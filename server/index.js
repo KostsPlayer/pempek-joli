@@ -15,7 +15,7 @@ const alamatpengirimanRoutes = require("./routes/alamatpengirimanRoutes.js");
 const pembayaranRoutes = require("./routes/pembayaranRoutes.js");
 const Profile = require("./routes/profileRoutes.js");
 
-const Pesanan = require("./models/pesanan.js");
+const Users = require("./models/users.js");
 
 const app = express();
 app.use(express.json());
