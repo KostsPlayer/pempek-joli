@@ -1,0 +1,244 @@
+@use "./../../helper/mixin" as m;
+@use "./../../helper/variable" as v;
+@use "./../../component/Sidebar/sidebar" as s;
+
+.tracking {
+  width: 100%;
+  min-height: 120vh;
+  @include m.flex($align: flex-start);
+  @include s.sidebar($position: absolute);
+
+  .content {
+    width: 100%;
+    height: auto;
+    padding: 2rem 4.2rem 4rem;
+    @include m.flex($direction: column, $align: flex-start);
+
+    .map {
+      width: 90%;
+      height: 80vh;
+      border: #fff 0.28rem solid;
+    }
+
+    .main {
+      width: 90%;
+      height: auto;
+      display: grid;
+      grid-template-areas:
+        "transaction transaction"
+        "origin destination"
+        "info execute";
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(3, auto);
+      row-gap: 1.4rem;
+      column-gap: 2.4rem;
+      justify-content: center;
+      border-radius: 0.8rem;
+      margin-top: 2.2rem;
+
+      @mixin origin-destination($index) {
+        grid-area: $index;
+        @include m.flex($direction: column, $align: flex-start);
+        gap: 0.28rem;
+        height: fit-content;
+
+        label {
+          @include title();
+        }
+      }
+
+      @mixin input() {
+        width: 100%;
+        height: auto;
+        outline: 0;
+        border: 0;
+        border-bottom: rgba($color: #000, $alpha: 0.6) 0.1rem solid;
+        padding: 0.48rem 0;
+        font-size: 0.9rem;
+        background-color: transparent;
+      }
+
+      @mixin title($fw: 600, $font: "Oswald") {
+        font-family: $font, sans-serif;
+        font-weight: $fw;
+        font-size: 1.14rem;
+      }
+
+      .transaction-id {
+        grid-area: transaction;
+        height: fit-content;
+        display: grid;
+
+        span:first-child {
+          @include title($fw: 600);
+        }
+
+        span:last-child {
+          @include title($fw: 300, $font: "Source Sans 3");
+        }
+      }
+
+      .origin {
+        @include origin-destination($index: origin);
+
+        #origin {
+          @include input();
+        }
+      }
+
+      .destination {
+        @include origin-destination($index: destination);
+
+        #destination {
+          @include input();
+        }
+      }
+
+      .info {
+        height: fit-content;
+        grid-area: info;
+        font-size: 0.96rem;
+        @include m.flex($direction: column, $align: flex-start);
+        gap: 0.54rem;
+
+        .title {
+          @include title();
+        }
+
+        &-detail {
+          .duration,
+          .distance {
+            display: flex;
+            gap: 0.4rem;
+
+            .result {
+              font-weight: 600;
+            }
+          }
+        }
+      }
+
+      .execute {
+        grid-area: execute;
+        @include m.flex($direction: column, $align: flex-start);
+        row-gap: 1rem;
+
+        .travel-method {
+          @include m.flex($direction: column, $align: flex-start);
+          gap: 0.52rem;
+
+          .title {
+            @include title();
+          }
+
+          .list {
+            @include m.flex();
+            gap: 0.56rem;
+
+            .material-symbols-outlined {
+              font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+              border: v.$light-blue 0.13rem solid;
+              padding: 0.28rem 0.64rem;
+              border-radius: 0.48rem;
+              font-weight: 500;
+              color: v.$light-blue;
+
+              &:hover,
+              &.active {
+                background-color: v.$light-blue;
+                color: #fff;
+              }
+            }
+          }
+        }
+
+        .buttons {
+          @include m.flex($direction: column, $align: flex-start);
+          gap: 0.54rem;
+
+          .title {
+            @include title();
+          }
+
+          .wrapper {
+            display: flex;
+            gap: 0.52rem;
+
+            .container {
+              width: fit-content;
+              height: fit-content;
+              @include m.flex();
+              gap: 0.28rem;
+              color: #fff;
+              padding: 0.43rem 0.79rem;
+              font-weight: 700;
+              background-color: #000;
+              border-radius: 0.32rem;
+              font-size: 0.95rem;
+
+              &:nth-child(1) {
+                background-color: v.$light-purple;
+                border: 0.17rem solid v.$light-purple;
+
+                .material-symbols-outlined {
+                  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0,
+                    "opsz" 24;
+                }
+
+                &:hover {
+                  background-color: transparent;
+                  color: v.$light-purple;
+                }
+              }
+
+              &:nth-child(2) {
+                background-color: v.$light-pink;
+                border: 0.17rem solid v.$light-pink;
+
+                .material-symbols-outlined {
+                  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0,
+                    "opsz" 24;
+                }
+
+                &:hover {
+                  background-color: transparent;
+                  color: v.$light-pink;
+                }
+              }
+
+              &:nth-child(3) {
+                background-color: v.$light-yellow;
+                border: 0.17rem solid v.$light-yellow;
+
+                &:hover {
+                  background-color: transparent;
+                  color: v.$light-yellow;
+
+                  .material-symbols-outlined {
+                    font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0,
+                      "opsz" 24;
+                  }
+                }
+              }
+
+              &:nth-child(4) {
+                background-color: v.$light-green;
+                border: 0.17rem solid v.$light-green;
+
+                &:hover {
+                  background-color: transparent;
+                  color: v.$light-green;
+
+                  .material-symbols-outlined {
+                    font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0,
+                      "opsz" 24;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

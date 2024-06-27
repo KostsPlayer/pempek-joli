@@ -1,0 +1,147 @@
+@use "./../../helper/mixin" as m;
+@use "./../../helper/variable" as v;
+
+.order {
+  width: 100%;
+  height: auto;
+  position: relative;
+  // background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+  //   url("./assets/images/top-view-mexican-food-with-guacamole.jpg");
+  // background-repeat: no-repeat;
+  // background-size: cover;
+  // background-position: top;
+  // background-attachment: fixed;
+
+  @mixin component($top: 3%, $bottom: 3%) {
+    width: 100%;
+    height: auto;
+    padding: $top 5% $bottom 5%;
+
+    .title {
+      color: #fff;
+      font-family: "Oswald", sans-serif;
+      font-size: 4rem;
+    }
+
+    .list {
+      margin-top: 1.4rem;
+      width: 100%;
+      height: auto;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(24rem, 1fr));
+      row-gap: 1.6rem;
+
+      .item {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto auto 1fr;
+        grid-template-areas:
+          "image title"
+          "image price"
+          "image action";
+        gap: 0.1rem 1.4rem;
+        align-items: center;
+        // border: 0.15rem solid #fff;
+
+        &-image {
+          border: 0.2rem solid #fff;
+          @include m.circle($w-h: 8.4rem);
+          grid-area: image;
+          //   padding-right: 1.2rem;
+
+          img {
+            @include m.circle($w-h: 100%);
+            object-fit: cover;
+          }
+        }
+
+        &-title {
+          grid-area: title;
+          color: #fff;
+          font-family: "Oswald", sans-serif;
+          font-size: 1.5rem;
+        }
+
+        &-price {
+          font-size: 1.1rem;
+          color: #fff;
+          grid-area: price;
+          font-weight: 800;
+        }
+
+        &-action {
+          grid-area: action;
+          @include m.flex($justify: flex-start);
+          gap: 0.25rem;
+          //   border: 0.15rem solid #fff;
+
+          .material-symbols-outlined {
+            font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+            color: #fff;
+            font-size: 1.2rem;
+            border: #fff 0.1rem solid;
+            border-radius: 0.15rem;
+          }
+
+          input {
+            width: 12%;
+            outline: 0;
+            border: 0;
+            border-radius: 0.15rem;
+            padding: 0.1rem 0.2rem;
+          }
+        }
+      }
+    }
+  }
+
+  &-foods {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+      url("./assets/images/top-view-mexican-food-with-guacamole.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+    background-attachment: fixed;
+
+    .content {
+      @include component($bottom: 6.4%);
+    }
+  }
+
+  &-drinks {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+      url("./assets/images/pexels-maria-salazar-303506-878992.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 80vh;
+    @include component($top: 4%, $bottom: 7.6%);
+  }
+
+  .add-to-cart {
+    position: fixed;
+    padding: 1.2% 2%;
+    bottom: 1.2rem;
+    right: 1.2rem;
+    color: v.$dark-orange;
+    @include m.flex($justify: flex-end);
+    gap: 0.5rem;
+    border: v.$dark-orange 0.165rem solid;
+    border-radius: 1rem;
+    width: fit-content;
+    height: auto;
+    background-color: #000;
+
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 500, "GRAD" 0, "opsz" 24;
+      font-size: 1.2rem;
+    }
+
+    span:last-child {
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+  }
+}

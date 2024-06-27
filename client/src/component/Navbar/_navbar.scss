@@ -1,0 +1,48 @@
+@use "./../../helper/mixin" as m;
+
+.navbar {
+  width: 100%;
+  height: auto;
+  @include m.flex($direction: column);
+  gap: 1rem;
+  padding: 2.2% 2.2% 1.6%;
+  border-bottom: solid #fff 0.1rem;
+
+  &-top {
+    width: 100%;
+    height: auto;
+    @include m.flex($justify: space-between);
+
+    .social-media {
+    }
+
+    .logo {
+      color: #fff;
+      text-decoration: none;
+      font-family: "Pacifico", cursive;
+      font-size: 2.1rem;
+    }
+
+    .icon {
+      @include m.flex();
+      gap: 0.6rem;
+      padding-right: 0.4rem;
+
+      .nav-link {
+        color: #fff;
+        text-decoration: none;
+      }
+    }
+  }
+
+  &-bottom {
+    @include m.flex();
+    gap: 1.2rem;
+
+    .nav-link {
+      color: #fff;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+  }
+}

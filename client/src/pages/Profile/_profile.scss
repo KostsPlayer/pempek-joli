@@ -1,0 +1,262 @@
+@use "./../../helper/mixin" as m;
+@use "./../../helper/variable" as v;
+@use "./../../component/Sidebar/sidebar" as s;
+
+@mixin input() {
+  width: 100%;
+  height: 2.4rem;
+  outline: 0;
+  border: #ddd solid 0.08rem;
+  border-radius: 0.2rem;
+  padding: 0.6rem;
+}
+
+.profile {
+  width: 100%;
+  height: auto;
+  display: grid;
+  grid-template-columns: auto 1fr 1fr;
+  gap: 2.2rem;
+
+  .title {
+    grid-area: title;
+    font-weight: 600;
+    font-size: 1.5rem;
+    font-family: "Oswald", sans-serif;
+    text-transform: capitalize;
+    @include m.flex($justify: space-between);
+
+    .text {
+      font-family: "Oswald", sans-serif;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 1, "wght" 600, "GRAD" 0, "opsz" 28;
+      border: v.$light-red 0.18rem solid;
+      border-radius: 0.2rem;
+      font-size: 1.15rem;
+      padding: 0.14rem 0.18rem;
+      color: v.$light-red;
+      transition: all 0.25s ease-in-out;
+
+      &:hover {
+        border: 0K;
+        background-color: v.$light-red;
+        font-variation-settings: "FILL" 0, "wght" 600, "GRAD" 0, "opsz" 28;
+        color: #fff;
+      }
+    }
+  }
+
+  .button {
+    grid-area: button;
+    width: 30%;
+    height: 2rem;
+    border: 0;
+    border-radius: 0.2rem;
+    border: v.$light-orange solid 0.08rem;
+    text-transform: uppercase;
+    background-color: v.$light-orange;
+    color: #fff;
+    font-weight: 700;
+    padding: 2.4% 0;
+    margin-left: auto;
+    @include m.flex();
+    letter-spacing: 0.06rem;
+  }
+
+  &-image {
+    width: 100%;
+    height: fit-content;
+    @include m.flex($direction: column);
+    gap: 0.8rem;
+
+    img {
+      @include m.circle($w-h: 10.8rem);
+      object-fit: cover;
+    }
+
+    label {
+      border: 0.12rem solid v.$light-orange;
+      display: inline-block;
+      color: v.$light-orange;
+      padding: 2.5% 5.8%;
+      border-radius: 0.2rem;
+      font-weight: 600;
+      font-size: 0.92rem;
+
+      &:hover {
+        border: 0.12rem solid v.$light-orange;
+        background-color: v.$light-orange;
+        color: #fff;
+        transition: all 0.3s ease-in-out;
+      }
+
+      input {
+        display: none;
+      }
+    }
+  }
+
+  &-info {
+    width: 100%;
+    height: fit-content;
+    display: grid;
+    grid-template-areas:
+      "title title"
+      "fullname fullname"
+      "nickname phone-number"
+      "email email"
+      "button button";
+    grid-template-rows: repeat(5, auto);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+
+    input {
+      @include input();
+
+      &[name="fullname"] {
+        grid-area: fullname;
+      }
+
+      &[name="nickname"] {
+        grid-area: nickname;
+      }
+
+      &[name="email"] {
+        grid-area: email;
+      }
+
+      &[name="phoneNumber"] {
+        grid-area: phone-number;
+      }
+    }
+  }
+
+  &-address {
+    width: 100%;
+    height: auto;
+    @include m.flex($direction: column);
+    row-gap: 1.6rem;
+    
+    .display-address {
+      width: 100%;
+      display: grid;
+      grid-template-rows: repeat(4, auto);
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-areas:
+        "title title"
+        "address address"
+        "province regency"
+        "description zip";
+      gap: 0.6rem;
+
+      .container {
+        @include m.flex($direction: column, $align: flex-start);
+        gap: 0.15rem;
+
+        input {
+          @include input();
+          color: rgba(0, 0, 0, 0.6);
+        }
+
+        label {
+          font-size: 0.95rem;
+          font-weight: 500;
+        }
+
+        &#address {
+          grid-area: address;
+        }
+
+        &#province {
+          grid-area: province;
+        }
+
+        &#regency {
+          grid-area: regency;
+        }
+
+        &#description {
+          grid-area: description;
+        }
+
+        &#zip {
+          grid-area: zip;
+        }
+      }
+    }
+
+    .create-address {
+      width: 100%;
+      display: grid;
+      grid-template-rows: repeat(5, auto);
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-areas:
+        "title title"
+        "address address"
+        "province regency"
+        "description zip"
+        "button button";
+      gap: 0.6rem;
+
+      .address {
+        grid-area: address;
+      }
+
+      input {
+        @include input();
+
+        &[name="description"] {
+          grid-area: description;
+        }
+
+        &[name="zip"] {
+          grid-area: zip;
+        }
+      }
+
+      .container {
+        position: relative;
+        width: 100%;
+
+        select {
+          width: 100%;
+          height: 2.4rem;
+          outline: 0;
+          padding: 0 0.6rem;
+          border: #ddd solid 0.08rem;
+          border-radius: 0.2rem;
+          color: rgba(0, 0, 0, 0.6);
+          -webkit-appearance: none; /* Untuk browser berbasis WebKit */
+          -moz-appearance: none; /* Untuk Firefox */
+          appearance: none;
+          background-color: #fff;
+
+          &[name="province"] {
+            grid-area: province;
+          }
+
+          &[name="regency"] {
+            grid-area: regency;
+          }
+
+          option {
+            color: #000;
+            padding: 0.4rem;
+          }
+        }
+
+        .material-symbols-outlined {
+          font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 28;
+          font-size: 1.2rem;
+          position: absolute;
+          right: 2.2%;
+          top: 50%;
+          transform: translateY(-50%);
+          color: rgba(0, 0, 0, 0.6);
+        }
+      }
+    }
+  }
+}

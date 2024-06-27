@@ -1,0 +1,41 @@
+@use "./../../../helper/mixin" as m;
+@use "./../../../helper/variable" as v;
+
+.h-advantage {
+  padding: 0 4% 5rem;
+  margin-top: -5rem;
+  width: 100%;
+  height: auto;
+  @include m.flex();
+
+  &-content {
+    width: 100%;
+    height: auto;
+    @include m.flex($direction: column);
+
+    .image {
+      @include m.circle($w-h: 14rem);
+      background-color: #000;
+    }
+
+    .title {
+      padding-top: 1.2rem;
+      font-family: "Oswald", sans-serif;
+      font-size: 2.1rem;
+      color: v.$light-orange;
+    }
+
+    .description {
+      padding-top: 0.2rem;
+      text-align: center;
+      width: 85%;
+      height: auto;
+      font-size: 1rem;
+      color: #000;
+    }
+
+    &:nth-child(2) {
+      padding-top: 15rem;
+    }
+  }
+}

@@ -1,0 +1,153 @@
+@use "./../../helper/mixin" as m;
+@use "./../../helper/variable" as v;
+
+.sign-up {
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+
+  &-image {
+    width: 100%;
+    height: auto;
+    padding: 12%;
+
+    .container {
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+
+      .content {
+        position: relative;
+        overflow: hidden;
+
+        &:not(:last-child)::after {
+          content: "";
+          position: absolute;
+          right: 0;
+          top: 0;
+          height: 100%;
+          background-color: v.$light-gray;
+          width: 0.5rem;
+        }
+
+        &-image {
+          position: absolute;
+          width: 700%;
+          height: 100%;
+          object-fit: cover;
+          object-position: -80% 50%;
+          top: 0;
+          left: 0;
+        }
+      }
+
+      .set-1 {
+        .content-image {
+          left: -100%;
+          top: -24%;
+        }
+      }
+
+      .set-2 {
+        .content-image {
+          left: -200%;
+          top: -32%;
+        }
+      }
+
+      .set-3 {
+        .content-image {
+          left: -300%;
+          top: -40%;
+        }
+      }
+
+      .set-4 {
+        .content-image {
+          left: -400%;
+          top: 40%;
+        }
+      }
+
+      .set-5 {
+        .content-image {
+          left: -500%;
+          top: 32%;
+        }
+      }
+
+      .set-6 {
+        .content-image {
+          left: -600%;
+          top: 24%;
+        }
+      }
+    }
+  }
+
+  &-form {
+    width: 100%;
+    height: auto;
+    @include m.flex($direction: column);
+    padding: 0 12%;
+
+    .material-symbols-outlined {
+      width: 80%;
+      margin: 0 auto;
+    }
+
+    .title {
+      padding-top: 0.8rem;
+      padding-bottom: 2.4rem;
+      font-family: "Oswald", sans-serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .social-media {
+      @include m.flex($direction: column);
+    }
+
+    .form {
+      width: 100%;
+      height: auto;
+      @include m.flex($direction: column);
+      gap: 1.2rem;
+
+      input {
+        outline: 0;
+        border: 0;
+        border-bottom: 2px solid #000;
+        width: 80%;
+        height: 2.8rem;
+        background-color: transparent;
+        font-size: 1.05rem;
+      }
+
+      button {
+        width: 80%;
+        height: auto;
+        margin-top: 1.6rem;
+        outline: 0;
+        border: 0.1rem solid #000;
+        background-color: #000;
+        padding: 3.2% 4.8%;
+        // border-radius: 0.2rem;
+        color: #fff;
+        text-transform: uppercase;
+        justify-self: flex-start;
+      }
+
+      &-link {
+        @include m.flex($direction: column);
+
+        .to-link {
+          color: v.$dark-orange;
+          //   text-decoration: none;
+        }
+      }
+    }
+  }
+}

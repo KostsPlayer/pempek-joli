@@ -1,0 +1,19 @@
+@use "./../../helper/mixin" as m;
+@use "./../../helper/variable" as v;
+@use "./../Sidebar/sidebar" as s;
+
+.layout {
+  width: 100%;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: "content sidebar";
+
+  .content {
+    width: 100%;
+    height: 100%;
+    padding: 3.2rem;
+  }
+
+  @include s.sidebar();
+}

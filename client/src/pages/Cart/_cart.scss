@@ -1,0 +1,371 @@
+@use "./../../helper/mixin" as m;
+@use "./../../helper/variable" as v;
+@use "./../../helper/modal";
+
+.cart {
+  width: 100%;
+  height: auto;
+  display: grid;
+  grid-template-columns: 6.9fr 3.1fr;
+  padding: 2.2rem 3.8rem 4.4rem;
+
+  &-receipt {
+    position: fixed;
+    bottom: 1.2rem;
+    right: 1.2rem;
+    @include m.flex();
+    border: #000 solid 0.16rem;
+    padding: 0.7rem 0.9rem;
+    border-radius: 0.8rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    gap: 0.16rem;
+    background-color: v.$dark-orange;
+
+    span:last-child {
+    }
+  }
+
+  &-item {
+    border-top-left-radius: 1.2rem;
+    border-bottom-left-radius: 1.2rem;
+    // border: 1px #000 solid;
+    width: 100%;
+    height: auto;
+    padding: 4% 6% 10%;
+    background-color: #fff;
+
+    .off {
+      height: auto;
+      position: relative;
+      @include m.flex();
+      color: #ddd;
+      font-size: 22rem;
+    }
+
+    &-title {
+      @include m.flex($justify: space-between);
+
+      .text {
+        font-family: "Oswald", sans-serif;
+        font-size: 2.4rem;
+        font-weight: 500;
+      }
+
+      .service {
+        @include m.flex();
+        gap: 0.46rem;
+
+        .amount {
+          font-size: 1.2rem;
+          font-weight: 500;
+        }
+
+        .limit {
+          font-weight: 600;
+          font-size: 1.1rem;
+        }
+
+        .material-symbols-outlined {
+          font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 64;
+          color: v.$dark-orange;
+          font-size: 1.56rem;
+
+          &:hover {
+            font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 64;
+          }
+        }
+      }
+    }
+
+    &-list {
+      @include m.flex($direction: column, $align: flex-start);
+      padding-top: 1.6rem;
+      gap: 1.6rem;
+
+      .product {
+        border-bottom: #000 0.04rem solid;
+        padding-bottom: 1.6rem;
+        width: 100%;
+        height: auto;
+        display: grid;
+        grid-template-columns: auto auto 1fr 1fr 1fr auto;
+        align-items: center;
+        gap: 2.4rem;
+
+        input {
+          width: 100%;
+          height: auto;
+        }
+
+        &:first-child {
+          border-top: #000 0.04rem solid;
+          padding-top: 1.6rem;
+        }
+
+        &-image {
+          width: 6rem;
+          height: 6rem;
+          border-radius: 0.25rem;
+
+          img {
+            border-radius: 0.25rem;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+
+        &-info {
+          margin-left: -1rem;
+
+          .name {
+            //Sementara
+            color: v.$dark-orange;
+            font-family: "Oswald", sans-serif;
+            font-weight: 500;
+            font-size: 1.25rem;
+            text-transform: capitalize;
+            line-height: 1.6rem;
+          }
+
+          .category {
+            font-weight: 700;
+            text-transform: capitalize;
+          }
+        }
+
+        &-quantity {
+          // padding-left: -6.4rem;
+          @include m.flex($justify: flex-start);
+          gap: 0.25rem;
+          width: 100%;
+
+          .material-symbols-outlined {
+            font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+            color: #000;
+            font-size: 1.2rem;
+            border: #000 0.1rem solid;
+            border-radius: 0.15rem;
+          }
+
+          input {
+            border: #000 0.1rem solid;
+            width: 32%;
+            outline: 0;
+            border-radius: 0.15rem;
+            padding: 0.01rem 0.24rem;
+          }
+        }
+
+        &-price {
+          padding-left: 2.4rem;
+          font-weight: 700;
+        }
+
+        .close {
+          width: 100%;
+          font-variation-settings: "FILL" 0, "wght" 600, "GRAD" 0, "opsz" 48;
+          font-size: 1.25rem;
+          text-align: end;
+        }
+      }
+    }
+  }
+
+  &-summary {
+    width: 100%;
+    height: auto;
+    padding: 14% 8% 8%;
+    background-color: #ddd;
+    @include m.flex(
+      $direction: column,
+      $justify: flex-start,
+      $align: flex-start
+    );
+    gap: 0.64rem;
+    border-top-right-radius: 1.2rem;
+    border-bottom-right-radius: 1.2rem;
+
+    &-title {
+      width: 100%;
+      font-family: "Oswald", sans-serif;
+      font-size: 2.4rem;
+      font-weight: 500;
+      padding-bottom: 1.3rem;
+      border-bottom: #000 0.04rem solid;
+    }
+
+    @mixin title() {
+      font-weight: 700;
+      padding-bottom: 0.4rem;
+      text-transform: uppercase;
+    }
+
+    .total-item {
+      width: 100%;
+      @include m.flex($justify: space-between);
+      padding-top: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+
+      span {
+        text-transform: capitalize;
+      }
+    }
+
+    .collect {
+      width: 100%;
+      height: auto;
+      display: grid;
+      grid-template-areas:
+        "title title title"
+        "ship takeaway take-in";
+
+      .title {
+        grid-area: title;
+        @include title();
+      }
+
+      .item {
+        @include m.flex($justify: flex-start);
+        gap: 0.3rem;
+        width: auto;
+
+        &:first-child {
+          grid-area: ship;
+        }
+
+        &:nth-child(2) {
+          grid-area: take-in;
+        }
+
+        &:last-child {
+          grid-area: takeaway;
+        }
+
+        label {
+          font-weight: 500;
+        }
+      }
+    }
+
+    .shipping-method {
+      width: 100%;
+      padding: 0.2rem 0;
+
+      .service {
+        @include m.flex($justify: space-between);
+        padding: 0.68rem 1rem;
+        border: #000 0.1rem solid;
+        background-color: #000;
+        border-radius: 0.6rem;
+        font-weight: 500;
+        color: #fff;
+        max-height: 2.8rem;
+      }
+    }
+
+    .address {
+      .title {
+        @include title();
+      }
+
+      .list {
+        @include m.flex($direction: column, $align: flex-start);
+        gap: 0.4rem;
+
+        .item {
+          @include m.flex($align: flex-start);
+          gap: 0.6rem;
+          height: fit-content;
+
+          input {
+            // border: #000 0.6rem solid;
+            margin-top: 0.35rem;
+          }
+
+          label {
+            font-weight: 500;
+            // border: #000 0.1rem solid;
+          }
+        }
+      }
+    }
+
+    .payment {
+      width: 100%;
+      height: auto;
+      padding: 0.2rem 0;
+
+      .title {
+        @include title();
+      }
+
+      .container {
+        width: 100%;
+        max-height: 2.8rem;
+        overflow: hidden;
+        background-color: #000;
+        color: #fff;
+        border-radius: 0.6rem;
+        @include m.flex($direction: column, $justify: flex-start);
+        transition: max-height 0.5s ease-in-out;
+
+        &.open {
+          max-height: 16.8rem;
+        }
+
+        .item {
+          width: 100%;
+          @include m.flex($justify: space-between);
+          border-radius: 0.6rem;
+          font-weight: 500;
+          transition: max-height 0.5s ease-in-out;
+          // padding: 0.2rem;
+          padding: 0.54rem 1rem;
+
+          &:first-child {
+            padding-top: 0.68rem;
+            padding-bottom: 0.68rem;
+          }
+
+          &:last-child {
+            padding-bottom: 0.68rem;
+          }
+
+          &:not(.display):hover {
+            background-color: #fff;
+            color: #000;
+            border-radius: 0;
+          }
+        }
+      }
+    }
+
+    .total-price {
+      width: 100%;
+      font-weight: 700;
+      @include m.flex($justify: space-between);
+      text-transform: uppercase;
+      margin-top: 1.8rem;
+      padding-top: 0.8rem;
+      border-top: #000 0.04rem solid;
+
+      span {
+        text-transform: capitalize;
+      }
+    }
+
+    .checkout {
+      width: 100%;
+      margin-top: 2.2rem;
+      font-weight: 700;
+      text-align: center;
+      text-transform: uppercase;
+      color: #fff;
+      padding: 3% 0;
+      background-color: #000;
+    }
+  }
+}

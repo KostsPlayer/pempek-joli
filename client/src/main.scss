@@ -1,0 +1,142 @@
+// @use "./assets/mixin" as m;
+@use "./helper/mixin" as m;
+@use "./helper/variable" as v;
+@use "./component/Navbar/navbar";
+@use "./component/Blabar/blabar";
+@use "./component/Footer/footer";
+@use "./component/Notification/notification";
+@use "./component/Layout/layout";
+@use "./pages/Home/H_Hero/h-hero";
+@use "./pages/Home/H_Advantage/h-advantage";
+@use "./pages/Home/H_Feature/h-feature";
+@use "./pages/Home/H_Catalog/h-catalog";
+@use "./pages/Menu/M_Hero/m-hero";
+@use "./pages/Menu/M_Catalog/m-catalog";
+@use "./pages/Menu/M_Outlet/m-outlet";
+@use "./pages/Contact/C_Hero/c-hero";
+@use "./pages/Contact/C_Contact/c-contact";
+@use "./pages/Contact/C_Outlet/c-outlet";
+@use "./pages/NotFound/notfound";
+@use "./pages/Login/login";
+@use "./pages/SignUp/sign-up";
+@use "./pages/Cart/cart";
+@use "./pages/Profile/profile";
+@use "./pages/Store/store";
+@use "./pages/Order/order";
+@use "./pages/Transaction/transaction";
+@use "./pages/GoShipping/goShipping";
+
+
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Pacifico&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Archivo:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Asap:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;0,6..96,800;0,6..96,900;1,6..96,400;1,6..96,500;1,6..96,600;1,6..96,700;1,6..96,800;1,6..96,900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Noto+Serif+Display:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,800;1,900&family=Poiret+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Source Sans 3", sans-serif;
+  cursor: none !important;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: v.$light-gray;
+  // background-color: #f4dfc8;
+}
+
+.cursor {
+  @include m.circle($w-h: 2.5rem);
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.cursor-follow {
+  @include m.circle($w-h: 2.5rem);
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  // background-color: rgba($color: #fff, $alpha: 0.2);
+  border: 0.05rem solid #fff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+  cursor: none;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="file"] {
+  cursor: none;
+}
+
+.loader {
+  width: 45px;
+  height: 40px;
+  background: linear-gradient(
+      #0000 calc(1 * 100% / 6),
+      v.$light-orange 0 calc(3 * 100% / 6),
+      #0000 0
+    ),
+    linear-gradient(
+      #0000 calc(2 * 100% / 6),
+      v.$light-orange 0 calc(4 * 100% / 6),
+      #0000 0
+    ),
+    linear-gradient(
+      #0000 calc(3 * 100% / 6),
+      v.$light-orange 0 calc(5 * 100% / 6),
+      #0000 0
+    );
+  background-size: 10px 400%;
+  background-repeat: no-repeat;
+  animation: matrix 1s infinite linear;
+}
+
+@keyframes matrix {
+  0% {
+    background-position: 0% 100%, 50% 100%, 100% 100%;
+  }
+
+  100% {
+    background-position: 0% 0%, 50% 0%, 100% 0%;
+  }
+}

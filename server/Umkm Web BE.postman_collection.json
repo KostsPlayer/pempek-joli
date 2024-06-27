@@ -1,0 +1,701 @@
+{
+	"info": {
+		"_postman_id": "1c229c7a-2b2b-41ba-a3d9-6ab358fdc27b",
+		"name": "Umkm Web BE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "31681870",
+		"_collection_link": "https://umkm-ai.postman.co/workspace/umkm-a%5Bi-Workspace~468023d3-ba9a-4baf-afb6-3448de06b66a/collection/31681870-1c229c7a-2b2b-41ba-a3d9-6ab358fdc27b?action=share&source=collection_link&creator=31681870"
+	},
+	"item": [
+		{
+			"name": "Aurh",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"Dinda Sanjaya\",\r\n    \"nickname\": \"Dinda123\",\r\n    \"email\": \"Dinda123@example.com\",\r\n    \"phoneNumber\": \"082184952582\",\r\n    \"password\": \"Dinda123\",\r\n    \"confirmPassword\": \"Dinda123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/auth/register"
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"Dinda123@example.com\",\r\n    \"password\": \"Dinda123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/auth/login"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "menu",
+			"item": [
+				{
+					"name": "getAllMenu",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/api/product/"
+					},
+					"response": []
+				},
+				{
+					"name": "createMenu",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nama_menu\" : \"Pempek kulit\",\r\n    \"harga_menu\" : 4.500,\r\n    \"stock_menu\": 50,\r\n    \"description\": \"Pempek yang terbuat dari ikan tenggiri dengan bentuk seperti kulit\",\r\n    \"img_menu\": \"pempekkulit.jpg\",\r\n    \"jenis_menu\": \"makanan\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/product/"
+					},
+					"response": []
+				},
+				{
+					"name": "menuMakanan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjcsImZ1bGxuYW1lIjoiQWhtYWQgUmlma2kgQXlhbGEiLCJuaWNrbmFtZSI6ImRzIiwiZW1haWwiOiJheWFsYXJpZmtpQGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiMDgyMTg0OTUyNTgyIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3MTc3MjkzNTIsImV4cCI6MTcxNzgxNTc1Mn0.E7ukX59uwg8c69YO3_aYzVApj20__Vy1WCWxgA7NzW4"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/product/:jenis_menu",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"product",
+								":jenis_menu"
+							],
+							"variable": [
+								{
+									"key": "jenis_menu",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get product by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/product/cari/:_id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"product",
+								"cari",
+								":_id"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "6668746126b8d69ff1d393c3",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "_id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "keranjang",
+			"item": [
+				{
+					"name": "create Carts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "1|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdiODBkNWQ3ZDI3NzQwYmExY2JkZDgiLCJyb2xlIjoidXNlciIsImZ1bGxOYW1lIjoiRGluZGEgU2FuamF5YSIsIm5pY2tuYW1lIjoiRGluZGExMjMiLCJlbWFpbCI6IkRpbmRhMTIzQGV4YW1wbGUuY29tIiwicGhvbmVOdW1iZXIiOiIwODIxODQ5NTI1ODIiLCJpYXQiOjE3MTk0NTc1NjgsImV4cCI6MTcxOTU0Mzk2OH0.Uyo8lKoGF5304ll6bRQ9Afht8HcBoee_KMpWMcpHuIU"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_ACCESS_TOKEN"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"products\": [\r\n    {\r\n      \"id_product\": \"6668748d26b8d69ff1d393c5\",\r\n      \"nama_product\": \"Es Kelapa Muda\",\r\n      \"jumlah_product_cart\": 2\r\n    },\r\n    {\r\n      \"id_product\": \"666874f526b8d69ff1d393cb\",\r\n      \"nama_product\": \"Pempek kulit\",\r\n      \"jumlah_product_cart\": 3\r\n    }\r\n  ]\r\n}"
+						},
+						"url": "http://localhost:5000/api/cart/"
+					},
+					"response": []
+				},
+				{
+					"name": "update cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "4|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzMiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZHMiLCJlbWFpbCI6ImF5YWxhcmlma2lAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiI4MjE4NDk1MjU4MiIsImlhdCI6MTcxODQ4OTkzNCwiZXhwIjoxNzE4NTc2MzM0fQ.YN74-0rfD5Uc6Jda766ELpyp_8rpEc9OsarGPYgTIYg"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_product\": \"6668748d26b8d69ff1d393c5\",\r\n    \"jumlah_product_cart\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/cart/update/666e136a56660111ff3b3b17",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"cart",
+								"update",
+								"666e136a56660111ff3b3b17"
+							],
+							"query": [
+								{
+									"key": "_id",
+									"value": "6668746126b8d69ff1d393c3",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "3|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzMiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZHMiLCJlbWFpbCI6ImF5YWxhcmlma2lAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiI4MjE4NDk1MjU4MiIsImlhdCI6MTcxODQzMjU1MywiZXhwIjoxNzE4NTE4OTUzfQ.Eq3vrtbNrt4WqjaKkudp7geMyYqIQHo1BLTQBerGOZg"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:5000/api/cart/"
+					},
+					"response": []
+				},
+				{
+					"name": "get all",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "1|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdiODBkNWQ3ZDI3NzQwYmExY2JkZDgiLCJyb2xlIjoidXNlciIsImZ1bGxOYW1lIjoiRGluZGEgU2FuamF5YSIsIm5pY2tuYW1lIjoiRGluZGExMjMiLCJlbWFpbCI6IkRpbmRhMTIzQGV4YW1wbGUuY29tIiwicGhvbmVOdW1iZXIiOiIwODIxODQ5NTI1ODIiLCJpYXQiOjE3MTk0NTc1NjgsImV4cCI6MTcxOTU0Mzk2OH0.Uyo8lKoGF5304ll6bRQ9Afht8HcBoee_KMpWMcpHuIU"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/cart/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"cart",
+								""
+							],
+							"query": [
+								{
+									"key": "_id",
+									"value": "6667a9dd6a05a5922eb0b3c5",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete cart from product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "3|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzMiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZHMiLCJlbWFpbCI6ImF5YWxhcmlma2lAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiI4MjE4NDk1MjU4MiIsImlhdCI6MTcxODQzMjU1MywiZXhwIjoxNzE4NTE4OTUzfQ.Eq3vrtbNrt4WqjaKkudp7geMyYqIQHo1BLTQBerGOZg"
+							}
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <your_jwt_token>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_product\": \"6668748d26b8d69ff1d393c5\"\r\n  }"
+						},
+						"url": "http://localhost:5000/api/cart/666d37c3d11da1bc656a54ab/product"
+					},
+					"response": []
+				},
+				{
+					"name": "update status produk",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "1|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdiODBkNWQ3ZDI3NzQwYmExY2JkZDgiLCJyb2xlIjoidXNlciIsImZ1bGxOYW1lIjoiRGluZGEgU2FuamF5YSIsIm5pY2tuYW1lIjoiRGluZGExMjMiLCJlbWFpbCI6IkRpbmRhMTIzQGV4YW1wbGUuY29tIiwicGhvbmVOdW1iZXIiOiIwODIxODQ5NTI1ODIiLCJpYXQiOjE3MTk0NTc1NjgsImV4cCI6MTcxOTU0Mzk2OH0.Uyo8lKoGF5304ll6bRQ9Afht8HcBoee_KMpWMcpHuIU"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <your_jwt_token>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_product\": \"6668748d26b8d69ff1d393c5\",\r\n    \"isActive\": true // or false, depending on the status you want to set\r\n}"
+						},
+						"url": "http://localhost:5000/api/cart/6673e8b4c8e4c868e7062457/product/status"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "4|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzQiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZGluZGEiLCJlbWFpbCI6IkRpbmRhQGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiODU2MjIzNTI3MDkiLCJpYXQiOjE3MTkyMjI1MzEsImV4cCI6MTcxOTMwODkzMX0.gD61QSFK7R5JcV9_74i7GX1b1PeBSfQs_S6ISkITUPQ"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/api/order/"
+					},
+					"response": []
+				},
+				{
+					"name": "create order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "6|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzMiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZHMiLCJlbWFpbCI6ImF5YWxhcmlma2lAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiI4MjE4NDk1MjU4MiIsImlhdCI6MTcxODY4NDMwNiwiZXhwIjoxNzE4NzcwNzA2fQ.EBAT3uEngB6ijYfKS2Z9u6pggpMYHJOrHLqq6G_rwG8"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n           \"products\": [\r\n             {\r\n               \"id_product\": \"6668748d26b8d69ff1d393c5\",\r\n               \"jumlah_product_cart\": 2,\r\n               \"isActive\": \"true\"\r\n             },\r\n             {\r\n               \"id_product\": \"666874f526b8d69ff1d393cb\",\r\n               \"jumlah_product_cart\": 3,\r\n               \"isActive\": \"true\"\r\n             }\r\n           ]\r\n         }"
+						},
+						"url": "http://localhost:5000/api/order/6677d6185790c638fec5ffc3/66710b1630fab5d4858fc946"
+					},
+					"response": []
+				},
+				{
+					"name": "buat order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "1|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdiODBkNWQ3ZDI3NzQwYmExY2JkZDgiLCJyb2xlIjoidXNlciIsImZ1bGxOYW1lIjoiRGluZGEgU2FuamF5YSIsIm5pY2tuYW1lIjoiRGluZGExMjMiLCJlbWFpbCI6IkRpbmRhMTIzQGV4YW1wbGUuY29tIiwicGhvbmVOdW1iZXIiOiIwODIxODQ5NTI1ODIiLCJpYXQiOjE3MTk0NTc1NjgsImV4cCI6MTcxOTU0Mzk2OH0.Uyo8lKoGF5304ll6bRQ9Afht8HcBoee_KMpWMcpHuIU"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN_HERE"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_MetodePembayaran\": \"66710b1630fab5d4858fc946\",\r\n    \"id_alamat_pengiriman\": \"6673e955c8e4c868e706245c\",\r\n    \"metode_pengambilan\": \"Dine-In\",\r\n    \"detail_pesanan\": [\r\n        {\r\n            \"id_product\": \"6668748d26b8d69ff1d393c5\",\r\n            \"jumlah\": 2,\r\n            \"total_harga\": 12.500\r\n        },\r\n        {\r\n            \"id_product\": \"666874f526b8d69ff1d393cb\",\r\n            \"jumlah\": 3,\r\n            \"total_harga\": 12.500\r\n        }\r\n    ],\r\n    \"total_harga\": 12.500\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/order/"
+					},
+					"response": []
+				},
+				{
+					"name": "get count order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "5|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzQiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZGluZGEiLCJlbWFpbCI6IkRpbmRhQGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiODU2MjIzNTI3MDkiLCJpYXQiOjE3MTkzNjU3MzEsImV4cCI6MTcxOTQ1MjEzMX0.iUwvp9FUfliu2FCJtTvBgaLtejX_DuWlc4UsqWEQDy4"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/api/order/count/6667d6185790c638fec5ffc4"
+					},
+					"response": []
+				},
+				{
+					"name": "update status order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "5|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzQiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZGluZGEiLCJlbWFpbCI6IkRpbmRhQGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiODU2MjIzNTI3MDkiLCJpYXQiOjE3MTkzNjU3MzEsImV4cCI6MTcxOTQ1MjEzMX0.iUwvp9FUfliu2FCJtTvBgaLtejX_DuWlc4UsqWEQDy4"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status_pesanan\": \"Completed\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/order/status/667b709d20abf22629c146e6"
+					},
+					"response": []
+				},
+				{
+					"name": "delete order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "5|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzQiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZGluZGEiLCJlbWFpbCI6IkRpbmRhQGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiODU2MjIzNTI3MDkiLCJpYXQiOjE3MTkzNjU3MzEsImV4cCI6MTcxOTQ1MjEzMX0.iUwvp9FUfliu2FCJtTvBgaLtejX_DuWlc4UsqWEQDy4"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:5000/api/order/delete/667b709d20abf22629c146e6"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "method pembayaran",
+			"item": [
+				{
+					"name": "create method",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "6|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzMiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZHMiLCJlbWFpbCI6ImF5YWxhcmlma2lAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiI4MjE4NDk1MjU4MiIsImlhdCI6MTcxODY4NDMwNiwiZXhwIjoxNzE4NzcwNzA2fQ.EBAT3uEngB6ijYfKS2Z9u6pggpMYHJOrHLqq6G_rwG8"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nama_metode\": \"OVO\",\r\n    \"deskripsi_metode_pembayaran\": \"082184952582\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/payments/"
+					},
+					"response": []
+				},
+				{
+					"name": "get all",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "6|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzMiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZHMiLCJlbWFpbCI6ImF5YWxhcmlma2lAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiI4MjE4NDk1MjU4MiIsImlhdCI6MTcxODY4NDMwNiwiZXhwIjoxNzE4NzcwNzA2fQ.EBAT3uEngB6ijYfKS2Z9u6pggpMYHJOrHLqq6G_rwG8"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/api/payments/"
+					},
+					"response": []
+				},
+				{
+					"name": "get by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "6|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzMiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZHMiLCJlbWFpbCI6ImF5YWxhcmlma2lAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiI4MjE4NDk1MjU4MiIsImlhdCI6MTcxODY4NDMwNiwiZXhwIjoxNzE4NzcwNzA2fQ.EBAT3uEngB6ijYfKS2Z9u6pggpMYHJOrHLqq6G_rwG8"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/api/payments/find/66710b1630fab5d4858fc946"
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "2|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzQiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZGluZGEiLCJlbWFpbCI6IkRpbmRhQGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiODU2MjIzNTI3MDkiLCJpYXQiOjE3MTg4NzIyMTQsImV4cCI6MTcxODk1ODYxNH0.G1FIalrM31QY-MFN_Gol9-QtXQiWoVCjaQHT00EDE8Y"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/api/payments/"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "alamat pengiriman",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "2|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzQiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZGluZGEiLCJlbWFpbCI6IkRpbmRhQGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiODU2MjIzNTI3MDkiLCJpYXQiOjE3MTg4NzIyMTQsImV4cCI6MTcxODk1ODYxNH0.G1FIalrM31QY-MFN_Gol9-QtXQiWoVCjaQHT00EDE8Y"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/api/alamatpengiriman/alamat"
+					},
+					"response": []
+				},
+				{
+					"name": "create pengiriman",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "3|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzQiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZGluZGEiLCJlbWFpbCI6IkRpbmRhQGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiODU2MjIzNTI3MDkiLCJpYXQiOjE3MTg5NTM0MDIsImV4cCI6MTcxOTAzOTgwMn0.7LNgS2x8uAsG9O5bDj9DufySt2wfWCMwAsG3wlOAvjw"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_AUTH_TOKEN"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n           \"address\": \"Jl.Sariasih no.45\",\r\n           \"province\": \"Jawa Barat\",\r\n           \"city\": \"Kota Bandung\",\r\n           \"description\": \"Sarijadi\",\r\n           \"postal_code\": 401222\r\n         }"
+						},
+						"url": "http://localhost:5000/api/alamatpengiriman"
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "1|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzQiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZGluZGEiLCJlbWFpbCI6IkRpbmRhQGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiODU2MjIzNTI3MDkiLCJpYXQiOjE3MTg3MDM1ODcsImV4cCI6MTcxODc4OTk4N30.C3wr2kiH2uqT1IhWr757CLV74DUoHJoRK1M0OpB59v8"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:5000/api/alamatpengiriman/667242da168e209124e1d317"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "payments",
+			"item": [
+				{
+					"name": "upload image",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "4|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzQiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZGluZGEiLCJlbWFpbCI6IkRpbmRhQGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiODU2MjIzNTI3MDkiLCJpYXQiOjE3MTkyMjI1MzEsImV4cCI6MTcxOTMwODkzMX0.gD61QSFK7R5JcV9_74i7GX1b1PeBSfQs_S6ISkITUPQ"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "bukti_pembayaran",
+									"type": "file",
+									"src": "postman-cloud:///1ef3249c-427d-4180-9750-77786bb5f402"
+								}
+							]
+						},
+						"url": "http://localhost:5000/api/upload/payments/667949b2fcb727938c64c0ea"
+					},
+					"response": []
+				},
+				{
+					"name": "get payments by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "4|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzQiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZGluZGEiLCJlbWFpbCI6IkRpbmRhQGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiODU2MjIzNTI3MDkiLCJpYXQiOjE3MTkyMjI1MzEsImV4cCI6MTcxOTMwODkzMX0.gD61QSFK7R5JcV9_74i7GX1b1PeBSfQs_S6ISkITUPQ"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/api/payments/667949b2fcb727938c64c0ea"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "profile",
+			"item": [
+				{
+					"name": "Get me",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "1|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdiN2U2MDM2M2E2NWIxYTBjOTUwZjAiLCJyb2xlIjoidXNlciIsImZ1bGxOYW1lIjoiRGluZGEgU2FuamF5YSIsIm5pY2tuYW1lIjoiRGluZGExMjMiLCJlbWFpbCI6IkRpbmRhMTIzQGV4YW1wbGUuY29tIiwicGhvbmVOdW1iZXIiOiIwODIxODQ5NTI1ODIiLCJpYXQiOjE3MTkzNjkzNTEsImV4cCI6MTcxOTQ1NTc1MX0.oses9Hgy7wDo1Tg1xlRhJHp7_wcRFDiv7BVnmmlkoqY"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/api/profile/me"
+					},
+					"response": []
+				},
+				{
+					"name": "edit profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "1|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdiN2U2MDM2M2E2NWIxYTBjOTUwZjAiLCJyb2xlIjoidXNlciIsImZ1bGxOYW1lIjoiRGluZGEgU2FuamF5YSIsIm5pY2tuYW1lIjoiRGluZGExMjMiLCJlbWFpbCI6IkRpbmRhMTIzQGV4YW1wbGUuY29tIiwicGhvbmVOdW1iZXIiOiIwODIxODQ5NTI1ODIiLCJpYXQiOjE3MTkzNjkzNTEsImV4cCI6MTcxOTQ1NTc1MX0.oses9Hgy7wDo1Tg1xlRhJHp7_wcRFDiv7BVnmmlkoqY"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"New Full Name\",\r\n    \"nickname\": \"newnickname\",\r\n    \"email\": \"newemail@example.com\",\r\n    \"phoneNumber\": \"0987654321\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/profile/edit"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

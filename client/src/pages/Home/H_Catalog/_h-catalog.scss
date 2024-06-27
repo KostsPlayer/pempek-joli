@@ -1,0 +1,68 @@
+@use "./../../../helper/mixin" as m;
+@use "./../../../helper/variable" as v;
+
+.h-catalog {
+  width: 100%;
+  height: auto;
+  padding: 6.5% 2% 6%;
+  @include m.flex($direction: column);
+
+  .note {
+    color: v.$light-orange;
+    font-weight: 600;
+  }
+
+  .title {
+    padding-top: 0.4rem;
+    font-size: 4rem;
+    font-family: "Oswald", sans-serif;
+  }
+
+  .description {
+    width: 50%;
+    height: auto;
+    padding-bottom: 1.5rem;
+    text-align: center;
+    @include m.flex();
+  }
+
+  .button {
+    border: 0.15rem solid v.$light-orange;
+    border-radius: 0.3rem;
+    padding: 0.8rem 1.5rem;
+    color: v.$light-orange;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background-color: v.$light-orange;
+      color: #fff;
+    }
+  }
+
+  .sample {
+    width: 90%;
+    height: auto;
+    @include m.flex($justify: space-between);
+    padding: 2% 4% 0;
+    // border: #000 solid 2px;
+
+    .image {
+      @include m.circle($w-h: 17rem);
+      background-color: #000;
+      margin-top: -6rem;
+
+      &:nth-child(2) {
+        margin-top: 8rem;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+    }
+  }
+}

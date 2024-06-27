@@ -1,0 +1,63 @@
+@use "./../../helper/mixin" as m;
+@use "./../../helper/variable" as v;
+
+.footer {
+  width: 100%;
+  height: auto;
+  display: grid;
+  grid-template-columns: 3fr 7fr;
+  padding: 6% 4% 5%;
+  align-items: flex-start;
+  background-color: #fff;
+
+  &-left {
+    padding-right: 2.4rem;
+
+    .logo {
+      color: v.$dark-orange;
+      text-decoration: none;
+      font-family: "Pacifico", cursive;
+      font-size: 1.4rem;
+    }
+
+    .description {
+      padding: 2rem 0 0.5rem;
+    }
+
+    .social-media {
+      margin-left: -0.55rem;
+    }
+  }
+
+  &-right {
+    @include m.flex($justify: space-between);
+
+    .container {
+      width: 100%;
+      height: auto;
+      padding-left: 2.8rem;
+      @include m.flex($direction: column, $align: flex-start);
+
+      .title {
+        font-family: "Oswald", sans-serif;
+        font-size: 1.3rem;
+        padding-bottom: 1.8rem;
+      }
+
+      .link {
+        text-decoration: none;
+        color: #000;
+        padding-bottom: 0.25rem;
+      }
+    }
+  }
+}
+
+.credit {
+  background-color: #fff;
+  width: 100%;
+  height: auto;
+  @include m.flex($justify: space-between);
+  padding: 3% 4%;
+  border-top: #000 solid 0.1rem;
+}

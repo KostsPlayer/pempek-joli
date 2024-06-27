@@ -1,0 +1,68 @@
+@mixin flex($justify: center, $align: center, $direction: row) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-direction: $direction;
+}
+
+@mixin circle($w-h) {
+  width: $w-h;
+  height: $w-h;
+  border-radius: 50%;
+}
+
+@mixin productStore() {
+  // border: #000 solid 0.2rem;
+  grid-area: modal;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(5, auto);
+  grid-template-areas:
+    "name jenis"
+    "price stock"
+    "description description"
+    "file file"
+    "button button";
+  row-gap: 2vh;
+  column-gap: 1.2vw;
+
+  .form-content:nth-child(1) {
+    grid-area: name;
+  }
+  .form-content:nth-child(2) {
+    grid-area: jenis;
+  }
+  .form-content:nth-child(3) {
+    grid-area: price;
+  }
+  .form-content:nth-child(4) {
+    grid-area: stock;
+  }
+  .form-content:nth-child(5) {
+    grid-area: description;
+  }
+  .form-content:nth-child(6) {
+    grid-area: file;
+  }
+}
+
+@mixin receipt() {
+  grid-area: modal;
+  @include flex($direction: column);
+  row-gap: 2vh;
+
+  .form-content:nth-child(2) {
+    width: 18rem;
+    height: 14rem;
+    border-radius: 0.2rem;
+    border: 0.1rem #ddd solid;
+
+    img {
+      border-radius: 0.2rem;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+}

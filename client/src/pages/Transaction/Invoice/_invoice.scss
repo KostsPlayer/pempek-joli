@@ -1,0 +1,27 @@
+@use "./../../../helper/mixin" as m;
+@use "./../../../helper/variable" as v;
+
+.invoice {
+  width: 100%;
+  height: auto;
+  padding: 2.4rem 3rem;
+
+  .title {
+    margin-bottom: 1.2rem;
+  }
+
+  .items {
+    width: fit-content;
+    height: auto;
+    display: grid;
+    gap: 0.28rem;
+
+    .container {
+      width: 100%;
+      height: auto;
+      display: grid;
+      grid-template-columns: 1fr auto 1.5fr;
+      gap: 0.45rem;
+    }
+  }
+}

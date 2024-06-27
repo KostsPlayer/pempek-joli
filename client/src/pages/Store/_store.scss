@@ -1,0 +1,113 @@
+@use "./../../helper/mixin" as m;
+@use "./../../helper/variable" as v;
+@use "./../../component/Sidebar/sidebar" as s;
+@use "./../../helper/modal";
+
+.store {
+  width: 100%;
+  height: auto;
+
+  &-new-product {
+    display: flex;
+    gap: 0.8rem;
+
+    button {
+      @include m.flex();
+      gap: 0.25rem;
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: v.$dark-orange;
+      background-color: #000;
+      padding: 0.6rem 0.9rem;
+      border: none;
+      transition: all 0.4s;
+      border-radius: 0.3rem;
+
+      .material-symbols-outlined {
+        font-size: 1.05rem;
+        font-variation-settings: "FILL" 0, "wght" 600, "GRAD" 0, "opsz" 24;
+      }
+
+      &:hover {
+        background-color: v.$light-orange;
+        color: #fff;
+      }
+    }
+  }
+
+  &-title {
+    font-family: "Oswald", sans-serif;
+    color: v.$dark-orange;
+    font-size: 3.2rem;
+    padding: 2.4rem 0 1.2rem;
+    //   border: 0.1rem #000 solid;
+  }
+
+  &-container {
+    width: 100%;
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+    gap: 2rem;
+
+    .item {
+      width: 100%;
+      height: auto;
+      display: grid;
+      grid-template-columns: 3.5fr 6.5fr;
+      grid-template-rows: auto auto 1fr auto;
+      grid-template-areas:
+        "image name"
+        "image description"
+        "image stock"
+        "image price";
+
+      .image {
+        width: 15rem;
+        height: 12rem;
+        border-radius: 4%;
+        grid-area: image;
+        padding-right: 1.2rem;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 4%;
+        }
+      }
+
+      .name {
+        grid-area: name;
+        font-family: "Oswald", sans-serif;
+        font-weight: 900;
+        font-size: 1.6rem;
+        text-transform: uppercase;
+      }
+
+      .description {
+        font-weight: 400;
+        grid-area: description;
+      }
+
+      .stock {
+        grid-area: stock;
+        font-weight: 700;
+        height: auto;
+        margin-top: auto;
+
+        span {
+          font-weight: 900;
+          color: v.$dark-orange;
+        }
+      }
+
+      .price {
+        font-weight: 700;
+        color: v.$light-orange;
+        font-size: 1.4rem;
+        padding-bottom: 0.8rem;
+      }
+    }
+  }
+}

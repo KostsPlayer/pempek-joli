@@ -1,0 +1,117 @@
+.cls-1 {
+  fill: #ffc541;
+}
+
+.cls-2 {
+  fill: #4e4066;
+}
+
+.cls-3 {
+  fill: #6f5b92;
+}
+
+.cls-4 {
+  fill: #f78d5e;
+}
+
+.cls-5 {
+  fill: #fa976c;
+}
+
+.cls-6,
+.cls-7,
+.cls-8 {
+  fill: #b65c32;
+}
+
+.cls-10,
+.cls-6 {
+  opacity: 0.6;
+}
+
+.cls-7 {
+  opacity: 0.4;
+}
+
+.cls-9 {
+  fill: #f4b73b;
+}
+
+.cls-11 {
+  fill: #f9c358;
+}
+
+.cls-12 {
+  fill: #9b462c;
+}
+
+.cls-13 {
+  fill: #aa512e;
+}
+
+.cls-14 {
+  fill: #7d6aa5;
+}
+
+/* animations */
+
+.wheel {
+  animation: wheel-rotate 6s ease infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+@keyframes wheel-rotate {
+  50% {
+    transform: rotate(360deg);
+    animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+  }
+  100% {
+    transform: rotate(960deg);
+  }
+}
+
+.clock-hand-1 {
+  animation: clock-rotate 3s linear infinite;
+  transform-origin: bottom;
+  transform-box: fill-box;
+}
+
+.clock-hand-2 {
+  animation: clock-rotate 6s linear infinite;
+  transform-origin: bottom;
+  transform-box: fill-box;
+}
+
+@keyframes clock-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+#box-top {
+  animation: box-top-anim 2s linear infinite;
+  transform-origin: right top;
+  transform-box: fill-box;
+}
+
+@keyframes box-top-anim {
+  50% {
+    transform: rotate(-5deg);
+  }
+}
+
+#umbrella {
+  animation: umbrella-anim 6s linear infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+@keyframes umbrella-anim {
+  25% {
+    transform: translateY(10px) rotate(5deg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+}

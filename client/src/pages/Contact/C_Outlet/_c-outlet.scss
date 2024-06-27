@@ -1,0 +1,65 @@
+@use "./../../../helper/mixin" as m;
+@use "./../../../helper/variable" as v;
+
+.c-outlet {
+  width: 100%;
+  height: auto;
+  @include m.flex($direction: column);
+  padding: 6% 6% 6%;
+
+  &-note {
+    font-family: "Oswald", sans-serif;
+    color: v.$dark-orange;
+    font-weight: 900;
+    letter-spacing: 0.15rem;
+    padding-bottom: 0.8rem;
+  }
+
+  &-title {
+    font-size: 4.2rem;
+    font-weight: 500;
+    font-family: "Oswald", sans-serif;
+  }
+
+  &-description {
+    font-size: 1.05rem;
+    width: 50%;
+    text-align: center;
+  }
+
+  &-branch {
+    width: 100%;
+    height: auto;
+    gap: 2.4rem;
+    @include m.flex();
+    padding-top: 2.8rem;
+
+    .container {
+      width: 100%;
+      height: auto;
+      @include m.flex($direction: column);
+
+      .city {
+        font-family: "Oswald", sans-serif;
+        color: v.$dark-orange;
+        font-size: 2rem;
+        padding-bottom: 1.2rem;
+        font-weight: 600;
+      }
+
+      .street {
+        font-weight: 600;
+        width: 90%;
+        text-align: center;
+      }
+
+      .phone-number {
+        font-weight: 600;
+      }
+
+      .social-media {
+        padding-top: 0.6rem;
+      }
+    }
+  }
+}
