@@ -50,9 +50,9 @@ export default function Transaction() {
     new Array(data.length).fill(false)
   );
   const [statusFilter, setStatusFilter] = useState({
-    completed: false,
-    pending: false,
-    cancelled: false,
+    Completed: false,
+    Pending: false,
+    Cancelled: false,
   });
   const [collectFilter, setCollectFilter] = useState({
     takeaway: false,
@@ -366,7 +366,7 @@ export default function Transaction() {
                 </span>
                 <button
                   onClick={handleNextPage}
-                  disabled={currentPage === totalPages}
+                  disabled={currentPage === totalPages || currentPage === 0}
                 >
                   Next
                 </button>
@@ -607,32 +607,32 @@ export default function Transaction() {
                 <div className="container">
                   <input
                     type="checkbox"
-                    name="completed"
-                    id="completed"
-                    checked={statusFilter.completed}
+                    name="Completed"
+                    id="Completed"
+                    checked={statusFilter.Completed}
                     onChange={handleStatusChange}
                   />
-                  <label htmlFor="completed">Completed</label>
+                  <label htmlFor="Completed">Completed</label>
                 </div>
                 <div className="container">
                   <input
                     type="checkbox"
-                    name="pending"
-                    id="pending"
-                    checked={statusFilter.pending}
+                    name="Pending"
+                    id="Pending"
+                    checked={statusFilter.Pending}
                     onChange={handleStatusChange}
                   />
-                  <label htmlFor="pending">Pending</label>
+                  <label htmlFor="Pending">Pending</label>
                 </div>
                 <div className="container">
                   <input
                     type="checkbox"
-                    name="cancelled"
-                    id="cancelled"
-                    checked={statusFilter.cancelled}
+                    name="Cancelled"
+                    id="Cancelled"
+                    checked={statusFilter.Cancelled}
                     onChange={handleStatusChange}
                   />
-                  <label htmlFor="cancelled">Cancelled</label>
+                  <label htmlFor="Cancelled">Cancelled</label>
                 </div>
               </div>
               <div className="collect">
