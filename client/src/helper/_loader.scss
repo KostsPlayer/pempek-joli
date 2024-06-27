@@ -1,0 +1,293 @@
+@use "./mixin" as m;
+@use "./variable" as v;
+
+.loader {
+  width: 100%;
+  height: 90vh;
+  @include m.flex($direction: column);
+  gap: 4vh;
+
+  .wrapper {
+    width: 100%;
+    height: auto;
+    @include m.flex();
+
+    .item {
+      width: 44px;
+      height: 44px;
+      position: relative;
+      display: inline-block;
+      margin: 0 16px;
+
+      $duration: 3s;
+
+      &:before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        position: absolute;
+        display: block;
+        background: v.$dark-orange;
+        //   background: v.$black;
+        top: 37px;
+        left: 19px;
+        transform: translate(-18px, -18px);
+        animation: dotRect $duration cubic-bezier(0.785, 0.135, 0.15, 0.86)
+          infinite;
+      }
+
+      svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+
+        rect,
+        polygon,
+        circle {
+          fill: none;
+          stroke: v.$black;
+          // stroke: v.$dark-orange;
+          stroke-width: 10px;
+          stroke-linejoin: round;
+          stroke-linecap: round;
+        }
+
+        polygon {
+          stroke-dasharray: 145 76 145 76;
+          stroke-dashoffset: 0;
+          animation: pathTriangle $duration
+            cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+        }
+
+        rect {
+          stroke-dasharray: 192 64 192 64;
+          stroke-dashoffset: 0;
+          animation: pathRect 3s cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+        }
+
+        circle {
+          stroke-dasharray: 150 50 150 50;
+          stroke-dashoffset: 75;
+          animation: pathCircle $duration cubic-bezier(0.785, 0.135, 0.15, 0.86)
+            infinite;
+        }
+      }
+
+      &.triangle {
+        width: 48px;
+
+        &:before {
+          left: 21px;
+          transform: translate(-10px, -18px);
+          animation: dotTriangle $duration
+            cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+        }
+      }
+
+      @keyframes pathTriangle {
+        33% {
+          stroke-dashoffset: 74;
+        }
+
+        66% {
+          stroke-dashoffset: 147;
+        }
+
+        100% {
+          stroke-dashoffset: 221;
+        }
+      }
+
+      @keyframes dotTriangle {
+        33% {
+          transform: translate(0, 0);
+        }
+
+        66% {
+          transform: translate(10px, -18px);
+        }
+
+        100% {
+          transform: translate(-10px, -18px);
+        }
+      }
+
+      @keyframes pathRect {
+        25% {
+          stroke-dashoffset: 64;
+        }
+
+        50% {
+          stroke-dashoffset: 128;
+        }
+
+        75% {
+          stroke-dashoffset: 192;
+        }
+
+        100% {
+          stroke-dashoffset: 256;
+        }
+      }
+
+      @keyframes dotRect {
+        25% {
+          transform: translate(0, 0);
+        }
+
+        50% {
+          transform: translate(18px, -18px);
+        }
+
+        75% {
+          transform: translate(0, -36px);
+        }
+
+        100% {
+          transform: translate(-18px, -18px);
+        }
+      }
+
+      @keyframes pathCircle {
+        25% {
+          stroke-dashoffset: 125;
+        }
+
+        50% {
+          stroke-dashoffset: 175;
+        }
+
+        75% {
+          stroke-dashoffset: 225;
+        }
+
+        100% {
+          stroke-dashoffset: 275;
+        }
+      }
+    }
+  }
+}
+
+// .wrapper {
+//   width: 200px;
+//   height: 60px;
+//   position: relative;
+//   z-index: 1;
+// }
+
+// .circle {
+//   width: 20px;
+//   height: 20px;
+//   position: absolute;
+//   border-radius: 50%;
+//   background-color: v.$light-orange;
+//   left: 15%;
+//   transform-origin: 50%;
+//   animation: circle7124 0.5s alternate infinite ease;
+// }
+
+// @keyframes circle7124 {
+//   0% {
+//     top: 60px;
+//     height: 5px;
+//     border-radius: 50px 50px 25px 25px;
+//     transform: scaleX(1.7);
+//   }
+
+//   40% {
+//     height: 20px;
+//     border-radius: 50%;
+//     transform: scaleX(1);
+//   }
+
+//   100% {
+//     top: 0%;
+//   }
+// }
+
+// .circle:nth-child(2) {
+//   left: 45%;
+//   animation-delay: 0.2s;
+// }
+
+// .circle:nth-child(3) {
+//   left: auto;
+//   right: 15%;
+//   animation-delay: 0.3s;
+// }
+
+// .shadow {
+//   width: 20px;
+//   height: 4px;
+//   border-radius: 50%;
+//   background-color: rgba(0, 0, 0, 0.9);
+//   position: absolute;
+//   top: 62px;
+//   transform-origin: 50%;
+//   z-index: -1;
+//   left: 15%;
+//   filter: blur(1px);
+//   animation: shadow046 0.5s alternate infinite ease;
+// }
+
+// @keyframes shadow046 {
+//   0% {
+//     transform: scaleX(1.5);
+//   }
+
+//   40% {
+//     transform: scaleX(1);
+//     opacity: 0.7;
+//   }
+
+//   100% {
+//     transform: scaleX(0.2);
+//     opacity: 0.4;
+//   }
+// }
+
+// .shadow:nth-child(4) {
+//   left: 45%;
+//   animation-delay: 0.2s;
+// }
+
+// .shadow:nth-child(5) {
+//   left: auto;
+//   right: 15%;
+//   animation-delay: 0.3s;
+// }
+
+// .loader {
+//   width: 45px;
+//   height: 40px;
+//   background: linear-gradient(
+//       #0000 calc(1 * 100% / 6),
+//       v.$light-orange 0 calc(3 * 100% / 6),
+//       #0000 0
+//     ),
+//     linear-gradient(
+//       #0000 calc(2 * 100% / 6),
+//       v.$light-orange 0 calc(4 * 100% / 6),
+//       #0000 0
+//     ),
+//     linear-gradient(
+//       #0000 calc(3 * 100% / 6),
+//       v.$light-orange 0 calc(5 * 100% / 6),
+//       #0000 0
+//     );
+//   background-size: 10px 400%;
+//   background-repeat: no-repeat;
+//   animation: matrix 1s infinite linear;
+// }
+
+// @keyframes matrix {
+//   0% {
+//     background-position: 0% 100%, 50% 100%, 100% 100%;
+//   }
+
+//   100% {
+//     background-position: 0% 0%, 50% 0%, 100% 0%;
+//   }
+// }

@@ -310,10 +310,10 @@
         color: #fff;
         border-radius: 0.6rem;
         @include m.flex($direction: column, $justify: flex-start);
-        transition: max-height 0.5s ease-in-out;
+        transition: max-height 0.75s ease-in-out;
 
         &.open {
-          max-height: 16.8rem;
+          max-height: 25rem;
         }
 
         .item {

@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
+import Loader from "../../helper/Loader";
 import Layout from "../../component/Layout/Layout";
 import {
   useJsApiLoader,
@@ -25,6 +26,13 @@ export default function GoShipping() {
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
   const [travelMode, setTravelMode] = useState("DRIVING"); // Default value as a string
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+  }, []);
 
   const originRef = useRef(null);
   const destinationRef = useRef(null);
@@ -97,110 +105,126 @@ export default function GoShipping() {
   }, []);
 
   if (!isLoaded) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return (
     <>
-      <Layout>
-        <div className="go-shipping">
-          <div className="map">
-            <GoogleMap
-              key={
-                directionsResponse ? "with-directions" : "without-directions"
-              }
-              center={center}
-              zoom={15}
-              mapContainerStyle={{ width: "100%", height: "100%" }}
-              options={{
-                streetViewControl: false,
-              }}
-              onLoad={(map) => setMap(map)}
-            >
-              <MarkerF position={position} />
-              {directionsResponse && (
-                <DirectionsRenderer directions={directionsResponse} />
-              )}
-            </GoogleMap>
-          </div>
-          <div className="main">
-            <div className="transaction-id">
-              <span>Transaction ID :</span>
-              <span>{location.state.transactionId}</span>
+      {loading ? (
+        <Loader />
+      ) : (
+        <Layout>
+          <div className="go-shipping">
+            <div className="map">
+              <GoogleMap
+                key={
+                  directionsResponse ? "with-directions" : "without-directions"
+                }
+                center={center}
+                zoom={15}
+                mapContainerStyle={{ width: "100%", height: "100%" }}
+                options={{
+                  streetViewControl: false,
+                }}
+                onLoad={(map) => setMap(map)}
+              >
+                <MarkerF position={position} />
+                {directionsResponse && (
+                  <DirectionsRenderer directions={directionsResponse} />
+                )}
+              </GoogleMap>
             </div>
-            <Autocomplete>
-              <div className="origin">
-                <label htmlFor="origin">Origin :</label>
-                <input type="text" name="origin" id="origin" ref={originRef} />
+            <div className="main">
+              <div className="transaction-id">
+                <span>Transaction ID :</span>
+                <span>{location.state.transactionId}</span>
               </div>
-            </Autocomplete>
-            <Autocomplete>
-              <div className="destination">
-                <label htmlFor="destination">Destination :</label>
-                <input
-                  type="text"
-                  name="destination"
-                  id="destination"
-                  placeholder="Destination"
-                  ref={destinationRef}
-                />
-              </div>
-            </Autocomplete>
-            <div className="info">
-              <div className="title">Information :</div>
-              <div className="info-detail">
-                <div className="distance">
-                  <span>Distance</span>
-                  <span>:</span>
-                  <span className="result">{distance}</span>
+              <Autocomplete>
+                <div className="origin">
+                  <label htmlFor="origin">Origin :</label>
+                  <input
+                    type="text"
+                    name="origin"
+                    id="origin"
+                    ref={originRef}
+                  />
                 </div>
-                <div className="duration">
-                  <span>Duration</span>
-                  <span>:</span>
-                  <span className="result">{duration}</span>
+              </Autocomplete>
+              <Autocomplete>
+                <div className="destination">
+                  <label htmlFor="destination">Destination :</label>
+                  <input
+                    type="text"
+                    name="destination"
+                    id="destination"
+                    placeholder="Destination"
+                    ref={destinationRef}
+                  />
+                </div>
+              </Autocomplete>
+              <div className="info">
+                <div className="title">Information :</div>
+                <div className="info-detail">
+                  <div className="distance">
+                    <span>Distance</span>
+                    <span>:</span>
+                    <span className="result">{distance}</span>
+                  </div>
+                  <div className="duration">
+                    <span>Duration</span>
+                    <span>:</span>
+                    <span className="result">{duration}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="execute">
-              <div className="travel-method">
-                <div className="title">Travel Method :</div>
-                <div className="list">
-                  {travelModes.map((item) => (
-                    <span
-                      key={item.mode}
-                      className={`material-symbols-outlined ${
-                        travelMode === item.mode ? "active" : ""
-                      }`}
-                      onClick={() => setTravelMode(item.mode)}
+              <div className="execute">
+                <div className="travel-method">
+                  <div className="title">Travel Method :</div>
+                  <div className="list">
+                    {travelModes.map((item) => (
+                      <span
+                        key={item.mode}
+                        className={`material-symbols-outlined ${
+                          travelMode === item.mode ? "active" : ""
+                        }`}
+                        onClick={() => setTravelMode(item.mode)}
+                      >
+                        {item.icon}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="buttons">
+                  <div className="title">Execute :</div>
+                  <div className="wrapper">
+                    <div className="container" onClick={calculateRoute}>
+                      <span className="material-symbols-outlined">
+                        calculate
+                      </span>
+                      <span>Calculate Route</span>
+                    </div>
+                    <div
+                      className="container"
+                      onClick={() => map.panTo(center)}
                     >
-                      {item.icon}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <div className="buttons">
-                <div className="title">Execute :</div>
-                <div className="wrapper">
-                  <div className="container" onClick={calculateRoute}>
-                    <span className="material-symbols-outlined">calculate</span>
-                    <span>Calculate Route</span>
-                  </div>
-                  <div className="container" onClick={() => map.panTo(center)}>
-                    <span className="material-symbols-outlined">home_work</span>
-                    <span>Base</span>
-                  </div>
-                  <div className="container" onClick={clearCalculate}>
-                    <span className="material-symbols-outlined">
-                      restart_alt
-                    </span>
-                    <span>Clear Route</span>
+                      <span className="material-symbols-outlined">
+                        home_work
+                      </span>
+                      <span>Base</span>
+                    </div>
+                    <div className="container" onClick={clearCalculate}>
+                      <span className="material-symbols-outlined">
+                        restart_alt
+                      </span>
+                      <span>Clear Route</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </Layout>
+        </Layout>
+      )}
       <ToastContainer />
     </>
   );

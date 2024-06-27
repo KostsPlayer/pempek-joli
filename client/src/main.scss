@@ -1,6 +1,7 @@
 // @use "./assets/mixin" as m;
 @use "./helper/mixin" as m;
 @use "./helper/variable" as v;
+@use "./helper/loader";
 @use "./component/Navbar/navbar";
 @use "./component/Blabar/blabar";
 @use "./component/Footer/footer";
@@ -25,7 +26,6 @@
 @use "./pages/Order/order";
 @use "./pages/Transaction/transaction";
 @use "./pages/GoShipping/goShipping";
-
 
 @import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Pacifico&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Archivo:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Asap:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;0,6..96,800;0,6..96,900;1,6..96,400;1,6..96,500;1,6..96,600;1,6..96,700;1,6..96,800;1,6..96,900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Noto+Serif+Display:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,800;1,900&family=Poiret+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
@@ -108,35 +108,6 @@ input[type="file"] {
   cursor: none;
 }
 
-.loader {
-  width: 45px;
-  height: 40px;
-  background: linear-gradient(
-      #0000 calc(1 * 100% / 6),
-      v.$light-orange 0 calc(3 * 100% / 6),
-      #0000 0
-    ),
-    linear-gradient(
-      #0000 calc(2 * 100% / 6),
-      v.$light-orange 0 calc(4 * 100% / 6),
-      #0000 0
-    ),
-    linear-gradient(
-      #0000 calc(3 * 100% / 6),
-      v.$light-orange 0 calc(5 * 100% / 6),
-      #0000 0
-    );
-  background-size: 10px 400%;
-  background-repeat: no-repeat;
-  animation: matrix 1s infinite linear;
-}
-
-@keyframes matrix {
-  0% {
-    background-position: 0% 100%, 50% 100%, 100% 100%;
-  }
-
-  100% {
-    background-position: 0% 0%, 50% 0%, 100% 0%;
-  }
+.Toastify__toast {
+  z-index: 9999;
 }

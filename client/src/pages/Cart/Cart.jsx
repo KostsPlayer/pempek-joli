@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import Loader from "../../helper/Loader";
 import Cursor from "../../helper/Cursor";
 import SmoothScroll from "../../helper/SmoothScroll";
 import Blabar from "../../component/Blabar/Blabar";
@@ -48,6 +49,24 @@ export default function Cart() {
   const [distance, setDistance] = useState(null);
   const [costDistance, setCostDistance] = useState(0);
   const [paymentId, setPaymentId] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+  }, []);
+
+  useEffect(() => {
+    if (location.state?.messageToCart) {
+      console.log(location.state.messageToCart);
+      toastMessage("success", location.state.messageToCart);
+      navigate(location.pathname, {
+        state: { ...location.state, messageToCart: undefined },
+        replace: true,
+      });
+    }
+  }, [location.state, location.pathname, navigate, toastMessage]);
 
   const reconstructArray = useCallback((params) => {
     return params.reduce((acc, item) => {
@@ -124,9 +143,12 @@ export default function Cart() {
       Promise.all(
         Object.keys(quantities).map((id) =>
           axios
-            .get(`https://pempek-joli-server.vercel.app/api/product/cari/${id}`, {
-              headers: { Authorization: `Bearer ${token}` },
-            })
+            .get(
+              `https://pempek-joli-server.vercel.app/api/product/cari/${id}`,
+              {
+                headers: { Authorization: `Bearer ${token}` },
+              }
+            )
             .then((res) => res.data.data)
         )
       )
@@ -157,11 +179,14 @@ export default function Cart() {
           setPaymentId(sendPaymentId);
 
           axios
-            .get(`https://pempek-joli-server.vercel.app/api/payments/${sendPaymentId}`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            })
+            .get(
+              `https://pempek-joli-server.vercel.app/api/payments/${sendPaymentId}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            )
             .then((res) => {
               const dataPayment = res.data.data;
               const statusPayment = dataPayment.payment.status_pembayaran;
@@ -253,8 +278,8 @@ export default function Cart() {
               (prod) => prod._id === item.id_product
             );
 
-            // const quantity = quantities[item.id_product] || 0;
-            const quantity = item.jumlah_product_cart;
+            // const quantity = item.jumlah_product_cart;
+            const quantity = quantities[item.id_product] || 0;
             const price = foundProduct
               ? parseFloat(foundProduct.harga_menu.$numberDecimal)
               : null;
@@ -273,9 +298,9 @@ export default function Cart() {
           detail_pesanan: detail_pesanan,
           total_harga: totalAmount,
         };
-
+        
         console.log(payloadCreateOrder);
-
+        
         return axios.post(
           "https://pempek-joli-server.vercel.app/api/order",
           payloadCreateOrder,
@@ -285,8 +310,9 @@ export default function Cart() {
         );
       })
       .catch((updateError) => {
-        console.error("Error:", updateError);
+        console.error(updateError);
         console.error(updateError.response?.data);
+        toastMessage("error", updateError.response?.data.error);
       })
       .then((createOrderResponse) => {
         if (createOrderResponse) {
@@ -297,7 +323,8 @@ export default function Cart() {
         }
       })
       .catch((createOrderError) => {
-        console.error("Error:", createOrderError);
+        toastMessage("error", createOrderError.response?.data.error);
+        console.error(createOrderError);
         console.error(createOrderError.response?.data);
       });
   }, [
@@ -305,9 +332,13 @@ export default function Cart() {
     originalQuantities,
     productCartData,
     quantities,
+    token,
+    method,
+    selectedAddress,
+    totalAmount,
+    products,
     reconstructArray,
     refreshDataCart,
-    token,
     toastMessage,
   ]);
 
@@ -443,12 +474,16 @@ export default function Cart() {
       )?._id;
 
       axios
-        .delete(`https://pempek-joli-server.vercel.app/api/cart/${cartId}/product`, {
-          headers: { Authorization: `Bearer ${token}` },
-          data: { id_product: id },
-        })
+        .delete(
+          `https://pempek-joli-server.vercel.app/api/cart/${cartId}/product`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            data: { id_product: id },
+          }
+        )
         .then((res) => {
-          toastMessage("success", res.data.message);
+          toastMessage("success", "Delete product in cart successfully!");
+          refreshDataCart();
         })
         .catch((err) => {
           console.error("Error:", err);
@@ -466,11 +501,13 @@ export default function Cart() {
       })
       .then((res) => {
         toastMessage("success", res.data.message);
+
+        refreshDataCart();
       })
       .catch((err) => {
         console.error(err);
       });
-  }, []);
+  }, [token, refreshDataCart]);
 
   useEffect(() => {
     axios
@@ -496,11 +533,14 @@ export default function Cart() {
 
   useEffect(() => {
     axios
-      .get("https://pempek-joli-server.vercel.app/api/alamatpengiriman/alamat", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .get(
+        "https://pempek-joli-server.vercel.app/api/alamatpengiriman/alamat",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((res) => {
         setAddress(res.data.alamat);
       })
@@ -585,69 +625,79 @@ export default function Cart() {
   // }, [distance, selectedDestination, costDistance, totalAmount]);
 
   if (!isLoaded) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return (
     <>
-      <Cursor />
-      <SmoothScroll />
-      <Blabar nonBorder={true} dashboard={false} />
-      <Receipt
-        onOpen={openReceipt}
-        onClose={() => {
-          setOpenReceipt(false);
-        }}
-        token={token}
-        paymentId={paymentId}
-      />
-      <div className="cart">
-        <Item
-          productCartData={productCartData}
-          lengthAllProduct={lengthAllProduct}
-          deleteCart={deleteCart}
-          products={products}
-          toggleActive={toggleActive}
-          memoizedImages={memoizedImages}
-          RemoveQuantity={RemoveQuantity}
-          quantities={quantities}
-          handleQuantityChange={handleQuantityChange}
-          AddQuantity={AddQuantity}
-          formatPrice={formatPrice}
-          deleteProduct={deleteProduct}
-        />
-        <Summary
-          lengthAllProduct={lengthAllProduct}
-          formatPrice={formatPrice}
-          costProducts={costProducts}
-          setMethod={setMethod}
-          method={method}
-          address={address}
-          payments={payments}
-          setSelectedAddress={setSelectedAddress}
-          openPayments={openPayments}
-          setOpenPayments={setOpenPayments}
-          selectedPayment={selectedPayment}
-          setSelectedPayment={setSelectedPayment}
-          totalAmount={totalAmount}
-          checkout={checkout}
-          setSelectedDestination={setSelectedDestination}
-          costDistance={costDistance}
-        />
-        {paymentPending === "Pending" ? (
-          <div
-            className="cart-receipt"
-            onClick={() => {
-              setOpenReceipt(true);
-            }}
-          >
-            <span className="material-symbols-outlined">receipt_long</span>
-            <span>Send Receipt</span>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <Cursor />
+          <SmoothScroll />
+          <Blabar nonBorder={true} />
+          {paymentId !== "" || undefined || null ? (
+            <Receipt
+              onOpen={openReceipt}
+              onClose={() => {
+                setOpenReceipt(false);
+              }}
+              token={token}
+              paymentId={paymentId}
+            />
+          ) : (
+            ""
+          )}
+          <div className="cart">
+            <Item
+              productCartData={productCartData}
+              lengthAllProduct={lengthAllProduct}
+              deleteCart={deleteCart}
+              products={products}
+              toggleActive={toggleActive}
+              memoizedImages={memoizedImages}
+              RemoveQuantity={RemoveQuantity}
+              quantities={quantities}
+              handleQuantityChange={handleQuantityChange}
+              AddQuantity={AddQuantity}
+              formatPrice={formatPrice}
+              deleteProduct={deleteProduct}
+            />
+            <Summary
+              lengthAllProduct={lengthAllProduct}
+              formatPrice={formatPrice}
+              costProducts={costProducts}
+              setMethod={setMethod}
+              method={method}
+              address={address}
+              payments={payments}
+              setSelectedAddress={setSelectedAddress}
+              openPayments={openPayments}
+              setOpenPayments={setOpenPayments}
+              selectedPayment={selectedPayment}
+              setSelectedPayment={setSelectedPayment}
+              totalAmount={totalAmount}
+              checkout={checkout}
+              setSelectedDestination={setSelectedDestination}
+              costDistance={costDistance}
+            />
+            {paymentPending === "Pending" ? (
+              <div
+                className="cart-receipt"
+                onClick={() => {
+                  setOpenReceipt(true);
+                }}
+              >
+                <span className="material-symbols-outlined">receipt_long</span>
+                <span>Send Receipt</span>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
-        ) : (
-          ""
-        )}
-      </div>
+        </>
+      )}
       <ToastContainer />
     </>
   );

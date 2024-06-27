@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Loader from "../../helper/Loader";
 import axios from "axios";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Cursor from "../../helper/Cursor";
@@ -22,6 +23,13 @@ export default function Login() {
   const { toastMessage } = AlertMessage();
   const location = useLocation();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+  }, []);
 
   useEffect(() => {
     if (location.state?.messageSignUp) {
@@ -66,6 +74,8 @@ export default function Login() {
         const getToken = res.data.data.token;
         const decodedToken = jwtDecode(getToken);
 
+        toastMessage("success", "Login successfully!");
+
         if (decodedToken.role === "admin") {
           navigate("/transaction", {
             state: { messageLogin: "Login successfully!" },
@@ -81,52 +91,58 @@ export default function Login() {
 
   return (
     <>
-      <Cursor />
-      <SmoothScroll />
-      <div className="login">
-        <div className="login-image">
-          <div className="container">
-            <GenerateImages />
-          </div>
-        </div>
-        <div className="login-form">
-          <span
-            className="material-symbols-outlined"
-            onClick={() => {
-              navigate("/");
-            }}
-          >
-            arrow_back
-          </span>
-          <div className="title">Login</div>
-          <form className="form" onSubmit={handleLogin}>
-            <input
-              type="text"
-              name="email"
-              placeholder="Email"
-              onChange={handleChange}
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              onChange={handleChange}
-            />
-            <button type="submit">Submit</button>
-            <div className="form-link">
-              <Link className="to-link" to={"/"}>
-                Forgot Password?
-              </Link>
-              <span>
-                Don't have an account?{" "}
-                <Link className="to-link" to={"/sign-up"}>
-                  SignUp{" "}
-                </Link>
-              </span>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <Cursor />
+          <SmoothScroll />
+          <div className="login">
+            <div className="login-image">
+              <div className="container">
+                <GenerateImages />
+              </div>
             </div>
-          </form>
-        </div>
-      </div>
+            <div className="login-form">
+              <span
+                className="material-symbols-outlined"
+                onClick={() => {
+                  navigate("/");
+                }}
+              >
+                arrow_back
+              </span>
+              <div className="title">Login</div>
+              <form className="form" onSubmit={handleLogin}>
+                <input
+                  type="text"
+                  name="email"
+                  placeholder="Email"
+                  onChange={handleChange}
+                />
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  onChange={handleChange}
+                />
+                <button type="submit">Submit</button>
+                <div className="form-link">
+                  <Link className="to-link" to={"/"}>
+                    Forgot Password?
+                  </Link>
+                  <span>
+                    Don't have an account?{" "}
+                    <Link className="to-link" to={"/sign-up"}>
+                      SignUp{" "}
+                    </Link>
+                  </span>
+                </div>
+              </form>
+            </div>
+          </div>
+        </>
+      )}
       <ToastContainer />
     </>
   );

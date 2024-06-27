@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from "react";
 import Layout from "../../component/Layout/Layout";
+import Loader from "../../helper/Loader";
 import dayjs from "dayjs";
 import "dayjs/locale/id";
 import isBetween from "dayjs/plugin/isBetween";
@@ -66,66 +67,69 @@ export default function Transaction() {
   const [customPeriod, setCustomPeriod] = useState({ start: "", end: "" });
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get("https://pempek-joli-server.vercel.app/api/alamatpengiriman/alamat", {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+  }, []);
+
+  useEffect(() => {
+    const fetchAddress = axios.get(
+      "https://pempek-joli-server.vercel.app/api/alamatpengiriman/alamat",
+      {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      })
-      .then((res) => {
-        const addressData = res.data.alamat;
+      }
+    );
 
-        axios
-          .get("https://pempek-joli-server.vercel.app/api/payments", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          .then((res) => {
-            const paymentData = res.data.data;
+    const fetchPayments = axios.get(
+      "https://pempek-joli-server.vercel.app/api/payments",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-            axios
-              .get("https://pempek-joli-server.vercel.app/api/order", {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              })
-              .then((res) => {
-                const data = res.data.data;
+    const fetchOrders = axios.get(
+      "https://pempek-joli-server.vercel.app/api/order",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-                const arrayData = data.map((data) => {
-                  const selectedAddress = addressData.find(
-                    (address) => address._id === data.id_alamat_pengiriman
-                  );
+    Promise.all([fetchAddress, fetchPayments, fetchOrders])
+      .then(([addressRes, paymentRes, orderRes]) => {
+        const addressData = addressRes.data.alamat;
+        const paymentData = paymentRes.data.data;
+        const orderData = orderRes.data.data;
 
-                  const selectedPayment = paymentData.find(
-                    (payment) => payment._id === data.id_MetodePembayaran
-                  );
+        const arrayData = orderData.map((data) => {
+          const selectedAddress = addressData.find(
+            (address) => address._id === data.id_alamat_pengiriman
+          );
 
-                  return {
-                    transactionId: data._id,
-                    status: data.status_pesanan,
-                    collect: data.metode_pengambilan,
-                    amount: data.total_harga,
-                    date: data.tanggal_pesanan,
-                    address: selectedAddress
-                      ? selectedAddress.address
-                      : "No Address",
-                    payment: selectedPayment.nama_metode.toLowerCase(),
-                  };
-                });
+          const selectedPayment = paymentData.find(
+            (payment) => payment._id === data.id_MetodePembayaran
+          );
 
-                setData(arrayData);
-              })
-              .catch((err) => {
-                console.error(err);
-              });
-          })
-          .catch((err) => {
-            console.error(err);
-          });
+          return {
+            transactionId: data._id,
+            status: data.status_pesanan,
+            collect: data.metode_pengambilan,
+            amount: data.total_harga,
+            date: data.tanggal_pesanan,
+            address: selectedAddress ? selectedAddress.address : "No Address",
+            payment: selectedPayment.nama_metode.toLowerCase(),
+          };
+        });
+
+        setData(arrayData);
       })
       .catch((err) => {
         console.error(err);
@@ -344,349 +348,362 @@ export default function Transaction() {
 
   return (
     <>
-      <Layout>
-        <div className="transaction">
-          <div className="transaction-table">
-            <div className="pagination-controls">
-              <button onClick={handlePreviousPage} disabled={currentPage === 1}>
-                Prev
-              </button>
-              <span>
-                {currentPage} of {totalPages} Pages
-              </span>
-              <button
-                onClick={handleNextPage}
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </button>
-            </div>
-            <div className="table-controls">
-              <div className="header">
-                <span className="header-col">No</span>
-                <span className="header-col">Transaction ID</span>
-                <span className="header-col">Amount</span>
-                <span className="header-col">Status</span>
-                <span className="header-col">Methods</span>
-                <span className="header-col">Action</span>
-                <span className="header-col">Date</span>
+      {loading ? (
+        <Loader />
+      ) : (
+        <Layout>
+          <div className="transaction">
+            <div className="transaction-table">
+              <div className="pagination-controls">
+                <button
+                  onClick={handlePreviousPage}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </button>
+                <span>
+                  {currentPage} of {totalPages} Pages
+                </span>
+                <button
+                  onClick={handleNextPage}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
               </div>
-              {currentData
-                .filter((item) => {
-                  const searchLower = search.toLowerCase();
-                  const formattedDate = dayjs(item.date)
-                    .format("ddd, D MMM YYYY h:mm A")
-                    .toLowerCase();
-                  return (
-                    searchLower === "" ||
-                    item.payment.toLowerCase().includes(searchLower) ||
-                    item.collect.toLowerCase().includes(searchLower) ||
-                    item.status.toLowerCase().includes(searchLower) ||
-                    item.transactionId.toLowerCase().includes(searchLower) ||
-                    item.amount.toString().includes(searchLower) ||
-                    formattedDate.toString().includes(searchLower)
-                  );
-                })
-                .map((item, index) => {
-                  const selectedOption = options.find(
-                    (option) => option.value === item.status
-                  );
+              <div className="table-controls">
+                <div className="header">
+                  <span className="header-col">No</span>
+                  <span className="header-col">Transaction ID</span>
+                  <span className="header-col">Amount</span>
+                  <span className="header-col">Status</span>
+                  <span className="header-col">Methods</span>
+                  <span className="header-col">Action</span>
+                  <span className="header-col">Date</span>
+                </div>
+                {currentData
+                  .filter((item) => {
+                    const searchLower = search.toLowerCase();
+                    const formattedDate = dayjs(item.date)
+                      .format("ddd, D MMM YYYY h:mm A")
+                      .toLowerCase();
+                    return (
+                      searchLower === "" ||
+                      item.payment.toLowerCase().includes(searchLower) ||
+                      item.collect.toLowerCase().includes(searchLower) ||
+                      item.status.toLowerCase().includes(searchLower) ||
+                      item.transactionId.toLowerCase().includes(searchLower) ||
+                      item.amount.toString().includes(searchLower) ||
+                      formattedDate.toString().includes(searchLower)
+                    );
+                  })
+                  .map((item, index) => {
+                    const selectedOption = options.find(
+                      (option) => option.value === item.status
+                    );
 
-                  return (
-                    <div className="row" key={item.transactionId}>
-                      <div className="col">{indexOfFirstItem + index + 1}</div>
-                      <div className="col">{item.transactionId}</div>
-                      <div className="col">{formatPrice(item.amount)}</div>
-                      <div className="col">
-                        <div
-                          className={`container ${
-                            openStatuses[item.transactionId] ? "open" : ""
-                          }`}
-                        >
+                    return (
+                      <div className="row" key={item.transactionId}>
+                        <div className="col">
+                          {indexOfFirstItem + index + 1}
+                        </div>
+                        <div className="col">{item.transactionId}</div>
+                        <div className="col">{formatPrice(item.amount)}</div>
+                        <div className="col">
                           <div
-                            className={`dis-status selected ${selectedOption.className}`}
+                            className={`container ${
+                              openStatuses[item.transactionId] ? "open" : ""
+                            }`}
+                          >
+                            <div
+                              className={`dis-status selected ${selectedOption.className}`}
+                              onClick={() =>
+                                toggleOpenStatus(item.transactionId)
+                              }
+                            >
+                              {selectedOption.label}
+                            </div>
+                            {openStatuses[item.transactionId] &&
+                              options
+                                .filter(
+                                  (option) => option.value !== item.status
+                                )
+                                .map((option) => (
+                                  <div
+                                    key={option.value}
+                                    className={`dis-status ${option.className}`}
+                                    onClick={() =>
+                                      handleStatusClick(
+                                        item.transactionId,
+                                        option.value
+                                      )
+                                    }
+                                  >
+                                    {option.label}
+                                  </div>
+                                ))}
+                            {console.log()}
+                          </div>
+                          <span
+                            className="material-symbols-outlined edit-button"
                             onClick={() => toggleOpenStatus(item.transactionId)}
                           >
-                            {selectedOption.label}
+                            edit_note
+                          </span>
+                        </div>
+                        <div className="col">
+                          <div
+                            className={`dis-payment ${
+                              item.payment === "cash" ? "cash" : "credit"
+                            }`}
+                          >
+                            {item.payment !== "cash" ? (
+                              <span className="material-symbols-outlined">
+                                credit_card
+                              </span>
+                            ) : item.payment === "cash" ? (
+                              <span className="material-symbols-outlined">
+                                paid
+                              </span>
+                            ) : (
+                              ""
+                            )}
                           </div>
-                          {openStatuses[item.transactionId] &&
-                            options
-                              .filter((option) => option.value !== item.status)
-                              .map((option) => (
-                                <div
-                                  key={option.value}
-                                  className={`dis-status ${option.className}`}
-                                  onClick={() =>
-                                    handleStatusClick(
-                                      item.transactionId,
-                                      option.value
-                                    )
-                                  }
-                                >
-                                  {option.label}
-                                </div>
-                              ))}
-                          {console.log()}
+                          <div
+                            className={`dis-collect ${
+                              item.collect === "takeaway"
+                                ? "takeaway"
+                                : item.collect === "dineIn"
+                                ? "dine-in"
+                                : "shipping"
+                            }`}
+                          >
+                            {item.collect === "takeaway" ? (
+                              <span className="material-symbols-outlined">
+                                package_2
+                              </span>
+                            ) : item.collect === "dineIn" ? (
+                              <span className="material-symbols-outlined">
+                                local_dining
+                              </span>
+                            ) : item.collect === "shipping" ? (
+                              <span className="material-symbols-outlined">
+                                local_shipping
+                              </span>
+                            ) : (
+                              ""
+                            )}
+                          </div>
                         </div>
-                        <span
-                          className="material-symbols-outlined edit-button"
-                          onClick={() => toggleOpenStatus(item.transactionId)}
-                        >
-                          edit_note
-                        </span>
-                      </div>
-                      <div className="col">
-                        <div
-                          className={`dis-payment ${
-                            item.payment === "cash" ? "cash" : "credit"
-                          }`}
-                        >
-                          {item.payment !== "cash" ? (
-                            <span className="material-symbols-outlined">
-                              credit_card
-                            </span>
-                          ) : item.payment === "cash" ? (
-                            <span className="material-symbols-outlined">
-                              paid
-                            </span>
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                        <div
-                          className={`dis-collect ${
-                            item.collect === "takeaway"
-                              ? "takeaway"
-                              : item.collect === "dineIn"
-                              ? "dine-in"
-                              : "shipping"
-                          }`}
-                        >
-                          {item.collect === "takeaway" ? (
-                            <span className="material-symbols-outlined">
-                              package_2
-                            </span>
-                          ) : item.collect === "dineIn" ? (
-                            <span className="material-symbols-outlined">
-                              local_dining
-                            </span>
-                          ) : item.collect === "shipping" ? (
-                            <span className="material-symbols-outlined">
-                              local_shipping
-                            </span>
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                      </div>
 
-                      <div className="col">
-                        <span
-                          className="material-symbols-outlined"
-                          onClick={() => goToMap(item.transactionId)}
-                        >
-                          share_location
-                        </span>
-                        <span
-                          className="material-symbols-outlined"
-                          onClick={() => handleInvoice(item)}
-                        >
-                          print_connect
-                        </span>
+                        <div className="col">
+                          <span
+                            className="material-symbols-outlined"
+                            onClick={() => goToMap(item.transactionId)}
+                          >
+                            share_location
+                          </span>
+                          <span
+                            className="material-symbols-outlined"
+                            onClick={() => handleInvoice(item)}
+                          >
+                            print_connect
+                          </span>
+                        </div>
+                        <div className="col">
+                          <span>
+                            {dayjs(item.date).format("ddd, D MMM YYYY")}
+                          </span>
+                          <span>{dayjs(item.date).format("h:mm A")}</span>
+                        </div>
                       </div>
-                      <div className="col">
-                        <span>
-                          {dayjs(item.date).format("ddd, D MMM YYYY")}
-                        </span>
-                        <span>{dayjs(item.date).format("h:mm A")}</span>
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+              </div>
             </div>
-          </div>
-          <div className="transaction-filter">
-            <div className="search">
-              <div className="title">Search</div>
-              <input
-                type="text"
-                name="search"
-                placeholder="Search"
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-            <div className="period">
-              <div className="title">Period</div>
-              <div className="container">
+            <div className="transaction-filter">
+              <div className="search">
+                <div className="title">Search</div>
                 <input
-                  type="radio"
-                  name="period-filter"
-                  id="today"
-                  checked={periodFilter === "today"}
-                  onChange={handlePeriodChange}
+                  type="text"
+                  name="search"
+                  placeholder="Search"
+                  onChange={(e) => setSearch(e.target.value)}
                 />
-                <label htmlFor="today">Today</label>
               </div>
-              <div className="container">
-                <input
-                  type="radio"
-                  name="period-filter"
-                  id="week"
-                  checked={periodFilter === "week"}
-                  onChange={handlePeriodChange}
-                />
-                <label htmlFor="week">This week</label>
-              </div>
-              <div className="container">
-                <input
-                  type="radio"
-                  name="period-filter"
-                  id="month"
-                  checked={periodFilter === "month"}
-                  onChange={handlePeriodChange}
-                />
-                <label htmlFor="month">This month</label>
-              </div>
-              <div className="container">
-                <div className="container-child">
+              <div className="period">
+                <div className="title">Period</div>
+                <div className="container">
                   <input
                     type="radio"
                     name="period-filter"
-                    id="custom"
-                    checked={periodFilter === "custom"}
+                    id="today"
+                    checked={periodFilter === "today"}
                     onChange={handlePeriodChange}
                   />
-                  <label htmlFor="custom">Custom</label>
+                  <label htmlFor="today">Today</label>
                 </div>
-                {periodFilter === "custom" && (
-                  <>
-                    <div className="custom-date">
-                      <div className="wrap">
-                        <span>start date</span>
-                        <span>:</span>
-                        <input
-                          type="date"
-                          name="start"
-                          value={customPeriod.start}
-                          onChange={handleCustomPeriodChange}
-                        />
+                <div className="container">
+                  <input
+                    type="radio"
+                    name="period-filter"
+                    id="week"
+                    checked={periodFilter === "week"}
+                    onChange={handlePeriodChange}
+                  />
+                  <label htmlFor="week">This week</label>
+                </div>
+                <div className="container">
+                  <input
+                    type="radio"
+                    name="period-filter"
+                    id="month"
+                    checked={periodFilter === "month"}
+                    onChange={handlePeriodChange}
+                  />
+                  <label htmlFor="month">This month</label>
+                </div>
+                <div className="container">
+                  <div className="container-child">
+                    <input
+                      type="radio"
+                      name="period-filter"
+                      id="custom"
+                      checked={periodFilter === "custom"}
+                      onChange={handlePeriodChange}
+                    />
+                    <label htmlFor="custom">Custom</label>
+                  </div>
+                  {periodFilter === "custom" && (
+                    <>
+                      <div className="custom-date">
+                        <div className="wrap">
+                          <span>start date</span>
+                          <span>:</span>
+                          <input
+                            type="date"
+                            name="start"
+                            value={customPeriod.start}
+                            onChange={handleCustomPeriodChange}
+                          />
+                        </div>
+                        <div className="wrap">
+                          <span>end date</span>
+                          <span>:</span>
+                          <input
+                            type="date"
+                            name="end"
+                            value={customPeriod.end}
+                            onChange={handleCustomPeriodChange}
+                          />
+                        </div>
                       </div>
-                      <div className="wrap">
-                        <span>end date</span>
-                        <span>:</span>
-                        <input
-                          type="date"
-                          name="end"
-                          value={customPeriod.end}
-                          onChange={handleCustomPeriodChange}
-                        />
-                      </div>
-                    </div>
-                  </>
-                )}
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-            <div className="status">
-              <div className="title">Status</div>
-              <div className="container">
-                <input
-                  type="checkbox"
-                  name="completed"
-                  id="completed"
-                  checked={statusFilter.completed}
-                  onChange={handleStatusChange}
-                />
-                <label htmlFor="completed">Completed</label>
+              <div className="status">
+                <div className="title">Status</div>
+                <div className="container">
+                  <input
+                    type="checkbox"
+                    name="completed"
+                    id="completed"
+                    checked={statusFilter.completed}
+                    onChange={handleStatusChange}
+                  />
+                  <label htmlFor="completed">Completed</label>
+                </div>
+                <div className="container">
+                  <input
+                    type="checkbox"
+                    name="pending"
+                    id="pending"
+                    checked={statusFilter.pending}
+                    onChange={handleStatusChange}
+                  />
+                  <label htmlFor="pending">Pending</label>
+                </div>
+                <div className="container">
+                  <input
+                    type="checkbox"
+                    name="cancelled"
+                    id="cancelled"
+                    checked={statusFilter.cancelled}
+                    onChange={handleStatusChange}
+                  />
+                  <label htmlFor="cancelled">Cancelled</label>
+                </div>
               </div>
-              <div className="container">
-                <input
-                  type="checkbox"
-                  name="pending"
-                  id="pending"
-                  checked={statusFilter.pending}
-                  onChange={handleStatusChange}
-                />
-                <label htmlFor="pending">Pending</label>
+              <div className="collect">
+                <div className="title">Collect Method(s)</div>
+                <div className="container">
+                  <input
+                    type="checkbox"
+                    name="takeaway"
+                    id="takeaway"
+                    checked={collectFilter.takeaway}
+                    onChange={handleCollectChange}
+                  />
+                  <label htmlFor="takeaway">Takeaway</label>
+                </div>
+                <div className="container">
+                  <input
+                    type="checkbox"
+                    name="dineIn"
+                    id="dineIn"
+                    checked={collectFilter.dineIn}
+                    onChange={handleCollectChange}
+                  />
+                  <label htmlFor="dineIn">Dinein</label>
+                </div>
+                <div className="container">
+                  <input
+                    type="checkbox"
+                    name="shipping"
+                    id="shipping"
+                    checked={collectFilter.shipping}
+                    onChange={handleCollectChange}
+                  />
+                  <label htmlFor="shipping">Shipping</label>
+                </div>
               </div>
-              <div className="container">
-                <input
-                  type="checkbox"
-                  name="cancelled"
-                  id="cancelled"
-                  checked={statusFilter.cancelled}
-                  onChange={handleStatusChange}
-                />
-                <label htmlFor="cancelled">Cancelled</label>
-              </div>
-            </div>
-            <div className="collect">
-              <div className="title">Collect Method(s)</div>
-              <div className="container">
-                <input
-                  type="checkbox"
-                  name="takeaway"
-                  id="takeaway"
-                  checked={collectFilter.takeaway}
-                  onChange={handleCollectChange}
-                />
-                <label htmlFor="takeaway">Takeaway</label>
-              </div>
-              <div className="container">
-                <input
-                  type="checkbox"
-                  name="dineIn"
-                  id="dineIn"
-                  checked={collectFilter.dineIn}
-                  onChange={handleCollectChange}
-                />
-                <label htmlFor="dineIn">Dinein</label>
-              </div>
-              <div className="container">
-                <input
-                  type="checkbox"
-                  name="shipping"
-                  id="shipping"
-                  checked={collectFilter.shipping}
-                  onChange={handleCollectChange}
-                />
-                <label htmlFor="shipping">Shipping</label>
-              </div>
-            </div>
-            <div className="payment">
-              <div className="title">Payment Method(s)</div>
-              <div className="container">
-                <input
-                  type="checkbox"
-                  name="qris"
-                  id="qris"
-                  checked={paymentFilter.qris}
-                  onChange={handlePaymentChange}
-                />
-                <label htmlFor="qris">Qris</label>
-              </div>
-              <div className="container">
-                <input
-                  type="checkbox"
-                  name="cash"
-                  id="cash"
-                  checked={paymentFilter.cash}
-                  onChange={handlePaymentChange}
-                />
-                <label htmlFor="cash">Cash</label>
+              <div className="payment">
+                <div className="title">Payment Method(s)</div>
+                <div className="container">
+                  <input
+                    type="checkbox"
+                    name="qris"
+                    id="qris"
+                    checked={paymentFilter.qris}
+                    onChange={handlePaymentChange}
+                  />
+                  <label htmlFor="qris">Qris</label>
+                </div>
+                <div className="container">
+                  <input
+                    type="checkbox"
+                    name="cash"
+                    id="cash"
+                    checked={paymentFilter.cash}
+                    onChange={handlePaymentChange}
+                  />
+                  <label htmlFor="cash">Cash</label>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div
-          style={{
-            display: "none",
-          }}
-        >
-          {selectedInvoice && (
-            <Invoice ref={printRef} transaction={selectedInvoice} />
-          )}
-        </div>
-      </Layout>
+          <div
+            style={{
+              display: "none",
+            }}
+          >
+            {selectedInvoice && (
+              <Invoice ref={printRef} transaction={selectedInvoice} />
+            )}
+          </div>
+        </Layout>
+      )}
       <ToastContainer />
     </>
   );

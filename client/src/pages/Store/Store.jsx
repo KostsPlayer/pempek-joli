@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import Loader from "../../helper/Loader";
 import Layout from "../../component/Layout/Layout";
 import CreateStore from "./CreateStore";
 import UpdateStore from "./UpdateStore";
@@ -16,6 +17,15 @@ export default function Store() {
 
   const [foods, setFoods] = useState([]);
   const [drinks, setDrinks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [openUpdateModal, setOpenUpdateModal] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+  }, []);
 
   useEffect(() => {
     if (token) {
@@ -63,84 +73,91 @@ export default function Store() {
     }).format(priceInRupiah);
   };
 
-  const [openCreateModal, setOpenCreateModal] = useState(false);
-  const [openUpdateModal, setOpenUpdateModal] = useState(false);
-
   return (
     <>
-      <CreateStore
-        onOpen={openCreateModal}
-        onClose={() => {
-          setOpenCreateModal(false);
-        }}
-      />
-      <UpdateStore
-        onOpen={openUpdateModal}
-        onClose={() => {
-          setOpenUpdateModal(false);
-        }}
-      />
-      <Layout>
-        <div className="store">
-          <div className="store-new-product">
-            <button
-              onClick={() => {
-                setOpenCreateModal(true);
-              }}
-            >
-              New Product
-              <span className="material-symbols-outlined">add_circle</span>
-            </button>
-            <button
-              onClick={() => {
-                setOpenUpdateModal(true);
-              }}
-            >
-              Update
-              <span className="material-symbols-outlined">edit</span>
-            </button>
-          </div>
-          <div className="store-title">Makanan</div>
-          <div className="store-container">
-            {foods.map((data, index) => {
-              return (
-                <div className="item" key={data._id}>
-                  <div className="image">
-                    <img src={memoizedImages[index]} alt={data.nama_menu} />
-                  </div>
-                  <div className="name">{data.nama_menu}</div>
-                  <div className="description">{data.description}</div>
-                  <div className="stock">
-                    Stock: <span>{data.stock_menu}</span>
-                  </div>
-                  <div className="price">{formatPrice(data.harga_menu)}</div>
-                </div>
-              );
-            })}
-          </div>
-          <div className="store-title">Minuman</div>
-          <div className="store-container">
-            {drinks.map((data, index) => {
-              return (
-                <div className="item" key={data._id}>
-                  <div className="image">
-                    <img
-                      src={memoizedImages[index + foods.length]}
-                      alt={data.nama_menu}
-                    />
-                  </div>
-                  <div className="name">{data.nama_menu}</div>
-                  <div className="stock">
-                    Stock: <span>{data.stock_menu}</span>
-                  </div>
-                  <div className="description">{data.description}</div>
-                  <div className="price">{formatPrice(data.harga_menu)}</div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </Layout>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <CreateStore
+            onOpen={openCreateModal}
+            onClose={() => {
+              setOpenCreateModal(false);
+            }}
+          />
+          <UpdateStore
+            onOpen={openUpdateModal}
+            onClose={() => {
+              setOpenUpdateModal(false);
+            }}
+          />
+          <Layout>
+            <div className="store">
+              <div className="store-new-product">
+                <button
+                  onClick={() => {
+                    setOpenCreateModal(true);
+                  }}
+                >
+                  New Product
+                  <span className="material-symbols-outlined">add_circle</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setOpenUpdateModal(true);
+                  }}
+                >
+                  Update
+                  <span className="material-symbols-outlined">edit</span>
+                </button>
+              </div>
+              <div className="store-title">Makanan</div>
+              <div className="store-container">
+                {foods.map((data, index) => {
+                  return (
+                    <div className="item" key={data._id}>
+                      <div className="image">
+                        <img src={memoizedImages[index]} alt={data.nama_menu} />
+                      </div>
+                      <div className="name">{data.nama_menu}</div>
+                      <div className="description">{data.description}</div>
+                      <div className="stock">
+                        Stock: <span>{data.stock_menu}</span>
+                      </div>
+                      <div className="price">
+                        {formatPrice(data.harga_menu)}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="store-title">Minuman</div>
+              <div className="store-container">
+                {drinks.map((data, index) => {
+                  return (
+                    <div className="item" key={data._id}>
+                      <div className="image">
+                        <img
+                          src={memoizedImages[index + foods.length]}
+                          alt={data.nama_menu}
+                        />
+                      </div>
+                      <div className="name">{data.nama_menu}</div>
+                      <div className="stock">
+                        Stock: <span>{data.stock_menu}</span>
+                      </div>
+                      <div className="description">{data.description}</div>
+                      <div className="price">
+                        {formatPrice(data.harga_menu)}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </Layout>
+        </>
+      )}
     </>
   );
 }

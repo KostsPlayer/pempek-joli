@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import Loader from "../../helper/Loader";
 import Cursor from "../../helper/Cursor";
 import SmoothScroll from "../../helper/SmoothScroll";
 import Navbar from "../../component/Navbar/Navbar";
@@ -20,6 +21,13 @@ export default function Order() {
   const [drinks, setDrinks] = useState([]);
   const [quantities, setQuantities] = useState({});
   const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+  }, []);
 
   useEffect(() => {
     if (getToken) {
@@ -133,7 +141,9 @@ export default function Order() {
         )
         .then((res) => {
           // console.log(res.data);
-          navigate("/cart");
+          navigate("/cart", {
+            state: { messageToCart: "Item successfully added to cart!" },
+          });
         })
         .catch((err) => {
           console.error(err);
@@ -143,115 +153,130 @@ export default function Order() {
     }
   };
 
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <>
-      <Cursor />
-      <SmoothScroll />
-      <div className="order">
-        <div className="order-foods">
-          <Navbar />
-          <div className="content">
-            <div className="title">Makanan</div>
-            <div className="list">
-              {foods.map((data, index) => {
-                return (
-                  <div className="item" key={data._id}>
-                    <div className="item-image">
-                      <img src={memoizedImages[index]} alt={data.nama_menu} />
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <Cursor />
+          <SmoothScroll />
+          <div className="order">
+            <div className="order-foods">
+              <Navbar />
+              <div className="content">
+                <div className="title">Makanan</div>
+                <div className="list">
+                  {foods.map((data, index) => {
+                    return (
+                      <div className="item" key={data._id}>
+                        <div className="item-image">
+                          <img
+                            src={memoizedImages[index]}
+                            alt={data.nama_menu}
+                          />
+                        </div>
+                        <div className="item-title">{data.nama_menu}</div>
+                        <div className="item-price">
+                          {formatPrice(data.harga_menu)}
+                        </div>
+                        <div className="item-action">
+                          <span
+                            className="material-symbols-outlined"
+                            onClick={() => RemoveQuantity(data._id)}
+                          >
+                            remove
+                          </span>
+                          <input
+                            type="number"
+                            name="quantity"
+                            value={quantities[data._id]}
+                            onChange={(e) =>
+                              handleQuantityChange(
+                                data._id,
+                                e.target.value,
+                                data.stock_menu
+                              )
+                            }
+                            min="0"
+                            max={data.stock_menu}
+                          />
+                          <span
+                            className="material-symbols-outlined"
+                            onClick={() =>
+                              AddQuantity(data._id, data.stock_menu)
+                            }
+                          >
+                            add
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+            <div className="order-drinks">
+              <div className="title">Minuman</div>
+              <div className="list">
+                {drinks.map((data, index) => {
+                  return (
+                    <div className="item" key={data._id}>
+                      <div className="item-image">
+                        <img
+                          src={memoizedImages[index + foods.length]}
+                          alt={data.nama_menu}
+                        />
+                      </div>
+                      <div className="item-title">{data.nama_menu}</div>
+                      <div className="item-price">
+                        {formatPrice(data.harga_menu)}
+                      </div>
+                      <div className="item-action">
+                        <span
+                          className="material-symbols-outlined"
+                          onClick={() => RemoveQuantity(data._id)}
+                        >
+                          remove
+                        </span>
+                        <input
+                          type="number"
+                          name="quantity"
+                          value={quantities[data._id]}
+                          onChange={(e) =>
+                            handleQuantityChange(
+                              data._id,
+                              e.target.value,
+                              data.stock_menu
+                            )
+                          }
+                          min="0"
+                          max={data.stock_menu}
+                        />
+                        <span
+                          className="material-symbols-outlined"
+                          onClick={() => AddQuantity(data._id, data.stock_menu)}
+                        >
+                          add
+                        </span>
+                      </div>
                     </div>
-                    <div className="item-title">{data.nama_menu}</div>
-                    <div className="item-price">
-                      {formatPrice(data.harga_menu)}
-                    </div>
-                    <div className="item-action">
-                      <span
-                        className="material-symbols-outlined"
-                        onClick={() => RemoveQuantity(data._id)}
-                      >
-                        remove
-                      </span>
-                      <input
-                        type="number"
-                        name="quantity"
-                        value={quantities[data._id]}
-                        onChange={(e) =>
-                          handleQuantityChange(
-                            data._id,
-                            e.target.value,
-                            data.stock_menu
-                          )
-                        }
-                        min="0"
-                        max={data.stock_menu}
-                      />
-                      <span
-                        className="material-symbols-outlined"
-                        onClick={() => AddQuantity(data._id, data.stock_menu)}
-                      >
-                        add
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
+            </div>
+            <div className="add-to-cart" onClick={handleToCart}>
+              <span className="material-symbols-outlined">draft_orders</span>
+              <span>Add to cart!</span>
             </div>
           </div>
-        </div>
-        <div className="order-drinks">
-          <div className="title">Minuman</div>
-          <div className="list">
-            {drinks.map((data, index) => {
-              return (
-                <div className="item" key={data._id}>
-                  <div className="item-image">
-                    <img
-                      src={memoizedImages[index + foods.length]}
-                      alt={data.nama_menu}
-                    />
-                  </div>
-                  <div className="item-title">{data.nama_menu}</div>
-                  <div className="item-price">
-                    {formatPrice(data.harga_menu)}
-                  </div>
-                  <div className="item-action">
-                    <span
-                      className="material-symbols-outlined"
-                      onClick={() => RemoveQuantity(data._id)}
-                    >
-                      remove
-                    </span>
-                    <input
-                      type="number"
-                      name="quantity"
-                      value={quantities[data._id]}
-                      onChange={(e) =>
-                        handleQuantityChange(
-                          data._id,
-                          e.target.value,
-                          data.stock_menu
-                        )
-                      }
-                      min="0"
-                      max={data.stock_menu}
-                    />
-                    <span
-                      className="material-symbols-outlined"
-                      onClick={() => AddQuantity(data._id, data.stock_menu)}
-                    >
-                      add
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        <div className="add-to-cart" onClick={handleToCart}>
-          <span className="material-symbols-outlined">draft_orders</span>
-          <span>Add to cart!</span>
-        </div>
-      </div>
-      <Footer />
+          <Footer />
+        </>
+      )}
       <ToastContainer />
     </>
   );

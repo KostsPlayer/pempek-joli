@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import Loader from "../../helper/Loader";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Cursor from "../../helper/Cursor";
@@ -24,6 +25,14 @@ export default function SignUp() {
     confirmPassword: "",
   });
 
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+  }, []);
+
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
@@ -46,64 +55,70 @@ export default function SignUp() {
 
   return (
     <>
-      <Cursor />
-      <SmoothScroll />
-      <div className="sign-up">
-        <div className="sign-up-image">
-          <div className="container">
-            <GenerateImages />
-          </div>
-        </div>
-        <div className="sign-up-form">
-          <span
-            className="material-symbols-outlined"
-            onClick={() => {
-              redirect("/");
-            }}
-          >
-            arrow_back
-          </span>
-          <div className="title">Sign Up</div>
-          <form className="form" onSubmit={handleSignUp}>
-            <input
-              type="text"
-              name="email"
-              placeholder="Email"
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="fullName"
-              placeholder="Fullname"
-              onChange={handleChange}
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              onChange={handleChange}
-            />
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              onChange={handleChange}
-            />
-            <button type="submit">Submit</button>
-            <div className="form-link">
-              <Link className="to-link" to={"/"}>
-                Forgot Password?
-              </Link>
-              <span>
-                Have an account?{" "}
-                <Link className="to-link" to={"/login"}>
-                  Login{" "}
-                </Link>
-              </span>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <Cursor />
+          <SmoothScroll />
+          <div className="sign-up">
+            <div className="sign-up-image">
+              <div className="container">
+                <GenerateImages />
+              </div>
             </div>
-          </form>
-        </div>
-      </div>
+            <div className="sign-up-form">
+              <span
+                className="material-symbols-outlined"
+                onClick={() => {
+                  redirect("/");
+                }}
+              >
+                arrow_back
+              </span>
+              <div className="title">Sign Up</div>
+              <form className="form" onSubmit={handleSignUp}>
+                <input
+                  type="text"
+                  name="email"
+                  placeholder="Email"
+                  onChange={handleChange}
+                />
+                <input
+                  type="text"
+                  name="fullName"
+                  placeholder="Fullname"
+                  onChange={handleChange}
+                />
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  onChange={handleChange}
+                />
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="Confirm Password"
+                  onChange={handleChange}
+                />
+                <button type="submit">Submit</button>
+                <div className="form-link">
+                  <Link className="to-link" to={"/"}>
+                    Forgot Password?
+                  </Link>
+                  <span>
+                    Have an account?{" "}
+                    <Link className="to-link" to={"/login"}>
+                      Login{" "}
+                    </Link>
+                  </span>
+                </div>
+              </form>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }

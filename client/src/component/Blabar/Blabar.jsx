@@ -4,14 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import GetData from "../../helper/GetData";
 import { ReactSocialMediaIcons } from "react-social-media-icons";
 
-export default function Blabar({ nonBorder = false, dashboard = true }) {
+export default function Blabar({ nonBorder = false }) {
   const redirect = useNavigate();
   const { role, session } = GetData();
   const [openNotife, setOpenNotife] = useState(false);
-
-  useEffect(() => {
-    console.log(openNotife);
-  }, [openNotife]);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -52,23 +48,21 @@ export default function Blabar({ nonBorder = false, dashboard = true }) {
             Pempek Joli
           </Link>
           <div className="icon">
-            {session && dashboard ? (
-              <div
-                className="nav-link"
-                onClick={() => {
-                  setOpenNotife(true);
-                }}
-              >
-                <span className="material-symbols-outlined">notifications</span>
-              </div>
-            ) : (
-              ""
-            )}
             <Link className="nav-link" to={"/cart"}>
               <span className="material-symbols-outlined">local_mall</span>
             </Link>
             {session ? (
               <>
+                <div
+                  className="nav-link"
+                  onClick={() => {
+                    setOpenNotife(true);
+                  }}
+                >
+                  <span className="material-symbols-outlined">
+                    notifications
+                  </span>
+                </div>
                 {role === "admin" ? (
                   <Link className="nav-link" to={"/profile"}>
                     <span className=" material-symbols-outlined">
@@ -82,20 +76,16 @@ export default function Blabar({ nonBorder = false, dashboard = true }) {
                     </span>
                   </Link>
                 )}
+                <div className="nav-link">
+                  <span className="material-symbols-outlined" onClick={logout}>
+                    logout
+                  </span>
+                </div>
               </>
             ) : (
               <Link className="nav-link" to={"/login"}>
                 <span className="material-symbols-outlined">person</span>
               </Link>
-            )}
-            {session ? (
-              <div className="nav-link">
-                <span className="material-symbols-outlined" onClick={logout}>
-                  logout
-                </span>
-              </div>
-            ) : (
-              ""
             )}
           </div>
         </div>
