@@ -62,7 +62,7 @@ export default function Cart() {
 
   const refreshDataCart = useCallback(() => {
     axios
-      .get("http://localhost:5000/api/cart", {
+      .get("https://pempek-joli-server.vercel.app/api/cart", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -124,7 +124,7 @@ export default function Cart() {
       Promise.all(
         Object.keys(quantities).map((id) =>
           axios
-            .get(`http://localhost:5000/api/product/cari/${id}`, {
+            .get(`https://pempek-joli-server.vercel.app/api/product/cari/${id}`, {
               headers: { Authorization: `Bearer ${token}` },
             })
             .then((res) => res.data.data)
@@ -143,7 +143,7 @@ export default function Cart() {
   useEffect(() => {
     if (token) {
       axios
-        .get("http://localhost:5000/api/order", {
+        .get("https://pempek-joli-server.vercel.app/api/order", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -157,7 +157,7 @@ export default function Cart() {
           setPaymentId(sendPaymentId);
 
           axios
-            .get(`http://localhost:5000/api/payments/${sendPaymentId}`, {
+            .get(`https://pempek-joli-server.vercel.app/api/payments/${sendPaymentId}`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -230,7 +230,7 @@ export default function Cart() {
       console.log("product Cart", productCartData);
 
       return axios.put(
-        `http://localhost:5000/api/cart/update/${cart._id}`,
+        `https://pempek-joli-server.vercel.app/api/cart/update/${cart._id}`,
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -277,7 +277,7 @@ export default function Cart() {
         console.log(payloadCreateOrder);
 
         return axios.post(
-          "http://localhost:5000/api/order",
+          "https://pempek-joli-server.vercel.app/api/order",
           payloadCreateOrder,
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -326,7 +326,7 @@ export default function Cart() {
         // Update status aktif untuk setiap cart yang ditemukan
         const updatePromises = cartsContainingProduct.map((cart) =>
           axios.put(
-            `http://localhost:5000/api/cart/${cart._id}/product/status`,
+            `https://pempek-joli-server.vercel.app/api/cart/${cart._id}/product/status`,
             {
               id_product: id,
               isActive: newActiveStatus,
@@ -443,7 +443,7 @@ export default function Cart() {
       )?._id;
 
       axios
-        .delete(`http://localhost:5000/api/cart/${cartId}/product`, {
+        .delete(`https://pempek-joli-server.vercel.app/api/cart/${cartId}/product`, {
           headers: { Authorization: `Bearer ${token}` },
           data: { id_product: id },
         })
@@ -459,7 +459,7 @@ export default function Cart() {
 
   const deleteCart = useCallback(() => {
     axios
-      .delete(`http://localhost:5000/api/cart`, {
+      .delete(`https://pempek-joli-server.vercel.app/api/cart`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -474,7 +474,7 @@ export default function Cart() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/payments", {
+      .get("https://pempek-joli-server.vercel.app/api/payments", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -496,7 +496,7 @@ export default function Cart() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/alamatpengiriman/alamat", {
+      .get("https://pempek-joli-server.vercel.app/api/alamatpengiriman/alamat", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

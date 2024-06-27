@@ -87,7 +87,7 @@ export default function Profile() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/alamatpengiriman/alamat", {
+      .get("https://pempek-joli-server.vercel.app/api/alamatpengiriman/alamat", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -145,7 +145,7 @@ export default function Profile() {
 
       axios
         .post(
-          "http://localhost:5000/api/alamatpengiriman",
+          "https://pempek-joli-server.vercel.app/api/alamatpengiriman",
           {
             address: addressValues.address,
             province: addressValues.province,
@@ -173,7 +173,7 @@ export default function Profile() {
 
   const refreshAddress = useCallback(() => {
     axios
-      .get("http://localhost:5000/api/alamatpengiriman/alamat", {
+      .get("https://pempek-joli-server.vercel.app/api/alamatpengiriman/alamat", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -190,7 +190,7 @@ export default function Profile() {
 
   const deleteAddress = useCallback((id) => {
     axios
-      .delete(`http://localhost:5000/api/alamatpengiriman/${id}`, {
+      .delete(`https://pempek-joli-server.vercel.app/api/alamatpengiriman/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -207,7 +207,7 @@ export default function Profile() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/profile/me", {
+      .get("https://pempek-joli-server.vercel.app/api/profile/me", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

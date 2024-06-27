@@ -30,7 +30,7 @@ export default function Order() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/product/makanan", {
+      .get("https://pempek-joli-server.vercel.app/api/product/makanan", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -48,7 +48,7 @@ export default function Order() {
       });
 
     axios
-      .get("http://localhost:5000/api/product/minuman", {
+      .get("https://pempek-joli-server.vercel.app/api/product/minuman", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -121,7 +121,7 @@ export default function Order() {
 
       axios
         .post(
-          "http://localhost:5000/api/cart/",
+          "https://pempek-joli-server.vercel.app/api/cart/",
           {
             products: products,
           },

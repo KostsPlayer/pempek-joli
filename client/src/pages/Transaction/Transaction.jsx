@@ -69,7 +69,7 @@ export default function Transaction() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/alamatpengiriman/alamat", {
+      .get("https://pempek-joli-server.vercel.app/api/alamatpengiriman/alamat", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -78,7 +78,7 @@ export default function Transaction() {
         const addressData = res.data.alamat;
 
         axios
-          .get("http://localhost:5000/api/payments", {
+          .get("https://pempek-joli-server.vercel.app/api/payments", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -87,7 +87,7 @@ export default function Transaction() {
             const paymentData = res.data.data;
 
             axios
-              .get("http://localhost:5000/api/order", {
+              .get("https://pempek-joli-server.vercel.app/api/order", {
                 headers: {
                   Authorization: `Bearer ${token}`,
                 },
@@ -161,7 +161,7 @@ export default function Transaction() {
 
       axios
         .put(
-          `http://localhost:5000/api/order/status/${id}`,
+          `https://pempek-joli-server.vercel.app/api/order/status/${id}`,
           {
             status_pesanan: newStatus,
           },

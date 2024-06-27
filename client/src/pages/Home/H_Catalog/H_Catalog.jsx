@@ -19,7 +19,7 @@ export default function H_Menu() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/product/makanan", {
+      .get("https://pempek-joli-server.vercel.app/api/product/makanan", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

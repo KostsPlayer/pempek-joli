@@ -61,7 +61,7 @@ export default function CreateStore({ onOpen, onClose }) {
 
     if (token) {
       axios
-        .post("http://localhost:5000/api/product/create_menu", formData, {
+        .post("https://pempek-joli-server.vercel.app/api/product/create_menu", formData, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -26,7 +26,7 @@ export default function UpdateStore({ onOpen, onClose }) {
   useEffect(() => {
     if (token) {
       axios
-        .get("http://localhost:5000/makanan", {
+        .get("https://pempek-joli-server.vercel.app/makanan", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -73,7 +73,7 @@ export default function UpdateStore({ onOpen, onClose }) {
 
     if (token) {
       axios
-        .post("http://localhost:5000/api/product/makanan", formData, {
+        .post("https://pempek-joli-server.vercel.app/api/product/makanan", formData, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

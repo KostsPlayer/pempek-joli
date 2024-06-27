@@ -33,7 +33,7 @@ export default function Receipt({ onClose, onOpen, token, paymentId }) {
 
       await axios
         .put(
-          `http://localhost:5000/api/upload/payments/${paymentId}`,
+          `https://pempek-joli-server.vercel.app/api/upload/payments/${paymentId}`,
           formData,
           {
             headers: {

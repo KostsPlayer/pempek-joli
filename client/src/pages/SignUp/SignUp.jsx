@@ -32,7 +32,7 @@ export default function SignUp() {
     e.preventDefault();
 
     axios
-      .post("http://localhost:5000/api/auth/register", values)
+      .post("https://pempek-joli-server.vercel.app/api/auth/register", values)
       .then((res) => {
         console.log(res.data);
         redirect("/login", {

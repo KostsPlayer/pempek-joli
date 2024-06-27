@@ -54,7 +54,7 @@ export default function Login() {
     e.preventDefault();
 
     axios
-      .post("http://localhost:5000/api/auth/login", values)
+      .post("https://pempek-joli-server.vercel.app/api/auth/login", values)
       .then((res) => {
         localStorage.setItem(
           "token",
