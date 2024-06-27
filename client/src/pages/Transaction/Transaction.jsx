@@ -346,6 +346,10 @@ export default function Transaction() {
     }
   }, [currentPage]);
 
+  useEffect(() => {
+    console.log(currentPage, totalPages);
+  }, [currentPage, totalPages]);
+
   return (
     <>
       {loading ? (
@@ -366,7 +370,7 @@ export default function Transaction() {
                 </span>
                 <button
                   onClick={handleNextPage}
-                  disabled={currentPage === totalPages || currentPage === 0}
+                  disabled={currentPage === totalPages || currentPage === 1}
                 >
                   Next
                 </button>
