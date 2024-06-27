@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { updateBuktiPembayaran, getPaymentsById } = require('../controllers/pembayaranController.js');
-const { upload } = require('../middleware/image.js');
+const { upload } = require('../middleware/uploadImage.js');
 const verifyToken = require('../middleware/auth.js');
 
 
