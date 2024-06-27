@@ -1,8 +1,9 @@
 @use "./../../helper/mixin" as m;
 @use "./../../helper/variable" as v;
+@use "sass:color";
 
 .notification {
-  //   border: 0.1rem solid #000;
+  //   border: 0.1rem solid v.$light-orange;
   position: fixed;
   top: 0;
   left: 0;
@@ -30,23 +31,42 @@
       height: 1.6rem;
       transform: rotate(45deg);
       border-radius: 0.1rem;
-      border-top: 0.15rem solid #000;
-      border-left: 0.15rem solid #000;
+      border-top: 0.15rem solid v.$light-orange;
+      border-left: 0.15rem solid v.$light-orange;
       border-bottom: 0.15rem solid transparent;
       border-right: 0.15rem solid transparent;
       z-index: -1;
-      background-color: #000;
+      background-color: v.$light-orange;
     }
 
-    .day {
-      background-color: #000;
+    @mixin helper($padding: 0.5rem 0.85rem) {
+      background-color: v.$light-orange;
       color: #fff;
       font-size: 0.94rem;
       font-weight: 600;
-      padding: 0.5rem 0.85rem;
+      padding: $padding;
+    }
+
+    .day {
+      @include helper();
       border-top-left-radius: 0.2rem;
       border-top-right-radius: 0.2rem;
     }
+
+    .all-message {
+      @include helper($padding: 0.75rem 0.85rem);
+      border-bottom-left-radius: 0.2rem;
+      border-bottom-right-radius: 0.2rem;
+      text-align: center;
+      border-top: 0.15rem solid #fff;
+    }
+
+    $item-colors: (
+      1: v.$light-yellow,
+      2: v.$light-green,
+      3: v.$light-blue,
+      4: v.$light-red,
+    );
 
     .item {
       width: 100%;
@@ -59,21 +79,10 @@
       border-top: 0.15rem solid #fff;
       font-size: 0.86rem;
 
-      &:last-child {
-        border-bottom-left-radius: 0.2rem;
-        border-bottom-right-radius: 0.2rem;
-      }
-
-      &.pending {
-        background-color: v.$pending;
-      }
-
-      &.completed {
-        background-color: v.$completed;
-      }
-
-      &.cancelled {
-        background-color: v.$cancelled;
+      @each $index, $color in $item-colors {
+        &:nth-child(#{$index}n) {
+          background-color: $color;
+        }
       }
 
       .image {
@@ -105,6 +114,7 @@
 
       .time {
         color: #fff;
+        font-weight: 500;
       }
     }
   }

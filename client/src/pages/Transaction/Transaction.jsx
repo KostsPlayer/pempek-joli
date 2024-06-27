@@ -370,7 +370,7 @@ export default function Transaction() {
                 </span>
                 <button
                   onClick={handleNextPage}
-                  disabled={currentPage === totalPages || currentPage === 1}
+                  disabled={currentPage === totalPages}
                 >
                   Next
                 </button>

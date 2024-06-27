@@ -18,7 +18,7 @@ function Notification({ openNotife, closeNotife }) {
           }}
         >
           <div className="day">Today</div>
-          <div className="item pending">
+          <div className="item">
             <div className="image">
               <img src={optimatizaiton} alt={`image-1`} />
             </div>
@@ -30,7 +30,7 @@ function Notification({ openNotife, closeNotife }) {
             </div>
             <div className="time">99h ago</div>
           </div>
-          <div className="item completed">
+          <div className="item">
             <div className="image">
               <img src={optimatizaiton} alt={`image-1`} />
             </div>
@@ -42,7 +42,7 @@ function Notification({ openNotife, closeNotife }) {
             </div>
             <div className="time">99h ago</div>
           </div>
-          <div className="item cancelled">
+          <div className="item">
             <div className="image">
               <img src={optimatizaiton} alt={`image-1`} />
             </div>
@@ -54,6 +54,19 @@ function Notification({ openNotife, closeNotife }) {
             </div>
             <div className="time">99h ago</div>
           </div>
+          <div className="item">
+            <div className="image">
+              <img src={optimatizaiton} alt={`image-1`} />
+            </div>
+            <div className="content">
+              <div className="text">
+                <span>Pemesanan dibatalkan! </span>
+                Pengguna* telah membatalkan pesanan.
+              </div>
+            </div>
+            <div className="time">99h ago</div>
+          </div>
+          <div className="all-message">Show All Message</div>
         </div>
       </div>
     </>
