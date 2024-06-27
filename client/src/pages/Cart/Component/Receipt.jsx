@@ -31,9 +31,18 @@ export default function Receipt({ onClose, onOpen, token, paymentId }) {
       const formData = new FormData();
       formData.append("bukti_pembayaran", sendReceipt);
 
+      for (let pair of formData.entries()) {
+        if (pair[1] instanceof File) {
+          console.log(pair[0], pair[1].name, pair[1].size, pair[1].type);
+        } else {
+          console.log(pair[0], pair[1]);
+        }
+      }
+
       await axios
         .put(
           `https://pempek-joli-server.vercel.app/api/upload/payments/${paymentId}`,
+          // `http://localhost:5000/api/upload/payments/${paymentId}`,
           formData,
           {
             headers: {
@@ -43,7 +52,6 @@ export default function Receipt({ onClose, onOpen, token, paymentId }) {
           }
         )
         .then((res) => {
-          // console.log(res.data);
           navigate("/", {
             state: { messageOrder: "Transaction Successfully!" },
           });
@@ -54,6 +62,10 @@ export default function Receipt({ onClose, onOpen, token, paymentId }) {
     },
     [navigate, paymentId, token, sendReceipt]
   );
+
+  useEffect(() => {
+    console.log(sendReceipt, paymentId);
+  }, [sendReceipt, paymentId]);
 
   if (!onOpen) return null;
 
@@ -70,7 +82,10 @@ export default function Receipt({ onClose, onOpen, token, paymentId }) {
           <span className="material-symbols-outlined" onClick={onClose}>
             cancel
           </span>
-          <form className="form-receipt" onSubmit={handleSubmit}>
+          <form
+            className="form-receipt"
+            onSubmit={handleSubmit}
+          >
             <div className="form-content">
               <input
                 type="file"

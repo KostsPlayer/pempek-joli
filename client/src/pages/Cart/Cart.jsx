@@ -211,7 +211,8 @@ export default function Cart() {
 
   useEffect(() => {
     console.log(paymentPending);
-  }, [paymentPending]);
+    console.log(paymentId);
+  }, [paymentPending, paymentId]);
 
   const checkout = useCallback(() => {
     const totalQuantities = Object.keys(originalQuantities).reduce(
