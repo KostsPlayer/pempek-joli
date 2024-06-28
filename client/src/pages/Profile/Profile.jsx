@@ -22,7 +22,7 @@ export default function Profile() {
   const { getToken } = GetData();
   const objectToken = JSON.parse(getToken);
   const token = objectToken.token;
-  const test = jwtDecode(token);
+  const decoded = jwtDecode(token);
 
   const autoCompleteRef = useRef(null);
 
@@ -38,6 +38,69 @@ export default function Profile() {
   });
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState({
+    fullName: "",
+    email: "",
+    nickname: "",
+    phoneNumber: "",
+  });
+
+  useEffect(() => {
+    axios
+      .get("https://pempek-joli-server.vercel.app/api/profile/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      })
+      .then((res) => {
+        setProfile(res.data.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [token]);
+
+  const handleChangeProfile = useCallback(
+    (e) => {
+      setProfile({
+        ...profile,
+        [e.target.name]: e.target.value,
+      });
+    },
+    [profile]
+  );
+
+  const handleSubmitProfile = useCallback(
+    (e) => {
+      e.preventDefault();
+
+      axios
+        .put(
+          "https://pempek-joli-server.vercel.app/api/profile/edit",
+          {
+            fullName: profile.fullName,
+            email: profile.email,
+            nickname: profile.nickname,
+            phoneNumber: profile.phoneNumber,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            withCredentials: true,
+          }
+        )
+        .then((res) => {
+          console.log(res.data.data);
+          toastMessage("success", res.data.message);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+    [toastMessage, token, profile]
+  );
 
   useEffect(() => {
     setTimeout(() => {
@@ -249,22 +312,36 @@ export default function Profile() {
       ) : (
         <Layout>
           <div className="profile">
-            <div className="profile-image">
-              <img src={pp} alt="test" />
-              <label htmlFor="image">
-                <input type="file" name="image" id="image" />
-                Select Image
-              </label>
-            </div>
-            <form className="profile-info">
+            <form className="profile-info" onSubmit={handleSubmitProfile}>
               <div className="title">Personal Data</div>
-              <input type="text" name="fullname" placeholder="Fullname" />
-              <input type="text" name="nickname" placeholder="Nickname" />
-              <input type="text" name="email" placeholder="Email" />
+              <input
+                type="text"
+                name="fullName"
+                placeholder="Fullname"
+                value={profile?.fullName || ""}
+                onChange={handleChangeProfile}
+              />
+              <input
+                type="text"
+                name="nickname"
+                placeholder="Nickname"
+                value={profile?.nickname || ""}
+                onChange={handleChangeProfile}
+              />
+
+              <input
+                type="text"
+                name="email"
+                placeholder="Email"
+                value={profile?.email || ""}
+                onChange={handleChangeProfile}
+              />
               <input
                 type="number"
                 name="phoneNumber"
                 placeholder="Phone Number"
+                value={profile?.phoneNumber || ""}
+                onChange={handleChangeProfile}
               />
               <button className="button">Submit</button>
             </form>

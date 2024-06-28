@@ -60,7 +60,7 @@ export default function Transaction() {
     shipping: false,
   });
   const [paymentFilter, setPaymentFilter] = useState({
-    qris: false,
+    credit: [],
     cash: false,
   });
   const [periodFilter, setPeriodFilter] = useState("");
@@ -129,6 +129,7 @@ export default function Transaction() {
           };
         });
 
+        console.log(arrayData);
         setData(arrayData);
       })
       .catch((err) => {
@@ -208,11 +209,27 @@ export default function Transaction() {
   }, []);
 
   const handlePaymentChange = useCallback((e) => {
-    setPaymentFilter((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.checked,
-    }));
+    const { name, checked } = e.target;
+
+    setPaymentFilter((prev) => {
+      if (name === "cash") {
+        return {
+          ...prev,
+          cash: checked,
+        };
+      } else if (name === "credit") {
+        const creditMethods = ["bni", "bca", "dana", "go pay", "ovo"];
+        return {
+          ...prev,
+          credit: checked ? creditMethods : [],
+        };
+      }
+    });
   }, []);
+
+  useEffect(() => {
+    console.log(paymentFilter);
+  }, [paymentFilter]);
 
   const handleCustomPeriodChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -677,12 +694,12 @@ export default function Transaction() {
                 <div className="container">
                   <input
                     type="checkbox"
-                    name="qris"
-                    id="qris"
-                    checked={paymentFilter.qris}
+                    name="credit"
+                    id="credit"
+                    checked={paymentFilter.credit.length > 0}
                     onChange={handlePaymentChange}
                   />
-                  <label htmlFor="qris">Qris</label>
+                  <label htmlFor="credit">Credit</label>
                 </div>
                 <div className="container">
                   <input

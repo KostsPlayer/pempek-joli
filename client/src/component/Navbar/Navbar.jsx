@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 import { ReactSocialMediaIcons } from "react-social-media-icons";
 import GetData from "../../helper/GetData";
 
 export default function Navbar() {
   const redirect = useNavigate();
-  const { role, session } = GetData();
+  const { role, session} = GetData();
 
   const logout = () => {
     localStorage.removeItem("token");

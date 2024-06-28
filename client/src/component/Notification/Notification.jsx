@@ -4,10 +4,6 @@ import image from "./../../assets/images/user_187488.png";
 function Notification({ openNotife, closeNotife }) {
   if (!openNotife) return null;
 
-  const optimatizaiton = useMemo(() => {
-    return image;
-  }, [image]);
-
   return (
     <>
       <div className="notification" onClick={closeNotife}>
@@ -19,9 +15,6 @@ function Notification({ openNotife, closeNotife }) {
         >
           <div className="day">Today</div>
           <div className="item">
-            <div className="image">
-              <img src={optimatizaiton} alt={`image-1`} />
-            </div>
             <div className="content">
               <div className="text">
                 <span>Pesanan masuk! </span>
@@ -31,9 +24,6 @@ function Notification({ openNotife, closeNotife }) {
             <div className="time">99h ago</div>
           </div>
           <div className="item">
-            <div className="image">
-              <img src={optimatizaiton} alt={`image-1`} />
-            </div>
             <div className="content">
               <div className="text">
                 <span>Pembayaran selesai! </span>
@@ -43,9 +33,6 @@ function Notification({ openNotife, closeNotife }) {
             <div className="time">99h ago</div>
           </div>
           <div className="item">
-            <div className="image">
-              <img src={optimatizaiton} alt={`image-1`} />
-            </div>
             <div className="content">
               <div className="text">
                 <span>Pemesanan dibatalkan! </span>
@@ -55,9 +42,6 @@ function Notification({ openNotife, closeNotife }) {
             <div className="time">99h ago</div>
           </div>
           <div className="item">
-            <div className="image">
-              <img src={optimatizaiton} alt={`image-1`} />
-            </div>
             <div className="content">
               <div className="text">
                 <span>Pemesanan dibatalkan! </span>

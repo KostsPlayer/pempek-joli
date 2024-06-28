@@ -304,7 +304,7 @@
 }
 
 .notification {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -363,7 +363,7 @@
   width: 100%;
   min-height: 10vh;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 1fr auto;
   align-items: center;
   padding: 0.75rem 0.85rem;
   gap: 0.65rem;
@@ -378,20 +378,6 @@
 }
 .notification .overlay .item:nth-child(3n) {
   background-color: #2fc1ff;
-}
-.notification .overlay .item:nth-child(4n) {
-  background-color: #ef4d48;
-}
-.notification .overlay .item .image {
-  width: 100%;
-  height: auto;
-}
-.notification .overlay .item .image img {
-  width: 2.4rem;
-  height: 2.4rem;
-  border-radius: 50%;
-  -o-object-fit: cover;
-     object-fit: cover;
 }
 .notification .overlay .item .content {
   width: 100%;
@@ -2017,7 +2003,7 @@
   width: 100%;
   height: auto;
   display: grid;
-  grid-template-columns: auto 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 2.2rem;
 }
 .profile .title {
@@ -2068,41 +2054,6 @@
   flex-direction: row;
   letter-spacing: 0.06rem;
 }
-.profile-image {
-  width: 100%;
-  height: -moz-fit-content;
-  height: fit-content;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 0.8rem;
-}
-.profile-image img {
-  width: 10.8rem;
-  height: 10.8rem;
-  border-radius: 50%;
-  -o-object-fit: cover;
-     object-fit: cover;
-}
-.profile-image label {
-  border: 0.12rem solid #ff7a3d;
-  display: inline-block;
-  color: #ff7a3d;
-  padding: 2.5% 5.8%;
-  border-radius: 0.2rem;
-  font-weight: 600;
-  font-size: 0.92rem;
-}
-.profile-image label:hover {
-  border: 0.12rem solid #ff7a3d;
-  background-color: #ff7a3d;
-  color: #fff;
-  transition: all 0.3s ease-in-out;
-}
-.profile-image label input {
-  display: none;
-}
 .profile-info {
   width: 100%;
   height: -moz-fit-content;
@@ -2118,10 +2069,12 @@
   height: 2.4rem;
   outline: 0;
   border: #ddd solid 0.08rem;
+  color: rgba(0, 0, 0, 0.7);
+  font-weight: 500;
   border-radius: 0.2rem;
   padding: 0.6rem;
 }
-.profile-info input[name=fullname] {
+.profile-info input[name=fullName] {
   grid-area: fullname;
 }
 .profile-info input[name=nickname] {
@@ -2162,6 +2115,8 @@
   height: 2.4rem;
   outline: 0;
   border: #ddd solid 0.08rem;
+  color: rgba(0, 0, 0, 0.7);
+  font-weight: 500;
   border-radius: 0.2rem;
   padding: 0.6rem;
   color: rgba(0, 0, 0, 0.6);
@@ -2175,9 +2130,11 @@
 }
 .profile-address .display-address .container#province {
   grid-area: province;
+  font-weight: 500;
 }
 .profile-address .display-address .container#regency {
   grid-area: regency;
+  font-weight: 500;
 }
 .profile-address .display-address .container#description {
   grid-area: description;
@@ -2201,6 +2158,8 @@
   height: 2.4rem;
   outline: 0;
   border: #ddd solid 0.08rem;
+  color: rgba(0, 0, 0, 0.7);
+  font-weight: 500;
   border-radius: 0.2rem;
   padding: 0.6rem;
 }
@@ -2229,9 +2188,11 @@
 }
 .profile-address .create-address .container select[name=province] {
   grid-area: province;
+  font-weight: 500;
 }
 .profile-address .create-address .container select[name=regency] {
   grid-area: regency;
+  font-weight: 500;
 }
 .profile-address .create-address .container select option {
   color: #000;

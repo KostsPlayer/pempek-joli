@@ -7,6 +7,8 @@
   height: 2.4rem;
   outline: 0;
   border: #ddd solid 0.08rem;
+  color: rgba(#000, 0.7);
+  font-weight: 500;
   border-radius: 0.2rem;
   padding: 0.6rem;
 }
@@ -15,7 +17,7 @@
   width: 100%;
   height: auto;
   display: grid;
-  grid-template-columns: auto 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 2.2rem;
 
   .title {
@@ -65,39 +67,6 @@
     letter-spacing: 0.06rem;
   }
 
-  &-image {
-    width: 100%;
-    height: fit-content;
-    @include m.flex($direction: column);
-    gap: 0.8rem;
-
-    img {
-      @include m.circle($w-h: 10.8rem);
-      object-fit: cover;
-    }
-
-    label {
-      border: 0.12rem solid v.$light-orange;
-      display: inline-block;
-      color: v.$light-orange;
-      padding: 2.5% 5.8%;
-      border-radius: 0.2rem;
-      font-weight: 600;
-      font-size: 0.92rem;
-
-      &:hover {
-        border: 0.12rem solid v.$light-orange;
-        background-color: v.$light-orange;
-        color: #fff;
-        transition: all 0.3s ease-in-out;
-      }
-
-      input {
-        display: none;
-      }
-    }
-  }
-
   &-info {
     width: 100%;
     height: fit-content;
@@ -115,7 +84,7 @@
     input {
       @include input();
 
-      &[name="fullname"] {
+      &[name="fullName"] {
         grid-area: fullname;
       }
 
@@ -138,7 +107,7 @@
     height: auto;
     @include m.flex($direction: column);
     row-gap: 1.6rem;
-    
+
     .display-address {
       width: 100%;
       display: grid;
@@ -171,10 +140,12 @@
 
         &#province {
           grid-area: province;
+          font-weight: 500;
         }
 
         &#regency {
           grid-area: regency;
+          font-weight: 500;
         }
 
         &#description {
@@ -235,10 +206,12 @@
 
           &[name="province"] {
             grid-area: province;
+            font-weight: 500;
           }
 
           &[name="regency"] {
             grid-area: regency;
+            font-weight: 500;
           }
 
           option {
