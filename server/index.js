@@ -26,7 +26,7 @@ connectDB();
 // CORS Configuration
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://pempek-joli-client.vercel.app"],
+    origin: ["http://localhost:5173/", "https://pempek-joli-client.vercel.app/"],
     methods: ["GET", "POST", "PUT", "OPTIONS", "DELETE"],
     credentials: true,
     optionsSuccessStatus: 200,
