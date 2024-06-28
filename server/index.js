@@ -23,17 +23,6 @@ app.use(express.json());
 // Connect to MongoDB
 connectDB();
 
-// CORS Configuration
-app.use(
-  cors({
-    origin: ["http://localhost:5173/", "https://pempek-joli-client.vercel.app/"],
-    methods: ["GET", "POST", "PUT", "OPTIONS", "DELETE"],
-    credentials: true,
-    optionsSuccessStatus: 200,
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
-
 // Route Handling
 app.use("/api/auth", authRoutes);
 app.use("/api/product", productRoutes);
