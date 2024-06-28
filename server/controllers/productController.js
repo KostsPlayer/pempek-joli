@@ -1,4 +1,5 @@
 const Produk = require("../models/product.js");
+const Supabase = require("../config/supabase.js");
 const { storage, imageFilter, upload } = require("../middleware/image.js");
 const express = require("express");
 const cors = require("cors");
@@ -15,9 +16,36 @@ app.use(
 );
 
 exports.createProduct = async (req, res) => {
-  const { nama_menu, harga_menu, stock_menu, description, img_menu, jenis_menu } = req.body;
-  // const img_menu = req.file ? req.file.filename : null; // Ambil nama file gambar jika tersedia
+  const { nama_menu, harga_menu, stock_menu, description, jenis_menu } = req.body;
+  const { file } = req;
+
   try {
+    let img_menu = null;
+
+    // Upload gambar ke Supabase jika ada file yang diunggah
+    if (file) {
+      const filePath = `products/${Date.now()}_${file.originalname}`;
+      const { data, error } = await Supabase.storage
+        .from('payments-image') // Ganti dengan nama bucket Anda
+        .upload(filePath, file.buffer, {
+          cacheControl: '3600',
+          upsert: false,
+          contentType: file.mimetype,
+        });
+
+      if (error) {
+        console.error("Error uploading file to Supabase:", error);
+        return res.status(500).json({
+          status: 500,
+          message: "Internal server error",
+          error: error.message,
+        });
+      }
+
+      // Simpan nama asli file di database
+      img_menu = file.originalname;
+    }
+
     const newProduct = new Produk({
       nama_menu,
       harga_menu,
@@ -26,12 +54,14 @@ exports.createProduct = async (req, res) => {
       img_menu,
       jenis_menu,
     });
+
     await newProduct.save();
+
     res.status(201).json({
-      status: 201, 
+      status: 201,
       message: "Product created successfully",
       data: {
-        nama_menu: newProduct.nama_menu          ,
+        nama_menu: newProduct.nama_menu,
         harga_menu: newProduct.harga_menu,
         stock_menu: newProduct.stock_menu,
         description: newProduct.description,
@@ -138,3 +168,115 @@ exports.getProductById = async (req, res) => {
     });
   }
 };
+
+exports.editProduct = async (req, res) => {
+  const { _id } = req.params;
+  const { nama_menu, harga_menu, stock_menu, description, jenis_menu } = req.body;
+  const { file } = req;
+
+  try {
+    const product = await Produk.findById(_id);
+    if (!product) {
+      return res.status(404).json({
+        status: 404,
+        message: "Product not found",
+      });
+    }
+
+    // Upload gambar baru ke Supabase jika ada file yang diunggah
+    if (file) {
+      const filePath = `products/${Date.now()}_${file.originalname}`;
+      const { data, error } = await Supabase.storage
+        .from('payments-image') // Ganti dengan nama bucket Anda
+        .upload(filePath, file.buffer, {
+          cacheControl: '3600',
+          upsert: false,
+          contentType: file.mimetype,
+        });
+
+      if (error) {
+        console.error("Error uploading file to Supabase:", error);
+        return res.status(500).json({
+          status: 500,
+          message: "Internal server error",
+          error: error.message,
+        });
+      }
+
+      // Simpan nama asli file di database
+      product.img_menu = file.originalname;
+    }
+
+    // Update product details
+    product.nama_menu = nama_menu;
+    product.harga_menu = harga_menu;
+    product.stock_menu = stock_menu;
+    product.description = description;
+    product.jenis_menu = jenis_menu;
+
+    await product.save();
+
+    res.status(200).json({
+      status: 200,
+      message: "Product updated successfully",
+      data: {
+        nama_menu: product.nama_menu,
+        harga_menu: product.harga_menu,
+        stock_menu: product.stock_menu,
+        description: product.description,
+        img_menu: product.img_menu,
+        jenis_menu: product.jenis_menu,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+}
+
+exports.deleteProduct = async (req, res) => {
+  const { _id } = req.params;
+
+  try {
+    const product = await Produk.findById(_id);
+    if (!product) {
+      return res.status(404).json({
+        status: 404,
+        message: "Product not found",
+      });
+    }
+
+    // Hapus gambar dari Supabase jika ada
+    if (product.img_menu) {
+      const filePath = `products/${product.img_menu}`;
+      const { error } = await Supabase.storage
+        .from('payments-image') // Ganti dengan nama bucket Anda
+        .remove([filePath]);
+
+      if (error) {
+        console.error("Error deleting file from Supabase:", error);
+        return res.status(500).json({
+          status: 500,
+          message: "Internal server error",
+          error: error.message,
+        });
+      }
+    }
+
+    await product.deleteOne();
+
+    res.status(200).json({
+      status: 200,
+      message: "Product deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+}
