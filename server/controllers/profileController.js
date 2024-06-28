@@ -1,4 +1,17 @@
 const Users = require('../models/users.js');
+const express = require("express");
+const cors = require("cors");
+const app = express();
+
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://pempek-joli-client.vercel.app"],
+    methods: ["GET", "POST", "PUT", "OPTIONS", "DELETE"],
+    credentials: true,
+    optionsSuccessStatus: 200,
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 exports.getMe = async (req, res) => {
     const { _id } = req.user; // Ambil ID pengguna dari req.user

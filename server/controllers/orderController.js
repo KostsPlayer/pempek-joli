@@ -4,6 +4,19 @@ const MetodePembayaran = require("../models/metode_pembayaran.js");
 const AlamatPengiriman = require("../models/alamat_pengiriman.js");
 const Produk = require("../models/product.js");
 const Pembayaran = require("../models/pembayaran.js");
+const express = require("express");
+const cors = require("cors");
+const app = express();
+
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://pempek-joli-client.vercel.app"],
+    methods: ["GET", "POST", "PUT", "OPTIONS", "DELETE"],
+    credentials: true,
+    optionsSuccessStatus: 200,
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 exports.createOrder = async (req, res) => {
   try {

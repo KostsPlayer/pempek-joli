@@ -1,4 +1,17 @@
 const MetodePembayaran = require('../models/metode_pembayaran.js');
+const express = require("express");
+const cors = require("cors");
+const app = express();
+
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://pempek-joli-client.vercel.app"],
+    methods: ["GET", "POST", "PUT", "OPTIONS", "DELETE"],
+    credentials: true,
+    optionsSuccessStatus: 200,
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 exports.createMetodePembayaran = async (req, res) => {
     const { nama_metode, deskripsi_metode_pembayaran } = req.body;
