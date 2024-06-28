@@ -1,4 +1,3 @@
-const AlamatPengiriman = require('../models/alamat_pengiriman.js'); // Ensure the correct path to your model
 const AlamatPengiriman = require("../models/alamat_pengiriman.js"); // Ensure the correct path to your model
 const express = require("express");
 const cors = require("cors");
