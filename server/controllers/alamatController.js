@@ -1,7 +1,11 @@
 const AlamatPengiriman = require("../models/alamat_pengiriman.js"); // Ensure the correct path to your model
 const express = require("express");
 const cors = require("cors");
+const axios = require('axios');
 const app = express();
+
+const BPS_API_ID = 'd5b8a0688eac08c5671eae0cf35472e6';
+const BPS_BASE_URL = 'https://webapi.bps.go.id/v1/api/domain/type/all/prov/kabbyprov/key';
 
 app.use(
   cors({
@@ -92,3 +96,18 @@ exports.deleteAlamatPengiriman = async (req, res) => {
     });
   }
 };
+
+exports.getDataBps = async (req, res) => {
+  try {
+    const response = await axios.get(`${BPS_BASE_URL}/${BPS_API_ID}`);
+    const countries = response.data;
+    res.status(200).json(countries);
+  } catch (error) {
+    console.error('Error fetching data from BPS API:', error);
+    res.status(500).json({
+      status: 500,
+      message: 'Internal server error',
+      error: error.message,
+    });
+  }
+}
