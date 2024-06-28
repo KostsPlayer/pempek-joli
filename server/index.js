@@ -20,6 +20,17 @@ const Pembayaran = require("./models/pembayaran.js");
 const app = express();
 app.use(express.json());
 
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://pempek-joli-client.vercel.app"],
+    methods: ["GET", "POST", "PUT", "OPTIONS", "DELETE"],
+    credentials: true,
+    optionsSuccessStatus: 200,
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+
 // Connect to MongoDB
 connectDB();
 
