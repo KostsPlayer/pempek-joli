@@ -1,4 +1,17 @@
 const AlamatPengiriman = require('../models/alamat_pengiriman.js'); // Ensure the correct path to your model
+const express = require("express");
+const cors = require("cors");
+const app = express();
+
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://pempek-joli-client.vercel.app"],
+    methods: ["GET", "POST", "PUT", "OPTIONS", "DELETE"],
+    credentials: true,
+    optionsSuccessStatus: 200,
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 exports.createAlamatPengiriman = async (req, res) => {
     const { address, province, city, description, postal_code } = req.body;

@@ -1,5 +1,18 @@
 const Produk = require("../models/product.js");
 const { storage, imageFilter, upload } = require("../middleware/image.js");
+const express = require("express");
+const cors = require("cors");
+const app = express();
+
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://pempek-joli-client.vercel.app"],
+    methods: ["GET", "POST", "PUT", "OPTIONS", "DELETE"],
+    credentials: true,
+    optionsSuccessStatus: 200,
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 exports.createProduct = async (req, res) => {
   const { nama_menu, harga_menu, stock_menu, description, img_menu, jenis_menu } = req.body;

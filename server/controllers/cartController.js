@@ -1,4 +1,17 @@
 const Cart = require("../models/cart.js");
+const express = require("express");
+const cors = require("cors");
+const app = express();
+
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://pempek-joli-client.vercel.app"],
+    methods: ["GET", "POST", "PUT", "OPTIONS", "DELETE"],
+    credentials: true,
+    optionsSuccessStatus: 200,
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 // exports.createCart = async (req, res) => {
 //     const { id_product, jumlah_product_cart, total_pesanan } = req.body;
