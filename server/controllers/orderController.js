@@ -282,3 +282,21 @@ exports.deleteOrder = async (req, res) => {
     });
   }
 };
+
+exports.getAllOrder = async (req, res) => {
+  try {
+    const orders = await Order.find(); // Mengambil semua pesanan dari database
+    res.status(200).json({
+      status: 200,
+      message: "Orders retrieved successfully",
+      data: orders,
+    });
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    res.status(500).json({
+      status: 500,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+}
