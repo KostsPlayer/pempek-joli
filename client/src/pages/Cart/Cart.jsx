@@ -23,10 +23,8 @@ export default function Cart() {
   const { toastMessage } = AlertMessage();
   const location = useLocation();
   const navigate = useNavigate();
-  const { getToken } = GetData();
-  const objectToken = JSON.parse(getToken);
-  const token = objectToken.token;
 
+  const { getToken } = GetData();
   const [method, setMethod] = useState({
     collect: "",
     payment: 0,
@@ -50,6 +48,14 @@ export default function Cart() {
   const [costDistance, setCostDistance] = useState(0);
   const [paymentId, setPaymentId] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    if (getToken) {
+      const objectToken = JSON.parse(getToken);
+      setToken(objectToken.token);
+    }
+  }, [getToken]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -203,6 +209,11 @@ export default function Cart() {
     }
   }, [token]);
 
+  useEffect(() => {
+    console.log(paymentPending);
+    console.log(paymentId);
+  }, [paymentPending, paymentId]);
+
   const checkout = useCallback(() => {
     const totalQuantities = Object.keys(originalQuantities).reduce(
       (acc, productId) => {
@@ -298,9 +309,9 @@ export default function Cart() {
           detail_pesanan: detail_pesanan,
           total_harga: totalAmount,
         };
-        
+
         console.log(payloadCreateOrder);
-        
+
         return axios.post(
           "https://pempek-joli-server.vercel.app/api/order",
           payloadCreateOrder,
@@ -370,7 +381,6 @@ export default function Cart() {
           )
         );
 
-        // Tunggu semua permintaan selesai
         Promise.all(updatePromises)
           .then((responses) => {
             // Perbarui state untuk semua entri dengan id_product yang sama
@@ -637,18 +647,14 @@ export default function Cart() {
           <Cursor />
           <SmoothScroll />
           <Blabar nonBorder={true} />
-          {paymentId !== "" || undefined || null ? (
-            <Receipt
-              onOpen={openReceipt}
-              onClose={() => {
-                setOpenReceipt(false);
-              }}
-              token={token}
-              paymentId={paymentId}
-            />
-          ) : (
-            ""
-          )}
+          <Receipt
+            onOpen={openReceipt}
+            onClose={() => {
+              setOpenReceipt(false);
+            }}
+            token={token}
+            paymentId={paymentId}
+          />
           <div className="cart">
             <Item
               productCartData={productCartData}

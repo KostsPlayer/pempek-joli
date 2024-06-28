@@ -48,21 +48,23 @@ export default function Blabar({ nonBorder = false }) {
             Pempek Joli
           </Link>
           <div className="icon">
+            {session ? (
+              <div
+                className="nav-link"
+                onClick={() => {
+                  setOpenNotife(true);
+                }}
+              >
+                <span className="material-symbols-outlined">notifications</span>
+              </div>
+            ) : (
+              ""
+            )}
             <Link className="nav-link" to={"/cart"}>
               <span className="material-symbols-outlined">local_mall</span>
             </Link>
             {session ? (
               <>
-                <div
-                  className="nav-link"
-                  onClick={() => {
-                    setOpenNotife(true);
-                  }}
-                >
-                  <span className="material-symbols-outlined">
-                    notifications
-                  </span>
-                </div>
                 {role === "admin" ? (
                   <Link className="nav-link" to={"/profile"}>
                     <span className=" material-symbols-outlined">

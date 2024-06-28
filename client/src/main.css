@@ -332,21 +332,32 @@
   height: 1.6rem;
   transform: rotate(45deg);
   border-radius: 0.1rem;
-  border-top: 0.15rem solid #000;
-  border-left: 0.15rem solid #000;
+  border-top: 0.15rem solid #ff7a3d;
+  border-left: 0.15rem solid #ff7a3d;
   border-bottom: 0.15rem solid transparent;
   border-right: 0.15rem solid transparent;
   z-index: -1;
-  background-color: #000;
+  background-color: #ff7a3d;
 }
 .notification .overlay .day {
-  background-color: #000;
+  background-color: #ff7a3d;
   color: #fff;
   font-size: 0.94rem;
   font-weight: 600;
   padding: 0.5rem 0.85rem;
   border-top-left-radius: 0.2rem;
   border-top-right-radius: 0.2rem;
+}
+.notification .overlay .all-message {
+  background-color: #ff7a3d;
+  color: #fff;
+  font-size: 0.94rem;
+  font-weight: 600;
+  padding: 0.75rem 0.85rem;
+  border-bottom-left-radius: 0.2rem;
+  border-bottom-right-radius: 0.2rem;
+  text-align: center;
+  border-top: 0.15rem solid #fff;
 }
 .notification .overlay .item {
   width: 100%;
@@ -359,18 +370,17 @@
   border-top: 0.15rem solid #fff;
   font-size: 0.86rem;
 }
-.notification .overlay .item:last-child {
-  border-bottom-left-radius: 0.2rem;
-  border-bottom-right-radius: 0.2rem;
+.notification .overlay .item:nth-child(1n) {
+  background-color: #f9c349;
 }
-.notification .overlay .item.pending {
-  background-color: #ffb100;
+.notification .overlay .item:nth-child(2n) {
+  background-color: #30c7b5;
 }
-.notification .overlay .item.completed {
-  background-color: #06752e;
+.notification .overlay .item:nth-child(3n) {
+  background-color: #2fc1ff;
 }
-.notification .overlay .item.cancelled {
-  background-color: #d90700;
+.notification .overlay .item:nth-child(4n) {
+  background-color: #ef4d48;
 }
 .notification .overlay .item .image {
   width: 100%;
@@ -398,6 +408,7 @@
 }
 .notification .overlay .item .time {
   color: #fff;
+  font-weight: 500;
 }
 
 .layout {
