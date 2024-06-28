@@ -4,6 +4,19 @@ const MetodePembayaran = require("../models/metode_pembayaran.js");
 const AlamatPengiriman = require("../models/alamat_pengiriman.js");
 const Produk = require("../models/product.js");
 const Pembayaran = require("../models/pembayaran.js");
+const express = require("express");
+const cors = require("cors");
+const app = express();
+
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://pempek-joli-client.vercel.app"],
+    methods: ["GET", "POST", "PUT", "OPTIONS", "DELETE"],
+    credentials: true,
+    optionsSuccessStatus: 200,
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 exports.createOrder = async (req, res) => {
   try {
@@ -54,6 +67,17 @@ exports.createOrder = async (req, res) => {
         if (pembayaran && pembayaran.status_pembayaran === "Pending") {
           pembayaran.status_pembayaran = "Cancelled";
           await pembayaran.save();
+          
+          // Update the order status to "Cancelled" as well
+          const order = await Order.findOne({ id_pembayaran: payment._id });
+          if (order) {
+            order.status_pesanan = "Cancelled";
+            await order.save();
+            console.log(
+              `Order ${order._id} cancelled due to cancelled payment ${payment._id}`
+            );
+          }
+          
           console.log(
             `Payment ${payment._id} cancelled due to no proof of payment`
           );
@@ -61,8 +85,7 @@ exports.createOrder = async (req, res) => {
       } catch (err) {
         console.error(`Error cancelling payment ${payment._id}:`, err);
       }
-    }, 5 * 60 * 1000); // 5 minutes
-
+    }, 10 * 60 * 1000); // 5 minutes
     // Prepare order details
     const orderDetails = detail_pesanan.map((item) => ({
       id_product: item.id_product,

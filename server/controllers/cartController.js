@@ -1,4 +1,17 @@
 const Cart = require("../models/cart.js");
+const express = require("express");
+const cors = require("cors");
+const app = express();
+
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://pempek-joli-client.vercel.app"],
+    methods: ["GET", "POST", "PUT", "OPTIONS", "DELETE"],
+    credentials: true,
+    optionsSuccessStatus: 200,
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 // exports.createCart = async (req, res) => {
 //     const { id_product, jumlah_product_cart, total_pesanan } = req.body;
@@ -37,20 +50,51 @@ exports.createCart = async (req, res) => {
   let id_pengguna = req.user._id;
 
   try {
-    const newCart = new Cart({
-      id_pengguna,
-      products,
-    });
+    const cart = await Cart.findOne({ id_pengguna });
 
-    await newCart.save();
+    if (cart) {
+      // User already has a cart, update it
+      products.forEach((product) => {
+        const existingProductIndex = cart.products.findIndex(
+          (p) => p.id_product.toString() === product.id_product.toString()
+        );
 
-    res.status(201).json({
-      status: 201,
-      message: "Cart created successfully",
-      data: {
-        cart: newCart,
-      },
-    });
+        if (existingProductIndex >= 0) {
+          // Product already in cart, update its quantity
+          cart.products[existingProductIndex].jumlah_product_cart +=
+            product.jumlah_product_cart;
+        } else {
+          // Product not in cart, add it
+          cart.products.push(product);
+        }
+      });
+
+      // Save the updated cart
+      await cart.save();
+
+      res.status(200).json({
+        status: 200,
+        message: "Cart updated successfully",
+        data: {
+          cart,
+        },
+      });
+    } else {
+      const newCart = new Cart({
+        id_pengguna,
+        products,
+      });
+
+      await newCart.save();
+
+      res.status(201).json({
+        status: 201,
+        message: "Cart created successfully",
+        data: {
+          cart: newCart,
+        },
+      });
+    }
   } catch (error) {
     res.status(500).json({
       status: 500,
@@ -127,8 +171,8 @@ exports.updateCart = async (req, res) => {
       status: 500,
       message: "Internal server error",
       error: error.message,
-    });
-  }
+    });
+  }
 };
 
 exports.deleteCart = async (req, res) => {
