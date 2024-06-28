@@ -17,14 +17,14 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\": \"Dinda Sanjaya\",\r\n    \"nickname\": \"Dinda123\",\r\n    \"email\": \"Dinda123@example.com\",\r\n    \"phoneNumber\": \"082184952582\",\r\n    \"password\": \"Dinda123\",\r\n    \"confirmPassword\": \"Dinda123\"\r\n}",
+							"raw": "{\r\n    \"fullName\": \"ukasyah\",\r\n    \"email\": \"ukasyah123@example.com\",\r\n    \"password\": \"ukasyah123\",\r\n    \"confirmPassword\": \"ukasyah123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "http://localhost:5000/api/auth/register"
+						"url": "https://pempek-joli-server.vercel.app/api/auth/register"
 					},
 					"response": []
 				},
@@ -35,7 +35,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"Dinda123@example.com\",\r\n    \"password\": \"Dinda123\"\r\n}",
+							"raw": "{\r\n    \"email\": \"testing123@example.com\",\r\n    \"password\": \"testing123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -72,13 +72,39 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"nama_menu\" : \"Pempek kulit\",\r\n    \"harga_menu\" : 4.500,\r\n    \"stock_menu\": 50,\r\n    \"description\": \"Pempek yang terbuat dari ikan tenggiri dengan bentuk seperti kulit\",\r\n    \"img_menu\": \"pempekkulit.jpg\",\r\n    \"jenis_menu\": \"makanan\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nama_menu",
+									"value": "Pempek Telor pecah",
+									"type": "text"
+								},
+								{
+									"key": "harga_menu",
+									"value": "4.500",
+									"type": "text"
+								},
+								{
+									"key": "stock_menu",
+									"value": "50",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "pempek enak",
+									"type": "text"
+								},
+								{
+									"key": "img_menu",
+									"type": "file",
+									"src": "postman-cloud:///1ef3249c-427d-4180-9750-77786bb5f402"
+								},
+								{
+									"key": "jenis_menu",
+									"value": "makanan",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": "http://localhost:5000/api/product/"
 					},
@@ -151,6 +177,59 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "edit product",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nama_menu",
+									"value": "testing",
+									"type": "text"
+								},
+								{
+									"key": "harga_menu",
+									"value": "5.000",
+									"type": "text"
+								},
+								{
+									"key": "stock_menu",
+									"value": "20",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "testing description",
+									"type": "text"
+								},
+								{
+									"key": "img_menu",
+									"type": "file",
+									"src": "postman-cloud:///1ef3249c-427d-4180-9750-77786bb5f402"
+								},
+								{
+									"key": "jenis_menu",
+									"value": "makanan",
+									"type": "text"
+								}
+							]
+						},
+						"url": "http://localhost:5000/api/product/update/667eafedea14742a12c1ce37"
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:5000/api/product/667eafedea14742a12c1ce37"
+					},
+					"response": []
 				}
 			]
 		},
@@ -163,7 +242,7 @@
 						"auth": {
 							"type": "bearer",
 							"bearer": {
-								"token": "1|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdiODBkNWQ3ZDI3NzQwYmExY2JkZDgiLCJyb2xlIjoidXNlciIsImZ1bGxOYW1lIjoiRGluZGEgU2FuamF5YSIsIm5pY2tuYW1lIjoiRGluZGExMjMiLCJlbWFpbCI6IkRpbmRhMTIzQGV4YW1wbGUuY29tIiwicGhvbmVOdW1iZXIiOiIwODIxODQ5NTI1ODIiLCJpYXQiOjE3MTk0NTc1NjgsImV4cCI6MTcxOTU0Mzk2OH0.Uyo8lKoGF5304ll6bRQ9Afht8HcBoee_KMpWMcpHuIU"
+								"token": "1|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdkNWVhZTYzYmQ3ODhlYjAwYTFhYjQiLCJyb2xlIjoidXNlciIsImZ1bGxOYW1lIjoidGVzdGluZyIsIm5pY2tuYW1lIjoidGVzdGluZzEyMyIsImVtYWlsIjoidGVzdGluZzEyM0BleGFtcGxlLmNvbSIsImlhdCI6MTcxOTQ5MjY2NywiZXhwIjoxNzE5NTc5MDY3fQ.8-0BdYSznH2lnL8WibnP40q7QLWBtJiLSxQM2E0sF7c"
 							}
 						},
 						"method": "POST",
@@ -191,14 +270,14 @@
 						"auth": {
 							"type": "bearer",
 							"bearer": {
-								"token": "4|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzMiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZHMiLCJlbWFpbCI6ImF5YWxhcmlma2lAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiI4MjE4NDk1MjU4MiIsImlhdCI6MTcxODQ4OTkzNCwiZXhwIjoxNzE4NTc2MzM0fQ.YN74-0rfD5Uc6Jda766ELpyp_8rpEc9OsarGPYgTIYg"
+								"token": "1|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdkNWVhZTYzYmQ3ODhlYjAwYTFhYjQiLCJyb2xlIjoidXNlciIsImZ1bGxOYW1lIjoidGVzdGluZyIsIm5pY2tuYW1lIjoidGVzdGluZzEyMyIsImVtYWlsIjoidGVzdGluZzEyM0BleGFtcGxlLmNvbSIsImlhdCI6MTcxOTQ5MjY2NywiZXhwIjoxNzE5NTc5MDY3fQ.8-0BdYSznH2lnL8WibnP40q7QLWBtJiLSxQM2E0sF7c"
 							}
 						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id_product\": \"6668748d26b8d69ff1d393c5\",\r\n    \"jumlah_product_cart\": 0\r\n}",
+							"raw": "{\r\n    \"id_product\": \"6668748d26b8d69ff1d393c5\",\r\n    \"jumlah_product_cart\": 2\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -206,7 +285,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/cart/update/666e136a56660111ff3b3b17",
+							"raw": "http://localhost:5000/api/cart/update/667d61589b30499e522e2f92",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -216,7 +295,7 @@
 								"api",
 								"cart",
 								"update",
-								"666e136a56660111ff3b3b17"
+								"667d61589b30499e522e2f92"
 							],
 							"query": [
 								{
@@ -235,7 +314,7 @@
 						"auth": {
 							"type": "bearer",
 							"bearer": {
-								"token": "3|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzMiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZHMiLCJlbWFpbCI6ImF5YWxhcmlma2lAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiI4MjE4NDk1MjU4MiIsImlhdCI6MTcxODQzMjU1MywiZXhwIjoxNzE4NTE4OTUzfQ.Eq3vrtbNrt4WqjaKkudp7geMyYqIQHo1BLTQBerGOZg"
+								"token": "1|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdkNWVhZTYzYmQ3ODhlYjAwYTFhYjQiLCJyb2xlIjoidXNlciIsImZ1bGxOYW1lIjoidGVzdGluZyIsIm5pY2tuYW1lIjoidGVzdGluZzEyMyIsImVtYWlsIjoidGVzdGluZzEyM0BleGFtcGxlLmNvbSIsImlhdCI6MTcxOTQ5MjY2NywiZXhwIjoxNzE5NTc5MDY3fQ.8-0BdYSznH2lnL8WibnP40q7QLWBtJiLSxQM2E0sF7c"
 							}
 						},
 						"method": "DELETE",
@@ -250,7 +329,7 @@
 						"auth": {
 							"type": "bearer",
 							"bearer": {
-								"token": "1|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdiODBkNWQ3ZDI3NzQwYmExY2JkZDgiLCJyb2xlIjoidXNlciIsImZ1bGxOYW1lIjoiRGluZGEgU2FuamF5YSIsIm5pY2tuYW1lIjoiRGluZGExMjMiLCJlbWFpbCI6IkRpbmRhMTIzQGV4YW1wbGUuY29tIiwicGhvbmVOdW1iZXIiOiIwODIxODQ5NTI1ODIiLCJpYXQiOjE3MTk0NTc1NjgsImV4cCI6MTcxOTU0Mzk2OH0.Uyo8lKoGF5304ll6bRQ9Afht8HcBoee_KMpWMcpHuIU"
+								"token": "1|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdkNWVhZTYzYmQ3ODhlYjAwYTFhYjQiLCJyb2xlIjoidXNlciIsImZ1bGxOYW1lIjoidGVzdGluZyIsIm5pY2tuYW1lIjoidGVzdGluZzEyMyIsImVtYWlsIjoidGVzdGluZzEyM0BleGFtcGxlLmNvbSIsImlhdCI6MTcxOTQ5MjY2NywiZXhwIjoxNzE5NTc5MDY3fQ.8-0BdYSznH2lnL8WibnP40q7QLWBtJiLSxQM2E0sF7c"
 							}
 						},
 						"method": "GET",
@@ -284,7 +363,7 @@
 						"auth": {
 							"type": "bearer",
 							"bearer": {
-								"token": "3|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzMiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZHMiLCJlbWFpbCI6ImF5YWxhcmlma2lAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiI4MjE4NDk1MjU4MiIsImlhdCI6MTcxODQzMjU1MywiZXhwIjoxNzE4NTE4OTUzfQ.Eq3vrtbNrt4WqjaKkudp7geMyYqIQHo1BLTQBerGOZg"
+								"token": "1|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdkNWVhZTYzYmQ3ODhlYjAwYTFhYjQiLCJyb2xlIjoidXNlciIsImZ1bGxOYW1lIjoidGVzdGluZyIsIm5pY2tuYW1lIjoidGVzdGluZzEyMyIsImVtYWlsIjoidGVzdGluZzEyM0BleGFtcGxlLmNvbSIsImlhdCI6MTcxOTQ5MjY2NywiZXhwIjoxNzE5NTc5MDY3fQ.8-0BdYSznH2lnL8WibnP40q7QLWBtJiLSxQM2E0sF7c"
 							}
 						},
 						"method": "DELETE",
@@ -302,7 +381,7 @@
 							"mode": "raw",
 							"raw": "{\r\n    \"id_product\": \"6668748d26b8d69ff1d393c5\"\r\n  }"
 						},
-						"url": "http://localhost:5000/api/cart/666d37c3d11da1bc656a54ab/product"
+						"url": "http://localhost:5000/api/cart/667d61589b30499e522e2f92/product"
 					},
 					"response": []
 				},
@@ -312,7 +391,7 @@
 						"auth": {
 							"type": "bearer",
 							"bearer": {
-								"token": "1|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdiODBkNWQ3ZDI3NzQwYmExY2JkZDgiLCJyb2xlIjoidXNlciIsImZ1bGxOYW1lIjoiRGluZGEgU2FuamF5YSIsIm5pY2tuYW1lIjoiRGluZGExMjMiLCJlbWFpbCI6IkRpbmRhMTIzQGV4YW1wbGUuY29tIiwicGhvbmVOdW1iZXIiOiIwODIxODQ5NTI1ODIiLCJpYXQiOjE3MTk0NTc1NjgsImV4cCI6MTcxOTU0Mzk2OH0.Uyo8lKoGF5304ll6bRQ9Afht8HcBoee_KMpWMcpHuIU"
+								"token": "1|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdkNWVhZTYzYmQ3ODhlYjAwYTFhYjQiLCJyb2xlIjoidXNlciIsImZ1bGxOYW1lIjoidGVzdGluZyIsIm5pY2tuYW1lIjoidGVzdGluZzEyMyIsImVtYWlsIjoidGVzdGluZzEyM0BleGFtcGxlLmNvbSIsImlhdCI6MTcxOTQ5MjY2NywiZXhwIjoxNzE5NTc5MDY3fQ.8-0BdYSznH2lnL8WibnP40q7QLWBtJiLSxQM2E0sF7c"
 							}
 						},
 						"method": "PUT",
@@ -328,9 +407,9 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id_product\": \"6668748d26b8d69ff1d393c5\",\r\n    \"isActive\": true // or false, depending on the status you want to set\r\n}"
+							"raw": "{\r\n    \"id_product\": \"666874f526b8d69ff1d393cb\",\r\n    \"isActive\": true // or false, depending on the status you want to set\r\n}"
 						},
-						"url": "http://localhost:5000/api/cart/6673e8b4c8e4c868e7062457/product/status"
+						"url": "http://localhost:5000/api/cart/667d6d5f95fa7d71f3abb531/product/status"
 					},
 					"response": []
 				}
@@ -384,7 +463,7 @@
 						"auth": {
 							"type": "bearer",
 							"bearer": {
-								"token": "1|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdiODBkNWQ3ZDI3NzQwYmExY2JkZDgiLCJyb2xlIjoidXNlciIsImZ1bGxOYW1lIjoiRGluZGEgU2FuamF5YSIsIm5pY2tuYW1lIjoiRGluZGExMjMiLCJlbWFpbCI6IkRpbmRhMTIzQGV4YW1wbGUuY29tIiwicGhvbmVOdW1iZXIiOiIwODIxODQ5NTI1ODIiLCJpYXQiOjE3MTk0NTc1NjgsImV4cCI6MTcxOTU0Mzk2OH0.Uyo8lKoGF5304ll6bRQ9Afht8HcBoee_KMpWMcpHuIU"
+								"token": "1|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdkNWVhZTYzYmQ3ODhlYjAwYTFhYjQiLCJyb2xlIjoidXNlciIsImZ1bGxOYW1lIjoidGVzdGluZyIsIm5pY2tuYW1lIjoidGVzdGluZzEyMyIsImVtYWlsIjoidGVzdGluZzEyM0BleGFtcGxlLmNvbSIsImlhdCI6MTcxOTQ5MjY2NywiZXhwIjoxNzE5NTc5MDY3fQ.8-0BdYSznH2lnL8WibnP40q7QLWBtJiLSxQM2E0sF7c"
 							}
 						},
 						"method": "POST",
@@ -396,7 +475,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id_MetodePembayaran\": \"66710b1630fab5d4858fc946\",\r\n    \"id_alamat_pengiriman\": \"6673e955c8e4c868e706245c\",\r\n    \"metode_pengambilan\": \"Dine-In\",\r\n    \"detail_pesanan\": [\r\n        {\r\n            \"id_product\": \"6668748d26b8d69ff1d393c5\",\r\n            \"jumlah\": 2,\r\n            \"total_harga\": 12.500\r\n        },\r\n        {\r\n            \"id_product\": \"666874f526b8d69ff1d393cb\",\r\n            \"jumlah\": 3,\r\n            \"total_harga\": 12.500\r\n        }\r\n    ],\r\n    \"total_harga\": 12.500\r\n}",
+							"raw": "{\r\n    \"id_MetodePembayaran\": \"66710b1630fab5d4858fc946\",\r\n    \"id_alamat_pengiriman\": \"667d61f99b30499e522e2f9a\",\r\n    \"metode_pengambilan\": \"Dine-In\",\r\n    \"detail_pesanan\": [\r\n        {\r\n            \"id_product\": \"6668748d26b8d69ff1d393c5\",\r\n            \"jumlah\": 2,\r\n            \"total_harga\": 12.500\r\n        },\r\n        {\r\n            \"id_product\": \"666874f526b8d69ff1d393cb\",\r\n            \"jumlah\": 3,\r\n            \"total_harga\": 12.500\r\n        }\r\n    ],\r\n    \"total_harga\": 12.500\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -458,6 +537,21 @@
 						"method": "DELETE",
 						"header": [],
 						"url": "http://localhost:5000/api/order/delete/667b709d20abf22629c146e6"
+					},
+					"response": []
+				},
+				{
+					"name": "get all order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "3|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdkNWVhZTYzYmQ3ODhlYjAwYTFhYjQiLCJyb2xlIjoidXNlciIsImZ1bGxOYW1lIjoidGVzdGluZyIsIm5pY2tuYW1lIjoidGVzdGluZzEyMyIsImVtYWlsIjoidGVzdGluZzEyM0BleGFtcGxlLmNvbSIsImlhdCI6MTcxOTU4ODgxNSwiZXhwIjoxNzE5Njc1MjE1fQ.2tpDkliLXI9FYolof3VPKCo9sQYG48jG1zPOaZ2hXQ8"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/api/order/all"
 					},
 					"response": []
 				}
@@ -597,6 +691,15 @@
 						"url": "http://localhost:5000/api/alamatpengiriman/667242da168e209124e1d317"
 					},
 					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/api/alamatpengiriman/countries"
+					},
+					"response": []
 				}
 			]
 		},
@@ -609,7 +712,7 @@
 						"auth": {
 							"type": "bearer",
 							"bearer": {
-								"token": "4|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjY3ZDYxODU3OTBjNjM4ZmVjNWZmYzQiLCJyb2xlIjoidXNlciIsIm5pY2tuYW1lIjoiZGluZGEiLCJlbWFpbCI6IkRpbmRhQGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiODU2MjIzNTI3MDkiLCJpYXQiOjE3MTkyMjI1MzEsImV4cCI6MTcxOTMwODkzMX0.gD61QSFK7R5JcV9_74i7GX1b1PeBSfQs_S6ISkITUPQ"
+								"token": "1|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjdkNWVhZTYzYmQ3ODhlYjAwYTFhYjQiLCJyb2xlIjoidXNlciIsImZ1bGxOYW1lIjoidGVzdGluZyIsIm5pY2tuYW1lIjoidGVzdGluZzEyMyIsImVtYWlsIjoidGVzdGluZzEyM0BleGFtcGxlLmNvbSIsImlhdCI6MTcxOTQ5MjY2NywiZXhwIjoxNzE5NTc5MDY3fQ.8-0BdYSznH2lnL8WibnP40q7QLWBtJiLSxQM2E0sF7c"
 							}
 						},
 						"method": "PUT",
@@ -624,7 +727,7 @@
 								}
 							]
 						},
-						"url": "http://localhost:5000/api/upload/payments/667949b2fcb727938c64c0ea"
+						"url": "http://localhost:5000/api/upload/payments/667d8b09553fc41bd75d8031"
 					},
 					"response": []
 				},
