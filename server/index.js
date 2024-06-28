@@ -15,7 +15,7 @@ const alamatpengirimanRoutes = require("./routes/alamatpengirimanRoutes.js");
 const pembayaranRoutes = require("./routes/pembayaranRoutes.js");
 const Profile = require("./routes/profileRoutes.js");
 
-const Users = require("./models/users.js");
+const Pembayaran = require("./models/pembayaran.js");
 
 const app = express();
 app.use(express.json());
@@ -50,4 +50,5 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+
 });
