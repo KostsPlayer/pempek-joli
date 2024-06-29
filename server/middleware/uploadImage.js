@@ -15,8 +15,4 @@ const storage = multer.memoryStorage(); // Simpan di memory saja, karena akan di
 // Inisialisasi middleware Multer
 const upload = multer({ storage: storage, fileFilter: imageFilter });
 
-<<<<<<< HEAD
 module.exports = { storage, imageFilter, upload };
-=======
-module.exports = { storage, imageFilter, upload };
->>>>>>> 0c44fbdb1dff562c883b76efa54fc2dc491daaf8
