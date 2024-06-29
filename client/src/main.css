@@ -2211,12 +2211,20 @@
 .store {
   width: 100%;
   height: auto;
-}
-.store-new-product {
   display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+}
+.store .new-product {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-direction: row;
   gap: 0.8rem;
 }
-.store-new-product button {
+.store .new-product button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -2228,78 +2236,165 @@
   background-color: #000;
   padding: 0.6rem 0.9rem;
   border: none;
-  transition: all 0.4s;
+  transition: all 0.4s ease-in-out;
   border-radius: 0.3rem;
 }
-.store-new-product button .material-symbols-outlined {
+.store .new-product button .material-symbols-outlined {
   font-size: 1.05rem;
   font-variation-settings: "FILL" 0, "wght" 600, "GRAD" 0, "opsz" 24;
+  transition: transform 0.5s ease-in-out;
 }
-.store-new-product button:hover {
+.store .new-product button:hover {
   background-color: #ff7a3d;
   color: #fff;
 }
-.store-title {
+.store .new-product button:hover .material-symbols-outlined {
+  font-size: 1.05rem;
+  font-variation-settings: "FILL" 1, "wght" 600, "GRAD" 0, "opsz" 24;
+  transform: rotate(90deg);
+}
+.store-wrapper {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+.store-wrapper .foods,
+.store-wrapper .drinks {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.store-wrapper .foods .title,
+.store-wrapper .drinks .title {
+  line-height: 120%;
   font-family: "Oswald", sans-serif;
   color: #ff5100;
   font-size: 3.2rem;
-  padding: 2.4rem 0 1.2rem;
 }
-.store-container {
+.store-wrapper .foods .container,
+.store-wrapper .drinks .container {
   width: 100%;
   height: auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: 2.4rem 1.8rem;
 }
-.store-container .item {
-  width: 100%;
-  height: auto;
-  display: grid;
-  grid-template-columns: 3.5fr 6.5fr;
-  grid-template-rows: auto auto 1fr auto;
-  grid-template-areas: "image name" "image description" "image stock" "image price";
-}
-.store-container .item .image {
-  width: 15rem;
-  height: 12rem;
+.store-wrapper .foods .container .item,
+.store-wrapper .drinks .container .item {
   border-radius: 4%;
-  grid-area: image;
-  padding-right: 1.2rem;
+  width: 100%;
+  height: auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto 1fr 1fr 1fr auto;
+  grid-template-areas: "image image" "name name" "description description" "stock action" "price action";
 }
-.store-container .item .image img {
+.store-wrapper .foods .container .item .image,
+.store-wrapper .drinks .container .item .image {
+  width: 100%;
+  height: 12rem;
+  border-radius: 0.4rem;
+  grid-area: image;
+  border: #fff solid 0.3rem;
+  margin-bottom: 0.6rem;
+}
+.store-wrapper .foods .container .item .image img,
+.store-wrapper .drinks .container .item .image img {
   width: 100%;
   height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
-  border-radius: 4%;
+  border-radius: 0.15rem;
 }
-.store-container .item .name {
+.store-wrapper .foods .container .item .name,
+.store-wrapper .drinks .container .item .name {
   grid-area: name;
   font-family: "Oswald", sans-serif;
   font-weight: 900;
   font-size: 1.6rem;
-  text-transform: uppercase;
+  text-transform: capitalize;
 }
-.store-container .item .description {
+.store-wrapper .foods .container .item .description,
+.store-wrapper .drinks .container .item .description {
   font-weight: 400;
+  line-height: 120%;
   grid-area: description;
+  text-align: justify;
 }
-.store-container .item .stock {
+.store-wrapper .foods .container .item .stock,
+.store-wrapper .drinks .container .item .stock {
   grid-area: stock;
   font-weight: 700;
   height: auto;
-  margin-top: auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  flex-direction: row;
+  gap: 0.3rem;
 }
-.store-container .item .stock span {
+.store-wrapper .foods .container .item .stock span,
+.store-wrapper .drinks .container .item .stock span {
   font-weight: 900;
   color: #ff5100;
 }
-.store-container .item .price {
-  font-weight: 700;
+.store-wrapper .foods .container .item .price,
+.store-wrapper .drinks .container .item .price {
+  margin-top: -0.15rem;
   color: #ff7a3d;
+  font-weight: 700;
   font-size: 1.4rem;
-  padding-bottom: 0.8rem;
+  height: -moz-fit-content;
+  height: fit-content;
+  line-height: 100%;
+}
+.store-wrapper .foods .container .item .action,
+.store-wrapper .drinks .container .item .action {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex-direction: row;
+  gap: 0.2rem;
+  grid-area: action;
+}
+.store-wrapper .foods .container .item .action .material-symbols-outlined:first-child,
+.store-wrapper .drinks .container .item .action .material-symbols-outlined:first-child {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+  padding: 0.15rem;
+  border: 0.15rem solid #f9c349;
+  border-radius: 0.25rem;
+  background-color: transparent;
+  color: #f9c349;
+  font-size: 1.2rem;
+}
+.store-wrapper .foods .container .item .action .material-symbols-outlined:first-child:hover,
+.store-wrapper .drinks .container .item .action .material-symbols-outlined:first-child:hover {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  background-color: #f9c349;
+  color: #fff;
+}
+.store-wrapper .foods .container .item .action .material-symbols-outlined:last-child,
+.store-wrapper .drinks .container .item .action .material-symbols-outlined:last-child {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+  padding: 0.15rem;
+  border: 0.15rem solid #ef4d48;
+  border-radius: 0.25rem;
+  background-color: transparent;
+  color: #ef4d48;
+  font-size: 1.2rem;
+}
+.store-wrapper .foods .container .item .action .material-symbols-outlined:last-child:hover,
+.store-wrapper .drinks .container .item .action .material-symbols-outlined:last-child:hover {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  background-color: #ef4d48;
+  color: #fff;
 }
 
 .order {
@@ -2330,20 +2425,20 @@
   height: auto;
   display: grid;
   grid-template-columns: repeat(2, minmax(24rem, 1fr));
-  row-gap: 1.6rem;
+  row-gap: 2.2rem;
 }
 .order-foods .content .list .item {
   display: grid;
   grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto 1fr;
-  grid-template-areas: "image title" "image price" "image action";
-  gap: 0.1rem 1.4rem;
+  grid-template-rows: auto auto 1fr 1fr;
+  grid-template-areas: "image title" "image price" "image stock" "image action";
+  gap: 0 1.4rem;
   align-items: center;
 }
 .order-foods .content .list .item-image {
   border: 0.2rem solid #fff;
-  width: 8.4rem;
-  height: 8.4rem;
+  width: 9.2rem;
+  height: 9.2rem;
   border-radius: 50%;
   grid-area: image;
 }
@@ -2366,11 +2461,24 @@
   grid-area: price;
   font-weight: 800;
 }
+.order-foods .content .list .item-stock {
+  height: 100%;
+  font-size: 1rem;
+  color: #fff;
+  grid-area: stock;
+  font-weight: 800;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  flex-direction: row;
+}
 .order-foods .content .list .item-action {
+  padding-top: 0.2rem;
+  height: 100%;
   grid-area: action;
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: row;
   gap: 0.25rem;
 }
@@ -2410,20 +2518,20 @@
   height: auto;
   display: grid;
   grid-template-columns: repeat(2, minmax(24rem, 1fr));
-  row-gap: 1.6rem;
+  row-gap: 2.2rem;
 }
 .order-drinks .list .item {
   display: grid;
   grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto 1fr;
-  grid-template-areas: "image title" "image price" "image action";
-  gap: 0.1rem 1.4rem;
+  grid-template-rows: auto auto 1fr 1fr;
+  grid-template-areas: "image title" "image price" "image stock" "image action";
+  gap: 0 1.4rem;
   align-items: center;
 }
 .order-drinks .list .item-image {
   border: 0.2rem solid #fff;
-  width: 8.4rem;
-  height: 8.4rem;
+  width: 9.2rem;
+  height: 9.2rem;
   border-radius: 50%;
   grid-area: image;
 }
@@ -2446,11 +2554,24 @@
   grid-area: price;
   font-weight: 800;
 }
+.order-drinks .list .item-stock {
+  height: 100%;
+  font-size: 1rem;
+  color: #fff;
+  grid-area: stock;
+  font-weight: 800;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  flex-direction: row;
+}
 .order-drinks .list .item-action {
+  padding-top: 0.2rem;
+  height: 100%;
   grid-area: action;
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: row;
   gap: 0.25rem;
 }

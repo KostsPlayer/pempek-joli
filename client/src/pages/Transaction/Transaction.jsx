@@ -265,11 +265,16 @@ export default function Transaction() {
       }
 
       // Filter based on payment
-      const paymentKeys = Object.keys(paymentFilter);
-      if (paymentKeys.some((key) => paymentFilter[key])) {
-        filteredData = filteredData.filter(
-          (item) => paymentFilter[item.payment]
-        );
+      if (paymentFilter.cash || paymentFilter.credit.length > 0) {
+        filteredData = filteredData.filter((item) => {
+          if (item.payment === "cash" && paymentFilter.cash) {
+            return true;
+          }
+          if (paymentFilter.credit.includes(item.payment)) {
+            return true;
+          }
+          return false;
+        });
       }
 
       // Filter based on period
@@ -365,6 +370,7 @@ export default function Transaction() {
 
   useEffect(() => {
     console.log(currentPage, totalPages);
+    console.log(filteredData);
   }, [currentPage, totalPages]);
 
   return (
