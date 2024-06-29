@@ -24,7 +24,7 @@ exports.createProduct = async (req, res) => {
 
     // Upload gambar ke Supabase jika ada file yang diunggah
     if (file) {
-      const filePath = `products/${Date.now()}_${file.originalname}`;
+      const filePath = `products/${file.originalname}`;
       const { data, error } = await Supabase.storage
         .from('payments-image') // Ganti dengan nama bucket Anda
         .upload(filePath, file.buffer, {
