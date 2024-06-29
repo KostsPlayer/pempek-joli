@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0c44fbdb1dff562c883b76efa54fc2dc491daaf8
 const { createClient } = require('@supabase/supabase-js');
 
 const supabaseUrl = 'https://nyhsxdvwnltrriyylvyl.supabase.co'
