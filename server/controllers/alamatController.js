@@ -1,17 +1,12 @@
 const AlamatPengiriman = require("../models/alamat_pengiriman.js"); // Ensure the correct path to your model
 const express = require("express");
 const cors = require("cors");
-<<<<<<< HEAD
 const axios = require('axios');
 const app = express();
 
 const BPS_API_ID = 'd5b8a0688eac08c5671eae0cf35472e6';
 const BPS_BASE_URL = 'https://webapi.bps.go.id/v1/api/domain/type/all/prov/kabbyprov/key';
 
-=======
-const app = express();
-
->>>>>>> 0c44fbdb1dff562c883b76efa54fc2dc491daaf8
 app.use(
   cors({
     origin: ["http://localhost:5173", "https://pempek-joli-client.vercel.app"],
@@ -100,7 +95,6 @@ exports.deleteAlamatPengiriman = async (req, res) => {
       error: error.message,
     });
   }
-<<<<<<< HEAD
 };
 
 exports.getDataBps = async (req, res) => {
@@ -117,6 +111,3 @@ exports.getDataBps = async (req, res) => {
     });
   }
 }
-=======
-};
->>>>>>> 0c44fbdb1dff562c883b76efa54fc2dc491daaf8
