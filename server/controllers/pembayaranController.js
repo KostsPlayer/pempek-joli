@@ -36,7 +36,7 @@ exports.updateBuktiPembayaran = async (req, res) => {
     // Upload the file to Supabase
     const { data, error } = await Supabase.storage
       .from("payments-image") // Ganti dengan nama bucket Anda
-      .upload(`payments/${Date.now()}_${file.originalname}`, file.buffer, {
+      .upload(`payments/${file.originalname}`, file.buffer, {
         cacheControl: "3600",
         upsert: false,
         contentType: file.mimetype,
