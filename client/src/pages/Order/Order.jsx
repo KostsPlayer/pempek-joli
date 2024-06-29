@@ -184,6 +184,9 @@ export default function Order() {
                         <div className="item-price">
                           {formatPrice(data.harga_menu)}
                         </div>
+                        <div className="item-stock">
+                          Stock: {data.stock_menu}
+                        </div>
                         <div className="item-action">
                           <span
                             className="material-symbols-outlined"
@@ -236,6 +239,7 @@ export default function Order() {
                       <div className="item-price">
                         {formatPrice(data.harga_menu)}
                       </div>
+                      <div className="item-stock">Stock: {data.stock_menu}</div>
                       <div className="item-action">
                         <span
                           className="material-symbols-outlined"

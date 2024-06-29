@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import axios from "axios";
 import AlertMessage from "../../helper/AlertMessage";
 import { ToastContainer } from "react-toastify";
 import GetData from "../../helper/GetData";
 
-export default function CreateStore({ onOpen, onClose }) {
+export default function CreateStore({ onOpen, onClose, refreshData, message }) {
   axios.defaults.withCredentials = true;
   if (!onOpen) return null;
+
   const { toastMessage } = AlertMessage();
   const { getToken } = GetData();
   const objectToken = JSON.parse(getToken);
@@ -20,60 +21,68 @@ export default function CreateStore({ onOpen, onClose }) {
     description: "",
     img_menu: null, // Perbaikan di sini
   });
-  const [fileName, setFileName] = useState("");
+
+  const handleChange = useCallback(
+    (e) => {
+      const { name, type, value, files } = e.target;
+      setValues((prevValues) => {
+        if (type === "file") {
+          return { ...prevValues, [name]: files[0] };
+        } else {
+          if (
+            (name === "harga_menu" || name === "stock_menu") &&
+            parseFloat(value) < 0
+          ) {
+            toastMessage("error", "Cannot be negative");
+            return prevValues; // Tidak mengubah state jika nilai negatif
+          }
+          return { ...prevValues, [name]: value };
+        }
+      });
+    },
+    [toastMessage]
+  );
 
   useEffect(() => {
-    console.log(getToken);
-    console.log(objectToken);
-    console.log(token);
-  }, []);
+    console.log(values);
+  }, [values]);
 
-  const handleChange = (e) => {
-    if (e.target.type === "file") {
-      setValues({ ...values, [e.target.name]: e.target.files[0] }); // Perbaikan di sini
-      setFileName(e.target.files[0].name);
-    } else {
-      if (
-        (e.target.name === "harga_menu" || e.target.name === "stock_menu") &&
-        parseFloat(e.target.value) < 0
-      ) {
-        return toastMessage("error", "Cannot be negative");
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+
+      const formData = new FormData();
+      formData.append("nama_menu", values.nama_menu);
+      formData.append("jenis_menu", values.jenis_menu);
+      formData.append("harga_menu", values.harga_menu);
+      formData.append("stock_menu", values.stock_menu);
+      formData.append("description", values.description);
+      formData.append("img_menu", values.img_menu); // Perbaikan di sini
+
+      for (let pair of formData.entries()) {
+        console.log(`${pair[0]}: ${pair[1]}`);
       }
-      setValues({ ...values, [e.target.name]: e.target.value });
-    }
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("nama_menu", values.nama_menu);
-    formData.append("jenis_menu", values.jenis_menu);
-    formData.append("harga_menu", values.harga_menu);
-    formData.append("stock_menu", values.stock_menu);
-    formData.append("description", values.description);
-    formData.append("img_menu", values.img_menu); // Perbaikan di sini
-
-    // Log FormData to console
-    for (let pair of formData.entries()) {
-      console.log(`${pair[0]}: ${pair[1]}`);
-    }
-
-    if (token) {
-      axios
-        .post("https://pempek-joli-server.vercel.app/api/product/create_menu", formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-        })
-        .catch((errors) => {
-          console.error(errors);
-        });
-    }
-  };
+      if (token) {
+        axios
+          .post("https://pempek-joli-server.vercel.app/api/product", formData, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((res) => {
+            message(res.data.message);
+            onClose();
+            refreshData();
+            // console.log(res.data);
+          })
+          .catch((errors) => {
+            console.error(errors);
+          });
+      }
+    },
+    [token, refreshData, onClose, message]
+  );
 
   return (
     <>

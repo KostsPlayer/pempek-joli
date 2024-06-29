@@ -281,6 +281,7 @@ exports.deleteOrder = async (req, res) => {
       error: error.message,
     });
   }
+<<<<<<< HEAD
 };
 
 exports.getAllOrder = async (req, res) => {
@@ -300,3 +301,6 @@ exports.getAllOrder = async (req, res) => {
     });
   }
 }
+=======
+};
+>>>>>>> 0c44fbdb1dff562c883b76efa54fc2dc491daaf8

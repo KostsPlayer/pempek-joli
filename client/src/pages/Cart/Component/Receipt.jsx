@@ -52,6 +52,7 @@ export default function Receipt({ onClose, onOpen, token, paymentId }) {
           }
         )
         .then((res) => {
+          onClose();
           navigate("/", {
             state: { messageOrder: "Transaction Successfully!" },
           });
@@ -82,10 +83,7 @@ export default function Receipt({ onClose, onOpen, token, paymentId }) {
           <span className="material-symbols-outlined" onClick={onClose}>
             cancel
           </span>
-          <form
-            className="form-receipt"
-            onSubmit={handleSubmit}
-          >
+          <form className="form-receipt" onSubmit={handleSubmit}>
             <div className="form-content">
               <input
                 type="file"

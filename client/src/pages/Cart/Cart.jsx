@@ -129,7 +129,9 @@ export default function Cart() {
   }, [token]);
 
   useEffect(() => {
-    if (token) refreshDataCart();
+    if (token) {
+      refreshDataCart();
+    }
   }, [token, refreshDataCart]);
 
   useEffect(() => {
@@ -557,7 +559,11 @@ export default function Cart() {
       .catch((err) => {
         console.error(err);
       });
-  }, []);
+  }, [token]);
+
+  useEffect(() => {
+    console.log(address);
+  }, [address]);
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
@@ -626,13 +632,13 @@ export default function Cart() {
     setTotalAmount(calculatedTotalAmount);
   }, [method.collect, costProducts, costDistance]);
 
-  // useEffect(() => {
-  //   console.log("origin : " + origin);
-  //   console.log("destination : " + selectedDestination);
-  //   console.log("distance : " + distance);
-  //   console.log("costDistance : " + parseFloat(costDistance));
-  //   console.log("totalAmount : " + totalAmount);
-  // }, [distance, selectedDestination, costDistance, totalAmount]);
+  useEffect(() => {
+    console.log("origin : " + origin);
+    console.log("destination : " + selectedDestination);
+    console.log("distance : " + distance);
+    console.log("costDistance : " + parseFloat(costDistance));
+    console.log("totalAmount : " + totalAmount);
+  }, [distance, selectedDestination, costDistance, totalAmount]);
 
   if (!isLoaded) {
     return <Loader />;

@@ -1,22 +1,26 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Loader from "../../helper/Loader";
 import Layout from "../../component/Layout/Layout";
 import CreateStore from "./CreateStore";
 import UpdateStore from "./UpdateStore";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import GetData from "../../helper/GetData";
+import AlertMessage from "../../helper/AlertMessage";
+import { ToastContainer } from "react-toastify";
 
 export default function Store() {
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const { toastMessage } = AlertMessage();
 
   const { getToken } = GetData();
   const objectToken = JSON.parse(getToken);
   const token = objectToken.token;
 
-  const [foods, setFoods] = useState([]);
-  const [drinks, setDrinks] = useState([]);
+  const [products, setProducts] = useState({ foods: [], drinks: [] });
   const [loading, setLoading] = useState(true);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
@@ -27,29 +31,28 @@ export default function Store() {
     }, 1500);
   }, []);
 
-  useEffect(() => {
+  const getProductData = useCallback(() => {
     if (token) {
-      axios
-        .get("https://pempek-joli-server.vercel.app/api/product/makanan", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => {
-          setFoods(res.data);
-        })
-        .catch((errors) => {
-          console.error(errors);
-        });
+      const fetchFoods = axios.get(
+        "https://pempek-joli-server.vercel.app/api/product/makanan",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
-      axios
-        .get("https://pempek-joli-server.vercel.app/api/product/minuman", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => {
-          setDrinks(res.data);
+      const fetchDrinks = axios.get(
+        "https://pempek-joli-server.vercel.app/api/product/minuman",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      Promise.all([fetchFoods, fetchDrinks])
+        .then(([foodsResponse, drinksResponse]) => {
+          setProducts({
+            foods: foodsResponse.data,
+            drinks: drinksResponse.data,
+          });
         })
         .catch((errors) => {
           console.error(errors);
@@ -57,11 +60,24 @@ export default function Store() {
     }
   }, [token]);
 
+  useEffect(() => {
+    if (token) {
+      getProductData();
+    }
+  }, [token]);
+
   const memoizedImages = useMemo(() => {
-    const foodImages = foods.map(({ img_menu }) => `./products/${img_menu}`);
-    const drinkImages = drinks.map(({ img_menu }) => `./products/${img_menu}`);
-    return [...foodImages, ...drinkImages];
-  }, [foods, drinks]);
+    const createImageUrls = (items) =>
+      items.map(
+        ({ img_menu }) =>
+          `https://nyhsxdvwnltrriyylvyl.supabase.co/storage/v1/object/public/payments-image/products/${img_menu}`
+      );
+
+    return {
+      foods: createImageUrls(products.foods),
+      drinks: createImageUrls(products.drinks),
+    };
+  }, [products]);
 
   const formatPrice = (priceObj) => {
     const priceString = priceObj.$numberDecimal;
@@ -72,6 +88,30 @@ export default function Store() {
       currency: "IDR",
     }).format(priceInRupiah);
   };
+
+  const handleDeleteProduct = useCallback((id) => {
+    if (token) {
+      axios
+        .delete(`https://pempek-joli-server.vercel.app/api/product/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          toastMessage("success", res.data.message);
+          getProductData();
+        })
+        .catch((errors) => {
+          console.error(errors);
+        });
+    }
+  }, []);
+
+  const displayCreateMessage = useCallback(
+    (msg) => {
+      toastMessage("success", msg);
+      console.log("Displaying message:", msg);
+    },
+    [toastMessage]
+  );
 
   return (
     <>
@@ -84,6 +124,8 @@ export default function Store() {
             onClose={() => {
               setOpenCreateModal(false);
             }}
+            refreshData={getProductData}
+            message={displayCreateMessage}
           />
           <UpdateStore
             onOpen={openUpdateModal}
@@ -93,7 +135,7 @@ export default function Store() {
           />
           <Layout>
             <div className="store">
-              <div className="store-new-product">
+              <div className="new-product">
                 <button
                   onClick={() => {
                     setOpenCreateModal(true);
@@ -102,60 +144,91 @@ export default function Store() {
                   New Product
                   <span className="material-symbols-outlined">add_circle</span>
                 </button>
-                <button
-                  onClick={() => {
-                    setOpenUpdateModal(true);
-                  }}
-                >
-                  Update
-                  <span className="material-symbols-outlined">edit</span>
-                </button>
               </div>
-              <div className="store-title">Makanan</div>
-              <div className="store-container">
-                {foods.map((data, index) => {
-                  return (
-                    <div className="item" key={data._id}>
-                      <div className="image">
-                        <img src={memoizedImages[index]} alt={data.nama_menu} />
-                      </div>
-                      <div className="name">{data.nama_menu}</div>
-                      <div className="description">{data.description}</div>
-                      <div className="stock">
-                        Stock: <span>{data.stock_menu}</span>
-                      </div>
-                      <div className="price">
-                        {formatPrice(data.harga_menu)}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="store-title">Minuman</div>
-              <div className="store-container">
-                {drinks.map((data, index) => {
-                  return (
-                    <div className="item" key={data._id}>
-                      <div className="image">
-                        <img
-                          src={memoizedImages[index + foods.length]}
-                          alt={data.nama_menu}
-                        />
-                      </div>
-                      <div className="name">{data.nama_menu}</div>
-                      <div className="stock">
-                        Stock: <span>{data.stock_menu}</span>
-                      </div>
-                      <div className="description">{data.description}</div>
-                      <div className="price">
-                        {formatPrice(data.harga_menu)}
-                      </div>
-                    </div>
-                  );
-                })}
+              <div className="store-wrapper">
+                <div className="foods">
+                  <div className="title">Makanan</div>
+                  <div className="container">
+                    {products.foods.map((data, index) => {
+                      return (
+                        <div className="item" key={data._id}>
+                          <div className="image">
+                            <img
+                              src={memoizedImages.foods[index]}
+                              alt={data.nama_menu}
+                            />
+                          </div>
+                          <div className="name">{data.nama_menu}</div>
+                          <div className="description">{data.description}</div>
+                          <div className="stock">
+                            Stock: <span>{data.stock_menu}</span>
+                          </div>
+                          <div className="price">
+                            {formatPrice(data.harga_menu)}
+                          </div>
+                          <div className="action">
+                            <span
+                              className="material-symbols-outlined"
+                              onClick={() => {
+                                setOpenUpdateModal(true);
+                              }}
+                            >
+                              edit
+                            </span>
+                            <span
+                              className="material-symbols-outlined"
+                              onClick={() => handleDeleteProduct(data._id)}
+                            >
+                              delete_forever
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div className="drinks">
+                  <div className="title">Minuman</div>
+                  <div className="container">
+                    {products.drinks.map((data, index) => {
+                      return (
+                        <div className="item" key={data._id}>
+                          <div className="image">
+                            <img
+                              src={memoizedImages.drinks[index]}
+                              alt={data.nama_menu}
+                            />
+                          </div>
+                          <div className="name">{data.nama_menu}</div>
+                          <div className="stock">
+                            Stock: <span>{data.stock_menu}</span>
+                          </div>
+                          <div className="description">{data.description}</div>
+                          <div className="price">
+                            {formatPrice(data.harga_menu)}
+                          </div>
+                          <div className="action">
+                            <span
+                              className="material-symbols-outlined"
+                              onClick={() => {
+                                setOpenUpdateModal(true);
+                              }}
+                            >
+                              edit
+                            </span>
+                            <span className="material-symbols-outlined">
+                              delete_forever
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
           </Layout>
+          <ToastContainer />
         </>
       )}
     </>
