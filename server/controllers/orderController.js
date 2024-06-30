@@ -99,7 +99,7 @@ exports.createOrder = async (req, res) => {
       id_alamat_pengiriman: id_alamat_pengiriman || null, // Set to null if not provided
       id_pembayaran: payment._id, // Reference the created payment record
       id_pengguna: id_pengguna,
-      metode_pengambilan,
+      metode_pengambilan: "Shipping",
       detail_pesanan: orderDetails,
       total_harga: total_harga, // Use the total_harga from req.body
       tanggal_pesanan: new Date(),
