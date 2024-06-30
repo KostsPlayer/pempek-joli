@@ -96,10 +96,26 @@ exports.deleteAlamatPengiriman = async (req, res) => {
     });
   }
 };
-
-exports.getDataBps = async (req, res) => {
+exports.getProvinces = async (req, res) => {
   try {
-    const response = await axios.get(`${BPS_BASE_URL}/${BPS_API_ID}`);
+    const response = await axios.get(`https://webapi.bps.go.id/v1/api/domain/type/prov/key/${BPS_API_ID}/`);
+    const provinces = response.data;
+    res.status(200).json(provinces);
+  } catch (error) {
+    console.error('Error fetching data from BPS API:', error);
+    res.status(500).json({
+      status: 500,
+      message: 'Internal server error',
+      error: error.message,
+    });
+  }
+};
+
+exports.getKabByProv = async (req, res) => {
+  const { selectedProvinceId } = req.params; // Mengambil ID provinsi dari parameter URL
+
+  try {
+    const response = await axios.get(`https://webapi.bps.go.id/v1/api/domain/type/kabbyprov/prov/${selectedProvinceId}/key/${BPS_API_ID}/`);
     const countries = response.data;
     res.status(200).json(countries);
   } catch (error) {
@@ -110,4 +126,4 @@ exports.getDataBps = async (req, res) => {
       error: error.message,
     });
   }
-}
+};
