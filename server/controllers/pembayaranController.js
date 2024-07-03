@@ -132,3 +132,19 @@ exports.getPaymentsById = async (req, res) => {
     });
   }
 };
+
+exports.getAllPayments = async (req, res) => {
+  try {
+    const payment = await Pembayaran.find();
+    res.status(200).json({
+      message: "All payments found",
+      data: payment,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+}

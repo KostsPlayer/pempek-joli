@@ -13,7 +13,7 @@ const pesananSchema = new Schema({
     id_MetodePembayaran: { type: Schema.Types.ObjectId, ref: 'MetodePembayaran', required: true },
     id_alamat_pengiriman: { type: Schema.Types.ObjectId, ref: 'AlamatPengiriman' },
     id_pembayaran: { type: Schema.Types.ObjectId, ref: 'Pembayaran', required: true },
-    id_pengguna: { type: Schema.Types.ObjectId, ref: 'users', required: true },
+    id_pengguna: { type: Schema.Types.ObjectId, ref: 'Users', required: true },
     metode_pengambilan: { type: String },
     detail_pesanan: [detailPesananSchema], // Embed the detail schema
     total_harga: { type: Number, required: true, min: 0 },

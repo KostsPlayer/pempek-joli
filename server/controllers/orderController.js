@@ -285,7 +285,7 @@ exports.deleteOrder = async (req, res) => {
 
 exports.getAllOrder = async (req, res) => {
   try {
-    const orders = await Order.find(); // Mengambil semua pesanan dari database
+    const orders = await Order.find().populate('id_pengguna');
     res.status(200).json({
       status: 200,
       message: "Orders retrieved successfully",

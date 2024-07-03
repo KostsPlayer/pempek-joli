@@ -7,5 +7,6 @@ const verifyToken = require('../middleware/auth.js');
 
 router.put('/upload/payments/:_id', upload.single('bukti_pembayaran'), verifyToken, updateBuktiPembayaran);
 router.get('/payments/:_id', verifyToken, getPaymentsById);
+router.get('/all', verifyToken, getAllPayments);
 
 module.exports = router;
