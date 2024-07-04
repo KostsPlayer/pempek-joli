@@ -53,7 +53,7 @@ exports.createCart = async (req, res) => {
     const cart = await Cart.findOne({ id_pengguna });
 
     if (cart && cart.isActive) {
-      // User has an active cart, update it
+      // User already has an active cart, update it
       products.forEach((product) => {
         const existingProductIndex = cart.products.findIndex(
           (p) => p.id_product.toString() === product.id_product.toString()
@@ -79,12 +79,29 @@ exports.createCart = async (req, res) => {
           cart,
         },
       });
-    } else {
-      // User does not have an active cart, create a new one
+    } else if (cart && !cart.isActive) {
+      // User has an inactive cart, create a new one
       const newCart = new Cart({
         id_pengguna,
         products,
-        isActive: true, // Ensure new cart is set to active
+        isActive: true,
+      });
+
+      await newCart.save();
+
+      res.status(201).json({
+        status: 201,
+        message: "New cart created successfully as the existing cart is inactive",
+        data: {
+          cart: newCart,
+        },
+      });
+    } else {
+      // User has no cart, create a new one
+      const newCart = new Cart({
+        id_pengguna,
+        products,
+        isActive: true,
       });
 
       await newCart.save();
@@ -105,6 +122,7 @@ exports.createCart = async (req, res) => {
     });
   }
 };
+
 exports.updateCart = async (req, res) => {
   const { _id } = req.params;
   let { id_product, jumlah_product_cart } = req.body;
