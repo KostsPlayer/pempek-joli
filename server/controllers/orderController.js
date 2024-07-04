@@ -308,3 +308,34 @@ exports.getAllOrder = async (req, res) => {
     });
   }
 }
+
+exports.updateRutes = async (req, res) => {
+  const { _id } = req.params;
+  const { distance, duration } = req.body;
+
+  try {
+    const order = await Order.findByIdAndUpdate(
+      _id,
+      { distance, duration },
+      { new: true }
+    );
+
+    if (!order) {
+      return res.status(404).json({
+        message: "Order not found",
+        error: 404,
+      });
+    }
+
+    res.status(200).json({
+      message: "Order routes updated successfully",
+      data: order,
+    });
+  } catch (error) {
+    console.error("Error updating order routes:", error);
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+}
