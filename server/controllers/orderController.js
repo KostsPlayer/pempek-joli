@@ -27,6 +27,7 @@ exports.createOrder = async (req, res) => {
       detail_pesanan,
       total_harga, // Directly use total_harga from req.body
       metode_pengambilan,
+      distance,
       duration
     } = req.body;
 
@@ -103,6 +104,7 @@ exports.createOrder = async (req, res) => {
       id_pembayaran: payment._id, // Reference the created payment record
       id_pengguna: id_pengguna,
       metode_pengambilan,
+      distance,
       duration,
       detail_pesanan: orderDetails,
       total_harga: total_harga, // Use the total_harga from req.body
@@ -150,6 +152,7 @@ exports.createOrder = async (req, res) => {
         id_alamat_pengiriman: newOrder.id_alamat_pengiriman,
         id_pembayaran: newOrder.id_pembayaran,
         metode_pengambilan: newOrder.metode_pengambilan,
+        distance: newOrder.distance,
         duration: newOrder.duration,
         id_pengguna: newOrder.id_pengguna,
         detail_pesanan: newOrder.detail_pesanan,
