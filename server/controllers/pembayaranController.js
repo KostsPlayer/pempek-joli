@@ -54,6 +54,7 @@ exports.updateBuktiPembayaran = async (req, res) => {
     // Update the payment document with the new proof image path
     payment.bukti_pembayaran =  file.originalname;
     payment.status_pembayaran = "Success";
+    payment.tanggal_pembayaran = new Date(); // Set current date as payment date
     await payment.save();
 
     res.status(200).json({
@@ -63,6 +64,7 @@ exports.updateBuktiPembayaran = async (req, res) => {
         id_pembayaran: payment._id,
         bukti_pembayaran: payment.bukti_pembayaran,
         status_pembayaran: payment.status_pembayaran,
+        tanggal_pembayaran: payment.tanggal_pembayaran,
       },
     });
   } catch (error) {
@@ -135,7 +137,7 @@ exports.getPaymentsById = async (req, res) => {
 
 exports.getAllPayments = async (req, res) => {
   try {
-    const payment = await Pembayaran.find();
+    const payment = await Pembayaran.find().populate('id_pengguna');
     res.status(200).json({
       message: "All payments found",
       data: payment,
