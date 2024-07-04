@@ -27,6 +27,7 @@ exports.createOrder = async (req, res) => {
       detail_pesanan,
       total_harga, // Directly use total_harga from req.body
       metode_pengambilan,
+      duration
     } = req.body;
 
     // Find the active cart for the user
@@ -58,6 +59,7 @@ exports.createOrder = async (req, res) => {
       metode_pembayaran: paymentMethod.nama_metode, // Assuming the payment method has a `nama_metode` field
       status_pembayaran: "Pending", // Initial status for payment
       id_pengguna: id_pengguna,
+      tanggal_pembayaran: new Date(),
     });
     await payment.save();
     // Set a timeout to update payment status to "c ancelled" if no proof is uploaded within 5 minutes
@@ -66,6 +68,7 @@ exports.createOrder = async (req, res) => {
         const pembayaran = await Pembayaran.findById(payment._id);
         if (pembayaran && pembayaran.status_pembayaran === "Pending") {
           pembayaran.status_pembayaran = "Cancelled";
+          pembayaran.tanggal_pembayaran = new Date();
           await pembayaran.save();
           
           // Update the order status to "Cancelled" as well
@@ -85,7 +88,7 @@ exports.createOrder = async (req, res) => {
       } catch (err) {
         console.error(`Error cancelling payment ${payment._id}:`, err);
       }
-    }, 10 * 60 * 1000); // 5 minutes
+    }, 10 * 60 * 1000); // 10 minutes
     // Prepare order details
     const orderDetails = detail_pesanan.map((item) => ({
       id_product: item.id_product,
@@ -99,7 +102,8 @@ exports.createOrder = async (req, res) => {
       id_alamat_pengiriman: id_alamat_pengiriman || null, // Set to null if not provided
       id_pembayaran: payment._id, // Reference the created payment record
       id_pengguna: id_pengguna,
-      metode_pengambilan: "Shipping",
+      metode_pengambilan,
+      duration,
       detail_pesanan: orderDetails,
       total_harga: total_harga, // Use the total_harga from req.body
       tanggal_pesanan: new Date(),
@@ -146,6 +150,7 @@ exports.createOrder = async (req, res) => {
         id_alamat_pengiriman: newOrder.id_alamat_pengiriman,
         id_pembayaran: newOrder.id_pembayaran,
         metode_pengambilan: newOrder.metode_pengambilan,
+        duration: newOrder.duration,
         id_pengguna: newOrder.id_pengguna,
         detail_pesanan: newOrder.detail_pesanan,
         total_harga: newOrder.total_harga,
@@ -285,7 +290,7 @@ exports.deleteOrder = async (req, res) => {
 
 exports.getAllOrder = async (req, res) => {
   try {
-    const orders = await Order.find().populate('id_pengguna');
+    const orders = await Order.find().populate('id_pengguna'); // Populate the id_pengguna field with user details
     res.status(200).json({
       status: 200,
       message: "Orders retrieved successfully",
