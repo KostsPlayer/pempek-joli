@@ -26,11 +26,8 @@ const pesananSchema = new Schema({
   },
   id_pengguna: { type: Schema.Types.ObjectId, ref: "Users", required: true },
   metode_pengambilan: { type: String },
-  duration: {
-    days: { type: Number, min: 0, default: 0 },
-    hours: { type: Number, min: 0, max: 23, default: 0 },
-    minutes: { type: Number, min: 0, max: 59, default: 0 },
-  },
+  distance: { type: String },
+  duration: { type: String },
   detail_pesanan: [detailPesananSchema], // Embed the detail schema
   total_harga: { type: Number, required: true, min: 0 },
   tanggal_pesanan: { type: Date, default: Date.now, required: true },
