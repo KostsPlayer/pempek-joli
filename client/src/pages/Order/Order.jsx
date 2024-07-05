@@ -75,9 +75,16 @@ export default function Order() {
   }, []);
 
   const memoizedImages = useMemo(() => {
-    const foodImages = foods.map(({ img_menu }) => `./products/${img_menu}`);
-    const drinkImages = drinks.map(({ img_menu }) => `./products/${img_menu}`);
-    return [...foodImages, ...drinkImages];
+    const createImageUrls = (items) =>
+      items.map(
+        ({ img_menu }) =>
+          `https://nyhsxdvwnltrriyylvyl.supabase.co/storage/v1/object/public/payments-image/products/${img_menu}`
+      );
+
+    return {
+      foods: createImageUrls(foods),
+      drinks: createImageUrls(drinks),
+    };
   }, [foods, drinks]);
 
   const formatPrice = (priceObj) => {
@@ -176,7 +183,7 @@ export default function Order() {
                       <div className="item" key={data._id}>
                         <div className="item-image">
                           <img
-                            src={memoizedImages[index]}
+                            src={memoizedImages.foods[index]}
                             alt={data.nama_menu}
                           />
                         </div>
@@ -231,7 +238,7 @@ export default function Order() {
                     <div className="item" key={data._id}>
                       <div className="item-image">
                         <img
-                          src={memoizedImages[index + foods.length]}
+                          src={memoizedImages.drinks[index]}
                           alt={data.nama_menu}
                         />
                       </div>

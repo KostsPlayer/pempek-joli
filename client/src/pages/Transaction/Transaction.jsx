@@ -9,40 +9,22 @@ import Layout from "../../component/Layout/Layout";
 import Loader from "../../helper/Loader";
 import dayjs from "dayjs";
 import "dayjs/locale/id";
+import axios from "axios";
 import isBetween from "dayjs/plugin/isBetween";
 import AlertMessage from "../../helper/AlertMessage";
 import { ToastContainer } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useReactToPrint } from "react-to-print";
 import Invoice from "./Invoice/Invoice";
 import GetData from "../../helper/GetData";
+import Pagination from "../../component/Pagination/Pagination";
+import { getOneMonthAgo, getOneWeekAgo } from "../../helper/Time";
 
 export default function Transaction() {
   axios.defaults.withCredentials = true;
 
   dayjs.locale("id");
   dayjs.extend(isBetween);
-
-  const { toastMessage } = AlertMessage();
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const { getToken } = GetData();
-  const objectToken = JSON.parse(getToken);
-  const token = objectToken.token;
-
-  const printRef = useRef(null);
-
-  useEffect(() => {
-    if (location.state?.messageLogin) {
-      toastMessage("success", location.state.messageLogin);
-      navigate(location.pathname, {
-        state: { ...location.state, messageLogin: undefined },
-        replace: true,
-      });
-    }
-  }, [location.state, location.pathname, navigate, toastMessage]);
 
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
@@ -54,11 +36,6 @@ export default function Transaction() {
     Pending: false,
     Cancelled: false,
   });
-  const [collectFilter, setCollectFilter] = useState({
-    takeaway: false,
-    dineIn: false,
-    shipping: false,
-  });
   const [paymentFilter, setPaymentFilter] = useState({
     credit: [],
     cash: false,
@@ -66,8 +43,38 @@ export default function Transaction() {
   const [periodFilter, setPeriodFilter] = useState("");
   const [customPeriod, setCustomPeriod] = useState({ start: "", end: "" });
   const [selectedInvoice, setSelectedInvoice] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [currentData, setCurrentData] = useState([]);
+  const [indexOfFirstItem, setIndexOfFirstItem] = useState(0);
+
+  const printRef = useRef(null);
+
+  const { toastMessage } = AlertMessage();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const { getToken } = GetData();
+  const objectToken = JSON.parse(getToken);
+  const token = objectToken.token;
+
+  const oneWeekAgo = getOneWeekAgo();
+  const oneMonthAgo = getOneMonthAgo();
+
+  const sortedData = useCallback((data, timeFrame) => {
+    const cutOffDate = timeFrame === "month" ? oneWeekAgo : oneMonthAgo;
+
+    return data.filter((item) => new Date(item.date) >= cutOffDate);
+  }, []);
+
+  useEffect(() => {
+    if (location.state?.messageLogin) {
+      toastMessage("success", location.state.messageLogin);
+      navigate(location.pathname, {
+        state: { ...location.state, messageLogin: undefined },
+        replace: true,
+      });
+    }
+  }, [location.state, location.pathname, navigate, toastMessage]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -95,7 +102,7 @@ export default function Transaction() {
     );
 
     const fetchOrders = axios.get(
-      "https://pempek-joli-server.vercel.app/api/order",
+      "https://pempek-joli-server.vercel.app/api/order/all",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -107,7 +114,15 @@ export default function Transaction() {
       .then(([addressRes, paymentRes, orderRes]) => {
         const addressData = addressRes.data.alamat;
         const paymentData = paymentRes.data.data;
-        const orderData = orderRes.data.data;
+        const orderData = orderRes.data.data
+          .filter((item) => {
+            return Object.values(item).every(
+              (value) => value !== null && value !== "" && value !== undefined
+            );
+          })
+          .map((data) => {
+            return data;
+          });
 
         const arrayData = orderData.map((data) => {
           const selectedAddress = addressData.find(
@@ -129,8 +144,15 @@ export default function Transaction() {
           };
         });
 
-        console.log(arrayData);
-        setData(arrayData);
+        const filtered = sortedData(arrayData, "week");
+
+        const sorted = filtered.sort((a, b) => {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+          return dateB - dateA;
+        });
+
+        setData(sorted);
       })
       .catch((err) => {
         console.error(err);
@@ -201,13 +223,6 @@ export default function Transaction() {
     }));
   }, []);
 
-  const handleCollectChange = useCallback((e) => {
-    setCollectFilter((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.checked,
-    }));
-  }, []);
-
   const handlePaymentChange = useCallback((e) => {
     const { name, checked } = e.target;
 
@@ -226,10 +241,6 @@ export default function Transaction() {
       }
     });
   }, []);
-
-  useEffect(() => {
-    console.log(paymentFilter);
-  }, [paymentFilter]);
 
   const handleCustomPeriodChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -254,14 +265,6 @@ export default function Transaction() {
       const statusKeys = Object.keys(statusFilter);
       if (statusKeys.some((key) => statusFilter[key])) {
         filteredData = filteredData.filter((item) => statusFilter[item.status]);
-      }
-
-      // Filter based on collect
-      const collectKeys = Object.keys(collectFilter);
-      if (collectKeys.some((key) => collectFilter[key])) {
-        filteredData = filteredData.filter(
-          (item) => collectFilter[item.collect]
-        );
       }
 
       // Filter based on payment
@@ -300,7 +303,7 @@ export default function Transaction() {
 
       return filteredData;
     },
-    [collectFilter, paymentFilter, statusFilter, periodFilter, customPeriod]
+    [paymentFilter, statusFilter, periodFilter, customPeriod]
   );
 
   const filteredData = useMemo(() => filterData(data), [data, filterData]);
@@ -347,32 +350,6 @@ export default function Transaction() {
     [filteredData, navigate]
   );
 
-  /** pagination */
-  const itemsPerPage = 6;
-
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
-
-  const handleNextPage = useCallback(() => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  }, [currentPage, totalPages]);
-
-  const handlePreviousPage = useCallback(() => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  }, [currentPage]);
-
-  useEffect(() => {
-    console.log(currentPage, totalPages);
-    console.log(filteredData);
-  }, [currentPage, totalPages]);
-
   return (
     <>
       {loading ? (
@@ -381,23 +358,11 @@ export default function Transaction() {
         <Layout>
           <div className="transaction">
             <div className="transaction-table">
-              <div className="pagination-controls">
-                <button
-                  onClick={handlePreviousPage}
-                  disabled={currentPage === 1}
-                >
-                  Prev
-                </button>
-                <span>
-                  {currentPage} of {totalPages} Pages
-                </span>
-                <button
-                  onClick={handleNextPage}
-                  disabled={currentPage === totalPages}
-                >
-                  Next
-                </button>
-              </div>
+              <Pagination
+                filteredData={filteredData}
+                setCurrentData={setCurrentData}
+                setIndexOfFirstItem={setIndexOfFirstItem} // pass the function to update indexOfFirstItem
+              />
               <div className="table-controls">
                 <div className="header">
                   <span className="header-col">No</span>
@@ -469,7 +434,6 @@ export default function Transaction() {
                                     {option.label}
                                   </div>
                                 ))}
-                            {console.log()}
                           </div>
                           <span
                             className="material-symbols-outlined edit-button"
@@ -496,30 +460,10 @@ export default function Transaction() {
                               ""
                             )}
                           </div>
-                          <div
-                            className={`dis-collect ${
-                              item.collect === "takeaway"
-                                ? "takeaway"
-                                : item.collect === "dineIn"
-                                ? "dine-in"
-                                : "shipping"
-                            }`}
-                          >
-                            {item.collect === "takeaway" ? (
-                              <span className="material-symbols-outlined">
-                                package_2
-                              </span>
-                            ) : item.collect === "dineIn" ? (
-                              <span className="material-symbols-outlined">
-                                local_dining
-                              </span>
-                            ) : item.collect === "shipping" ? (
-                              <span className="material-symbols-outlined">
-                                local_shipping
-                              </span>
-                            ) : (
-                              ""
-                            )}
+                          <div className="dis-collect shipping">
+                            <span className="material-symbols-outlined">
+                              local_shipping
+                            </span>
                           </div>
                         </div>
 
@@ -660,39 +604,6 @@ export default function Transaction() {
                     onChange={handleStatusChange}
                   />
                   <label htmlFor="Cancelled">Cancelled</label>
-                </div>
-              </div>
-              <div className="collect">
-                <div className="title">Collect Method(s)</div>
-                <div className="container">
-                  <input
-                    type="checkbox"
-                    name="takeaway"
-                    id="takeaway"
-                    checked={collectFilter.takeaway}
-                    onChange={handleCollectChange}
-                  />
-                  <label htmlFor="takeaway">Takeaway</label>
-                </div>
-                <div className="container">
-                  <input
-                    type="checkbox"
-                    name="dineIn"
-                    id="dineIn"
-                    checked={collectFilter.dineIn}
-                    onChange={handleCollectChange}
-                  />
-                  <label htmlFor="dineIn">Dinein</label>
-                </div>
-                <div className="container">
-                  <input
-                    type="checkbox"
-                    name="shipping"
-                    id="shipping"
-                    checked={collectFilter.shipping}
-                    onChange={handleCollectChange}
-                  />
-                  <label htmlFor="shipping">Shipping</label>
                 </div>
               </div>
               <div className="payment">

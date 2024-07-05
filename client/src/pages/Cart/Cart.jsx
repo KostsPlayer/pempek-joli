@@ -25,10 +25,7 @@ export default function Cart() {
   const navigate = useNavigate();
 
   const { getToken } = GetData();
-  const [method, setMethod] = useState({
-    collect: "",
-    payment: 0,
-  });
+  const [paymentMethod, setPaymentMethod] = useState(null);
   const [cartData, setCartData] = useState([]);
   const [productCartData, setProductCartData] = useState([]);
   const [quantities, setQuantities] = useState({});
@@ -182,39 +179,35 @@ export default function Cart() {
           const dataOrder = res.data.data;
           const paymentIdArray = dataOrder.map((item) => item.id_pembayaran);
 
-          // const sendPaymentId = paymentIdArray.pop(); // Item akan menghilang dari array
           const sendPaymentId = paymentIdArray[paymentIdArray.length - 1];
           setPaymentId(sendPaymentId);
 
-          axios
-            .get(
-              `https://pempek-joli-server.vercel.app/api/payments/${sendPaymentId}`,
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            )
-            .then((res) => {
-              const dataPayment = res.data.data;
-              const statusPayment = dataPayment.payment.status_pembayaran;
+          if (sendPaymentId.length > 0) {
+            axios
+              .get(
+                `https://pempek-joli-server.vercel.app/api/payments/${sendPaymentId}`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              )
+              .then((res) => {
+                const dataPayment = res.data.data;
+                const statusPayment = dataPayment.payment.status_pembayaran;
 
-              setPaymentPending(statusPayment);
-            })
-            .catch((err) => {
-              console.error(err);
-            });
+                setPaymentPending(statusPayment);
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+          }
         })
         .catch((err) => {
           console.error(err);
         });
     }
   }, [token]);
-
-  useEffect(() => {
-    console.log(paymentPending);
-    console.log(paymentId);
-  }, [paymentPending, paymentId]);
 
   const checkout = useCallback(() => {
     const totalQuantities = Object.keys(originalQuantities).reduce(
@@ -305,14 +298,11 @@ export default function Cart() {
           });
 
         const payloadCreateOrder = {
-          id_MetodePembayaran: method.payment,
+          id_MetodePembayaran: paymentMethod.payment,
           id_alamat_pengiriman: selectedAddress,
-          metode_pengambilan: method.collect,
           detail_pesanan: detail_pesanan,
           total_harga: totalAmount,
         };
-
-        console.log(payloadCreateOrder);
 
         return axios.post(
           "https://pempek-joli-server.vercel.app/api/order",
@@ -346,7 +336,7 @@ export default function Cart() {
     productCartData,
     quantities,
     token,
-    method,
+    paymentMethod,
     selectedAddress,
     totalAmount,
     products,
@@ -522,18 +512,20 @@ export default function Cart() {
   }, [token, refreshDataCart]);
 
   useEffect(() => {
-    axios
-      .get("https://pempek-joli-server.vercel.app/api/payments", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        setPayments(res.data.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    if (token) {
+      axios
+        .get("https://pempek-joli-server.vercel.app/api/payments", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          setPayments(res.data.data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   }, [token]);
 
   const lengthAllProduct = productCartData.reduce((acc, current) => {
@@ -544,26 +536,24 @@ export default function Cart() {
   }, []);
 
   useEffect(() => {
-    axios
-      .get(
-        "https://pempek-joli-server.vercel.app/api/alamatpengiriman/alamat",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((res) => {
-        setAddress(res.data.alamat);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    if (token) {
+      axios
+        .get(
+          "https://pempek-joli-server.vercel.app/api/alamatpengiriman/alamat",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          setAddress(res.data.alamat);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   }, [token]);
-
-  useEffect(() => {
-    console.log(address);
-  }, [address]);
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
@@ -624,21 +614,10 @@ export default function Cart() {
   }, [distance]);
 
   useEffect(() => {
-    const calculatedTotalAmount =
-      method.collect === "shipping"
-        ? costProducts + parseFloat(costDistance)
-        : costProducts;
+    const calculatedTotalAmount = costProducts + parseFloat(costDistance);
 
     setTotalAmount(calculatedTotalAmount);
-  }, [method.collect, costProducts, costDistance]);
-
-  useEffect(() => {
-    console.log("origin : " + origin);
-    console.log("destination : " + selectedDestination);
-    console.log("distance : " + distance);
-    console.log("costDistance : " + parseFloat(costDistance));
-    console.log("totalAmount : " + totalAmount);
-  }, [distance, selectedDestination, costDistance, totalAmount]);
+  }, [costProducts, costDistance]);
 
   if (!isLoaded) {
     return <Loader />;
@@ -680,8 +659,7 @@ export default function Cart() {
               lengthAllProduct={lengthAllProduct}
               formatPrice={formatPrice}
               costProducts={costProducts}
-              setMethod={setMethod}
-              method={method}
+              setPaymentMethod={setPaymentMethod}
               address={address}
               payments={payments}
               setSelectedAddress={setSelectedAddress}

@@ -1,0 +1,97 @@
+@use "./../../helper/mixin" as m;
+@use "./../../helper/variable" as v;
+
+.notification-all {
+  width: 100%;
+  height: auto;
+
+  &-header {
+    width: 100%;
+    height: fit-content;
+    display: grid;
+    grid-template-columns: 1fr 14fr 3fr 2fr;
+    gap: 1.2rem;
+    border-bottom: 0.15rem solid #ddd;
+
+    .col {
+      width: 100%;
+      height: auto;
+      padding: 0.75rem 0;
+      font-weight: 700;
+
+      &:nth-child(1),
+      &:nth-child(4) {
+        @include m.flex($align: flex-start);
+      }
+    }
+  }
+
+  &-body {
+    width: 100%;
+    height: auto;
+    display: grid;
+    grid-template-columns: 1fr 14fr 3fr 2fr;
+    gap: 1.2rem;
+    border-bottom: 0.15rem solid #ddd;
+
+    .col {
+      width: 100%;
+      height: auto;
+      padding: 0.75rem 0;
+
+      &:nth-child(1) {
+        @include m.flex($align: flex-start);
+      }
+
+      &:nth-child(2) {
+        span {
+          font-weight: 700;
+
+          &.pending {
+            color: rgba($color: v.$pending, $alpha: 0.88);
+          }
+          &.success {
+            color: rgba($color: v.$completed, $alpha: 0.88);
+          }
+          &.cancelled {
+            color: rgba($color: v.$cancelled, $alpha: 0.88);
+          }
+          &.blue {
+            color: rgba($color: v.$dark-blue, $alpha: 0.88);
+          }
+        }
+      }
+
+      &:nth-child(4) {
+        width: 100%;
+        height: auto;
+        @include m.flex($align: flex-start);
+        gap: 0.3rem;
+
+        @mixin icon($color) {
+          border-radius: 0.25rem;
+          padding: 0.2rem 0.3rem;
+          border: 0.12rem solid $color;
+          color: $color;
+          font-variation-settings: "FILL" 1, "wght" 300, "GRAD" 0, "opsz" 24;
+          transition: all 0.4s ease-in-out;
+
+          &:hover {
+            border: 0.12rem solid $color;
+            color: #fff;
+            background-color: $color;
+            font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+          }
+        }
+
+        .material-symbols-outlined:nth-child(1) {
+          @include icon(v.$light-blue);
+        }
+
+        .material-symbols-outlined:nth-child(2) {
+          @include icon(v.$light-red);
+        }
+      }
+    }
+  }
+}

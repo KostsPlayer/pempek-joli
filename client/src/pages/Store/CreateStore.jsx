@@ -1,12 +1,12 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import axios from "axios";
 import AlertMessage from "../../helper/AlertMessage";
 import { ToastContainer } from "react-toastify";
 import GetData from "../../helper/GetData";
+import initialImage from "./../../assets/images/366841-PB2ZVB-92.jpg";
 
-export default function CreateStore({ onOpen, onClose, refreshData, message }) {
+export default function CreateStore({ onOpen, onClose, refreshData }) {
   axios.defaults.withCredentials = true;
-  if (!onOpen) return null;
 
   const { toastMessage } = AlertMessage();
   const { getToken } = GetData();
@@ -19,33 +19,41 @@ export default function CreateStore({ onOpen, onClose, refreshData, message }) {
     harga_menu: 0,
     stock_menu: 0,
     description: "",
-    img_menu: null, // Perbaikan di sini
+    image: null,
   });
+
+  const [selectedImage, setSelectedImage] = useState(initialImage);
+
+  const handleImageChange = useCallback(
+    (e) => {
+      const file = e.target.files[0];
+
+      if (file) {
+        const imageUrl = URL.createObjectURL(file);
+        setSelectedImage(imageUrl);
+      }
+    },
+    [setSelectedImage]
+  );
 
   const handleChange = useCallback(
     (e) => {
-      const { name, type, value, files } = e.target;
-      setValues((prevValues) => {
-        if (type === "file") {
-          return { ...prevValues, [name]: files[0] };
+      if (e.target.type === "file") {
+        setValues({ ...values, [e.target.name]: e.target.files[0] });
+        handleImageChange(e);
+      } else {
+        if (
+          (e.target.name === "harga_menu" || e.target.name === "stock_menu") &&
+          e.target.value < 0
+        ) {
+          toastMessage("error", "Cannot be negative");
         } else {
-          if (
-            (name === "harga_menu" || name === "stock_menu") &&
-            parseFloat(value) < 0
-          ) {
-            toastMessage("error", "Cannot be negative");
-            return prevValues; // Tidak mengubah state jika nilai negatif
-          }
-          return { ...prevValues, [name]: value };
+          setValues({ ...values, [e.target.name]: e.target.value });
         }
-      });
+      }
     },
-    [toastMessage]
+    [values, handleImageChange, toastMessage]
   );
-
-  useEffect(() => {
-    console.log(values);
-  }, [values]);
 
   const handleSubmit = useCallback(
     (e) => {
@@ -57,32 +65,33 @@ export default function CreateStore({ onOpen, onClose, refreshData, message }) {
       formData.append("harga_menu", values.harga_menu);
       formData.append("stock_menu", values.stock_menu);
       formData.append("description", values.description);
-      formData.append("img_menu", values.img_menu); // Perbaikan di sini
+      formData.append("img_menu", values.image);
 
-      for (let pair of formData.entries()) {
-        console.log(`${pair[0]}: ${pair[1]}`);
-      }
+      // Log FormData to console
+      // for (let pair of formData.entries()) {
+      //   console.log(`${pair[0]}: ${pair[1]}`);
+      // }
 
-      if (token) {
-        axios
-          .post("https://pempek-joli-server.vercel.app/api/product", formData, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          .then((res) => {
-            message(res.data.message);
-            onClose();
-            refreshData();
-            // console.log(res.data);
-          })
-          .catch((errors) => {
-            console.error(errors);
-          });
-      }
+      axios
+        .post("https://pempek-joli-server.vercel.app/api/product", formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          toastMessage("success", res.data.message);
+          onClose();
+          refreshData();
+        })
+        .catch((errors) => {
+          toastMessage("error", errors.response.data.error);
+          console.error(errors);
+        });
     },
-    [token, refreshData, onClose, message]
+    [values, token, toastMessage, onClose, refreshData]
   );
+
+  if (!onOpen) return null;
 
   return (
     <>
@@ -148,13 +157,18 @@ export default function CreateStore({ onOpen, onClose, refreshData, message }) {
               ></textarea>
             </div>
             <div className="form-content">
-              <label htmlFor="img_menu">Image</label>
+              <label htmlFor="image">Image</label>
               <input
                 type="file"
                 onChange={handleChange}
-                id="img_menu"
-                name="img_menu"
+                id="image"
+                name="image"
               />
+            </div>
+            <div className="form-content">
+              <div className="container-img">
+                <img src={selectedImage} alt="choose image" />
+              </div>
             </div>
             <button type="submit">Submit</button>
           </form>

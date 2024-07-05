@@ -4,8 +4,7 @@ export default function Summary({
   lengthAllProduct,
   formatPrice,
   costProducts,
-  setMethod,
-  method,
+  setPaymentMethod,
   address,
   payments,
   setSelectedAddress,
@@ -31,87 +30,33 @@ export default function Summary({
             <span>{formatPrice(costProducts)}</span>
           </div>
         </div>
-        <div className="collect">
-          <div className="title">Collect Method(s)</div>
-          <div className="item">
-            <input
-              type="radio"
-              id="shipping"
-              name="method"
-              value="shipping"
-              onChange={(e) => {
-                setMethod((prev) => ({
-                  ...prev,
-                  collect: e.target.value,
-                }));
-              }}
-            />
-            <label htmlFor="shipping">Shipping</label>
-          </div>
-          <div className="item">
-            <input
-              type="radio"
-              id="takeaway"
-              name="method"
-              value="takeaway"
-              onChange={(e) => {
-                setMethod((prev) => ({
-                  ...prev,
-                  collect: e.target.value,
-                }));
-              }}
-            />
-            <label htmlFor="takeaway">Take away</label>
-          </div>
-          <div className="item">
-            <input
-              type="radio"
-              id="dineIn"
-              name="method"
-              value="dineIn"
-              onChange={(e) => {
-                setMethod((prev) => ({
-                  ...prev,
-                  collect: e.target.value,
-                }));
-              }}
-            />
-            <label htmlFor="dineIn">Dine-in</label>
+        <div className="shipping-method">
+          <div className="service">
+            <div className="text">Service Fee</div>
+            <div className="amount">
+              {formatPrice(parseFloat(costDistance))}
+            </div>
           </div>
         </div>
-        {method.collect === "shipping" ? (
-          <>
-            <div className="shipping-method">
-              <div className="service">
-                <div className="text">Service Fee</div>
-                <div className="amount">
-                  {formatPrice(parseFloat(costDistance))}
-                </div>
+        <div className="address">
+          <div className="title">Shipping Address</div>
+          <div className="list">
+            {address.map((data) => (
+              <div className="item" key={data._id}>
+                <input
+                  type="radio"
+                  id="address"
+                  name="address"
+                  onChange={() => {
+                    setSelectedAddress(data._id);
+                    setSelectedDestination(data.address);
+                  }}
+                />
+                <label htmlFor="address">{data.address}</label>
               </div>
-            </div>
-            <div className="address">
-              <div className="title">Shipping Address</div>
-              <div className="list">
-                {address.map((data) => (
-                  <div className="item" key={data._id}>
-                    <input
-                      type="radio"
-                      id="address"
-                      name="address"
-                      onChange={() => {
-                        setSelectedAddress(data._id);
-                        setSelectedDestination(data.address);
-                      }}
-                    />
-                    <label htmlFor="address">{data.address}</label>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </>
-        ) : (
-          ""
-        )}
+            ))}
+          </div>
+        </div>
         <div className="payment">
           <div className="title">Payment Method(s)</div>
           <div className={`container ${openPayments ? "open" : ""}`}>
@@ -134,7 +79,7 @@ export default function Summary({
                 key={data._id}
                 onClick={() => {
                   setOpenPayments(!openPayments);
-                  setMethod((prev) => ({
+                  setPaymentMethod((prev) => ({
                     ...prev,
                     payment: data._id,
                   }));

@@ -10,7 +10,9 @@ import {
 } from "@react-google-maps/api";
 import { ToastContainer } from "react-toastify";
 import AlertMessage from "../../helper/AlertMessage";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import GetData from "../../helper/GetData";
+import axios from "axios";
 
 const center = {
   lat: -6.874217158786191,
@@ -28,28 +30,44 @@ export default function GoShipping() {
   const [travelMode, setTravelMode] = useState("DRIVING"); // Default value as a string
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1500);
-  }, []);
-
   const originRef = useRef(null);
   const destinationRef = useRef(null);
 
+  const { getToken } = GetData();
+  const objectToken = JSON.parse(getToken);
+  const token = objectToken.token;
+
+  const navigate = useNavigate();
   const location = useLocation();
   const { toastMessage } = AlertMessage();
-
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-    libraries,
-  });
 
   const travelModes = [
     { mode: "DRIVING", icon: "directions_car" },
     { mode: "TRANSIT", icon: "directions_subway" },
     { mode: "WALKING", icon: "directions_run" },
   ];
+
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+    libraries,
+  });
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+  }, []);
+
+  useEffect(() => {
+    if (originRef.current) {
+      originRef.current.value =
+        "Universitas Logistik dan Bisnis Internasional (ULBI), Jl. Sariasih, Sarijadi, Bandung City, West Java, Indonesia";
+    }
+
+    if (destinationRef.current) {
+      destinationRef.current.value = location.state.destination;
+    }
+  }, [originRef.current, destinationRef.current]);
 
   const calculateRoute = useCallback(async () => {
     if (!isLoaded || !google) {
@@ -73,6 +91,29 @@ export default function GoShipping() {
       setDirectionsResponse(results);
       setDistance(results.routes[0].legs[0].distance.text);
       setDuration(results.routes[0].legs[0].duration.text);
+
+      const payload = {
+        distance: results.routes[0].legs[0].distance.value,
+        duration: results.routes[0].legs[0].duration.value,
+      };
+
+      await axios
+        .put(
+          `https://pempek-joli-server.vercel.app/api/order/rutes/${location.state.transactionId}`,
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res.data.data);
+          toastMessage("success", res.data.message);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     } catch (error) {
       if (error.code === "ZERO_RESULTS") {
         toastMessage(
@@ -84,17 +125,6 @@ export default function GoShipping() {
       }
     }
   }, [isLoaded, travelMode]);
-
-  useEffect(() => {
-    if (originRef.current) {
-      originRef.current.value =
-        "Universitas Logistik dan Bisnis Internasional (ULBI), Jl. Sariasih, Sarijadi, Bandung City, West Java, Indonesia";
-    }
-
-    if (destinationRef.current) {
-      destinationRef.current.value = location.state.destination;
-    }
-  }, [originRef.current, destinationRef.current]);
 
   const clearCalculate = useCallback(() => {
     setDirectionsResponse(null);

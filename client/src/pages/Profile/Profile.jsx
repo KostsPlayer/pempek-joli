@@ -126,9 +126,7 @@ export default function Profile() {
   useEffect(() => {
     axios
       .get(
-        `https://webapi.bps.go.id/v1/api/domain/type/prov/key/${
-          import.meta.env.VITE_WEB_API_KEY_ID
-        }/`
+        `https://pempek-joli-server.vercel.app/api/alamatpengiriman/provinces`
       )
       .then((res) => {
         setAllProvince(res.data.data[1]);
@@ -142,9 +140,7 @@ export default function Profile() {
     if (selectedProvince.domain_id) {
       axios
         .get(
-          `https://webapi.bps.go.id/v1/api/domain/type/kabbyprov/prov/${
-            selectedProvince.domain_id
-          }/key/${import.meta.env.VITE_WEB_API_KEY_ID}/`
+          `https://pempek-joli-server.vercel.app/api/alamatpengiriman/Kab/${selectedProvince.domain_id}`
         )
         .then((res) => {
           setAllRegency(res.data.data[1]);

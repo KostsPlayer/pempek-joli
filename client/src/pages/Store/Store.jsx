@@ -21,6 +21,7 @@ export default function Store() {
   const token = objectToken.token;
 
   const [products, setProducts] = useState({ foods: [], drinks: [] });
+  const [productId, setProductId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
@@ -32,33 +33,31 @@ export default function Store() {
   }, []);
 
   const getProductData = useCallback(() => {
-    if (token) {
-      const fetchFoods = axios.get(
-        "https://pempek-joli-server.vercel.app/api/product/makanan",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+    const fetchFoods = axios.get(
+      "https://pempek-joli-server.vercel.app/api/product/makanan",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
 
-      const fetchDrinks = axios.get(
-        "https://pempek-joli-server.vercel.app/api/product/minuman",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+    const fetchDrinks = axios.get(
+      "https://pempek-joli-server.vercel.app/api/product/minuman",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
 
-      Promise.all([fetchFoods, fetchDrinks])
-        .then(([foodsResponse, drinksResponse]) => {
-          setProducts({
-            foods: foodsResponse.data,
-            drinks: drinksResponse.data,
-          });
-        })
-        .catch((errors) => {
-          console.error(errors);
+    Promise.all([fetchFoods, fetchDrinks])
+      .then(([foodsResponse, drinksResponse]) => {
+        setProducts({
+          foods: foodsResponse.data,
+          drinks: drinksResponse.data,
         });
-    }
-  }, [token]);
+      })
+      .catch((errors) => {
+        console.error(errors);
+      });
+  }, [token, toastMessage]);
 
   useEffect(() => {
     if (token) {
@@ -79,9 +78,16 @@ export default function Store() {
     };
   }, [products]);
 
-  const formatPrice = (priceObj) => {
-    const priceString = priceObj.$numberDecimal;
-    const priceInDecimal = parseFloat(priceString);
+  const formatPrice = (price) => {
+    const priceInDecimal =
+      typeof price === "object" && price.$numberDecimal
+        ? parseFloat(price.$numberDecimal)
+        : typeof price === "number"
+        ? price
+        : NaN;
+
+    if (isNaN(priceInDecimal)) throw new Error("Invalid price format");
+
     const priceInRupiah = priceInDecimal * 1000;
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
@@ -89,28 +95,19 @@ export default function Store() {
     }).format(priceInRupiah);
   };
 
-  const handleDeleteProduct = useCallback((id) => {
-    if (token) {
+  const handleDeleteProduct = useCallback(
+    (id) => {
       axios
         .delete(`https://pempek-joli-server.vercel.app/api/product/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          toastMessage("success", res.data.message);
+          toastMessage("success", "Delete product successfully!");
           getProductData();
         })
-        .catch((errors) => {
-          console.error(errors);
-        });
-    }
-  }, []);
-
-  const displayCreateMessage = useCallback(
-    (msg) => {
-      toastMessage("success", msg);
-      console.log("Displaying message:", msg);
+        .catch((errors) => console.error(errors));
     },
-    [toastMessage]
+    [token, toastMessage, getProductData]
   );
 
   return (
@@ -119,20 +116,6 @@ export default function Store() {
         <Loader />
       ) : (
         <>
-          <CreateStore
-            onOpen={openCreateModal}
-            onClose={() => {
-              setOpenCreateModal(false);
-            }}
-            refreshData={getProductData}
-            message={displayCreateMessage}
-          />
-          <UpdateStore
-            onOpen={openUpdateModal}
-            onClose={() => {
-              setOpenUpdateModal(false);
-            }}
-          />
           <Layout>
             <div className="store">
               <div className="new-product">
@@ -171,6 +154,7 @@ export default function Store() {
                               className="material-symbols-outlined"
                               onClick={() => {
                                 setOpenUpdateModal(true);
+                                setProductId(data._id);
                               }}
                             >
                               edit
@@ -179,7 +163,7 @@ export default function Store() {
                               className="material-symbols-outlined"
                               onClick={() => handleDeleteProduct(data._id)}
                             >
-                              delete_forever
+                              delete
                             </span>
                           </div>
                         </div>
@@ -212,12 +196,16 @@ export default function Store() {
                               className="material-symbols-outlined"
                               onClick={() => {
                                 setOpenUpdateModal(true);
+                                setProductId(data._id);
                               }}
                             >
                               edit
                             </span>
-                            <span className="material-symbols-outlined">
-                              delete_forever
+                            <span
+                              className="material-symbols-outlined"
+                              onClick={() => handleDeleteProduct(data._id)}
+                            >
+                              delete
                             </span>
                           </div>
                         </div>
@@ -228,6 +216,21 @@ export default function Store() {
               </div>
             </div>
           </Layout>
+          <CreateStore
+            onOpen={openCreateModal}
+            onClose={() => {
+              setOpenCreateModal(false);
+            }}
+            refreshData={getProductData}
+          />
+          <UpdateStore
+            onOpen={openUpdateModal}
+            onClose={() => {
+              setOpenUpdateModal(false);
+            }}
+            refreshData={getProductData}
+            productId={productId}
+          />
           <ToastContainer />
         </>
       )}

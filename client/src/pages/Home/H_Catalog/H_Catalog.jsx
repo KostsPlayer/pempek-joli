@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 import GetData from "../../../helper/GetData";
 import axios from "axios";
@@ -34,8 +34,13 @@ export default function H_Menu() {
   }, [token]);
 
   const memoizedImages = useMemo(() => {
-    const foodImages = foods.map(({ img_menu }) => `./products/${img_menu}`);
-    return [...foodImages];
+    const createImageUrls = (items) =>
+      items.map(
+        ({ img_menu }) =>
+          `https://nyhsxdvwnltrriyylvyl.supabase.co/storage/v1/object/public/payments-image/products/${img_menu}`
+      );
+
+    return createImageUrls(foods);
   }, [foods]);
 
   return (
