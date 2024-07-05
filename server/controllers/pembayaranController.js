@@ -81,7 +81,7 @@ exports.getPaymentsById = async (req, res) => {
   const { _id } = req.params;
   try {
     const payment = await Pembayaran.findById(_id).select(
-      "id_pengguna metode_pembayaran status_pembayaran"
+      "id_pengguna metode_pembayaran status_pembayaran tanggal_pembayaran"
     );
 
     if (!Pembayaran) {
@@ -112,6 +112,7 @@ exports.getPaymentsById = async (req, res) => {
           metode_pembayaran: payment.metode_pembayaran,
           status_pembayaran: payment.status_pembayaran,
           bukti_pembayaran: payment.bukti_pembayaran,
+tanggal_pembayaran: payments.tanggal_pembayaran
         },
         order: {
           id_MetodePembayaran: order.id_MetodePembayaran,
