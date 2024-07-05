@@ -12,37 +12,48 @@
 }
 
 @mixin productStore() {
-  // border: #000 solid 0.2rem;
   grid-area: modal;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(5, auto);
+  grid-template-columns: 1fr 1fr 0.75fr 0.75fr;
+  grid-template-rows: auto auto 1fr auto;
   grid-template-areas:
-    "name jenis"
-    "price stock"
-    "description description"
-    "file file"
-    "button button";
+    "name jenis file file"
+    "price stock image image"
+    "description description image image"
+    "button button button button";
   row-gap: 2vh;
-  column-gap: 1.2vw;
+  column-gap: 1.5vw;
+  width: 60vw;
+  height: 100%;
 
   .form-content:nth-child(1) {
+    height: fit-content;
     grid-area: name;
   }
   .form-content:nth-child(2) {
+    height: fit-content;
     grid-area: jenis;
   }
   .form-content:nth-child(3) {
+    height: fit-content;
     grid-area: price;
   }
   .form-content:nth-child(4) {
+    height: fit-content;
     grid-area: stock;
   }
   .form-content:nth-child(5) {
+    height: 100%;
     grid-area: description;
   }
   .form-content:nth-child(6) {
+    height: fit-content;
     grid-area: file;
+  }
+  .form-content:nth-child(7) {
+    height: 100%;
+    grid-area: image;
+    border-radius: 0.2rem;
   }
 }
 

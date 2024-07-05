@@ -14,6 +14,10 @@ export default function Sidebar() {
           <span className="material-symbols-outlined">manage_accounts</span>
           <span className="text">Profile</span>
         </NavLink>
+        <NavLink to={"/notification-all"} className="sidebar-item">
+          <span className="material-symbols-outlined">notifications</span>
+          <span className="text">Notification</span>
+        </NavLink>
         {role === "admin" ? (
           <>
             <NavLink to={"/transaction"} className="sidebar-item">
@@ -21,7 +25,7 @@ export default function Sidebar() {
               <span className="text">Transaction</span>
             </NavLink>
             <NavLink to={"/store"} className="sidebar-item">
-              <span className="material-symbols-outlined">storefront</span>
+              <span className="material-symbols-outlined">store</span>
               <span className="text">Store</span>
             </NavLink>
             {id === undefined || "" ? (

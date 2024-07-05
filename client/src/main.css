@@ -316,7 +316,7 @@
   top: 14.8vh;
   right: 7vw;
   z-index: 100;
-  width: 25vw;
+  width: 28vw;
   height: -moz-fit-content;
   height: fit-content;
   border-radius: 0.2rem;
@@ -332,15 +332,15 @@
   height: 1.6rem;
   transform: rotate(45deg);
   border-radius: 0.1rem;
-  border-top: 0.15rem solid #ff7a3d;
-  border-left: 0.15rem solid #ff7a3d;
+  border-top: 0.15rem solid #575250;
+  border-left: 0.15rem solid #575250;
   border-bottom: 0.15rem solid transparent;
   border-right: 0.15rem solid transparent;
   z-index: -1;
-  background-color: #ff7a3d;
+  background-color: #575250;
 }
 .notification .overlay .day {
-  background-color: #ff7a3d;
+  background-color: #575250;
   color: #fff;
   font-size: 0.94rem;
   font-weight: 600;
@@ -349,42 +349,51 @@
   border-top-right-radius: 0.2rem;
 }
 .notification .overlay .all-message {
-  background-color: #ff7a3d;
+  position: absolute;
+  background-color: #575250;
   color: #fff;
   font-size: 0.94rem;
   font-weight: 600;
   padding: 0.75rem 0.85rem;
   border-bottom-left-radius: 0.2rem;
   border-bottom-right-radius: 0.2rem;
+  width: 100%;
+  height: auto;
+  text-decoration: none;
   text-align: center;
   border-top: 0.15rem solid #fff;
 }
 .notification .overlay .item {
   width: 100%;
-  min-height: 10vh;
+  min-height: auto;
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
   padding: 0.75rem 0.85rem;
-  gap: 0.65rem;
+  gap: 1rem;
   border-top: 0.15rem solid #fff;
   font-size: 0.86rem;
+  font-weight: 500;
 }
-.notification .overlay .item:nth-child(1n) {
-  background-color: #f9c349;
-}
-.notification .overlay .item:nth-child(2n) {
+.notification .overlay .item.green {
   background-color: #30c7b5;
 }
-.notification .overlay .item:nth-child(3n) {
+.notification .overlay .item.blue {
   background-color: #2fc1ff;
+}
+.notification .overlay .item.yellow {
+  background-color: #f9c349;
+}
+.notification .overlay .item.red {
+  background-color: #ef4d48;
 }
 .notification .overlay .item .content {
   width: 100%;
-  height: 100%;
+  height: auto;
   padding-top: 0.2rem;
 }
 .notification .overlay .item .content .text {
+  width: 100%;
   height: auto;
   line-height: 130%;
   color: #fff;
@@ -393,6 +402,8 @@
   font-weight: 800;
 }
 .notification .overlay .item .time {
+  width: 100%;
+  height: auto;
   color: #fff;
   font-weight: 500;
 }
@@ -426,6 +437,9 @@
 .layout .sidebar .active {
   background-color: #000;
 }
+.layout .sidebar .active .material-symbols-outlined {
+  font-variation-settings: "FILL" 1, "wght" 600, "GRAD" 0, "opsz" 48;
+}
 .layout .sidebar .active .text,
 .layout .sidebar .active .role,
 .layout .sidebar .active .material-symbols-outlined {
@@ -455,6 +469,52 @@
   font-variation-settings: "FILL" 0, "wght" 600, "GRAD" 0, "opsz" 48;
   font-size: 1.2rem;
   color: #fff;
+}
+
+.pagination-controls {
+  width: 100%;
+  height: -moz-fit-content;
+  height: fit-content;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-direction: row;
+}
+.pagination-controls button {
+  outline: 0;
+  background-color: #08acf2;
+  border: 0;
+  border: 0.1rem #08acf2 solid;
+  padding: 0 0.6rem;
+  color: #fff;
+  height: 1.65rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+.pagination-controls button:first-child {
+  border-top-left-radius: 0.2rem;
+  border-bottom-left-radius: 0.2rem;
+}
+.pagination-controls button:last-child {
+  border-top-right-radius: 0.2rem;
+  border-bottom-right-radius: 0.2rem;
+}
+.pagination-controls button:disabled {
+  background-color: #575250;
+  border: #575250 solid 0.1rem;
+}
+.pagination-controls span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  background-color: #000;
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 0 0.8rem;
+  height: 1.65rem;
 }
 
 .h-hero {
@@ -1546,34 +1606,6 @@
   grid-area: close;
   margin: auto 0 auto auto;
 }
-.overlay-modal .modal-area .form-product {
-  grid-area: modal;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(5, auto);
-  grid-template-areas: "name jenis" "price stock" "description description" "file file" "button button";
-  row-gap: 2vh;
-  -moz-column-gap: 1.2vw;
-       column-gap: 1.2vw;
-}
-.overlay-modal .modal-area .form-product .form-content:nth-child(1) {
-  grid-area: name;
-}
-.overlay-modal .modal-area .form-product .form-content:nth-child(2) {
-  grid-area: jenis;
-}
-.overlay-modal .modal-area .form-product .form-content:nth-child(3) {
-  grid-area: price;
-}
-.overlay-modal .modal-area .form-product .form-content:nth-child(4) {
-  grid-area: stock;
-}
-.overlay-modal .modal-area .form-product .form-content:nth-child(5) {
-  grid-area: description;
-}
-.overlay-modal .modal-area .form-product .form-content:nth-child(6) {
-  grid-area: file;
-}
 .overlay-modal .modal-area .form-receipt {
   grid-area: modal;
   display: flex;
@@ -1597,9 +1629,55 @@
   -o-object-position: center;
      object-position: center;
 }
+.overlay-modal .modal-area .form-product {
+  grid-area: modal;
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.75fr 0.75fr;
+  grid-template-rows: auto auto 1fr auto;
+  grid-template-areas: "name jenis file file" "price stock image image" "description description image image" "button button button button";
+  row-gap: 2vh;
+  -moz-column-gap: 1.5vw;
+       column-gap: 1.5vw;
+  width: 60vw;
+  height: 100%;
+}
+.overlay-modal .modal-area .form-product .form-content:nth-child(1) {
+  height: -moz-fit-content;
+  height: fit-content;
+  grid-area: name;
+}
+.overlay-modal .modal-area .form-product .form-content:nth-child(2) {
+  height: -moz-fit-content;
+  height: fit-content;
+  grid-area: jenis;
+}
+.overlay-modal .modal-area .form-product .form-content:nth-child(3) {
+  height: -moz-fit-content;
+  height: fit-content;
+  grid-area: price;
+}
+.overlay-modal .modal-area .form-product .form-content:nth-child(4) {
+  height: -moz-fit-content;
+  height: fit-content;
+  grid-area: stock;
+}
+.overlay-modal .modal-area .form-product .form-content:nth-child(5) {
+  height: 100%;
+  grid-area: description;
+}
+.overlay-modal .modal-area .form-product .form-content:nth-child(6) {
+  height: -moz-fit-content;
+  height: fit-content;
+  grid-area: file;
+}
+.overlay-modal .modal-area .form-product .form-content:nth-child(7) {
+  height: 100%;
+  grid-area: image;
+  border-radius: 0.2rem;
+}
 .overlay-modal .modal-area .form-content {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
   width: 100%;
@@ -1631,7 +1709,19 @@
   font-size: 1.02rem;
   padding: 2%;
   width: 100%;
-  height: 6.4rem;
+  height: 100%;
+}
+.overlay-modal .modal-area .form-content img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 0.2rem;
+}
+.overlay-modal .modal-area .form-content .container-img {
+  width: 100%;
+  height: 16rem;
+  border-radius: 0.2rem;
 }
 .overlay-modal .modal-area button {
   margin-top: 0.8rem;
@@ -1641,16 +1731,16 @@
   height: auto;
   padding: 0.36rem 0.96rem;
   background-color: transparent;
-  border: 0.1rem solid #ff5100;
+  border: 0.1rem solid #ff7a3d;
   outline: 0;
   text-transform: uppercase;
   border-radius: 0.25rem;
   font-weight: 600;
   margin-left: auto;
-  color: #ff5100;
+  color: #ff7a3d;
 }
 .overlay-modal .modal-area button:hover {
-  background-color: #ff5100;
+  background-color: #ff7a3d;
   color: #fff;
 }
 
@@ -2654,51 +2744,6 @@
   grid-template-rows: auto 1fr;
   row-gap: 0.4rem;
 }
-.transaction-table .pagination-controls {
-  width: 100%;
-  height: -moz-fit-content;
-  height: fit-content;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  flex-direction: row;
-}
-.transaction-table .pagination-controls button {
-  outline: 0;
-  background-color: #08acf2;
-  border: 0;
-  border: 0.1rem #08acf2 solid;
-  padding: 0 0.6rem;
-  color: #fff;
-  height: 1.65rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-}
-.transaction-table .pagination-controls button:first-child {
-  border-top-left-radius: 0.2rem;
-  border-bottom-left-radius: 0.2rem;
-}
-.transaction-table .pagination-controls button:last-child {
-  border-top-right-radius: 0.2rem;
-  border-bottom-right-radius: 0.2rem;
-}
-.transaction-table .pagination-controls button:disabled {
-  background-color: #575250;
-  border: #575250 solid 0.1rem;
-}
-.transaction-table .pagination-controls span {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  background-color: #000;
-  color: #fff;
-  font-size: 0.9rem;
-  padding: 0 0.8rem;
-  height: 1.65rem;
-}
 .transaction-table .table-controls {
   width: 100%;
   height: auto;
@@ -2856,42 +2901,6 @@
 .transaction-table .table-controls .row .col:nth-child(5) .dis-collect {
   width: -moz-fit-content;
   width: fit-content;
-}
-.transaction-table .table-controls .row .col:nth-child(5) .dis-collect.takeaway {
-  font-variation-settings: "FILL" 0, "wght" 600, "GRAD" 0, "opsz" 40;
-  background-color: #f9c349;
-  color: #fff;
-  padding: 0.18rem;
-  border-radius: 0.4rem;
-  border: #f9c349 0.13rem solid;
-  transition: all 0.28s ease-in-out;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-}
-.transaction-table .table-controls .row .col:nth-child(5) .dis-collect.takeaway:hover, .transaction-table .table-controls .row .col:nth-child(5) .dis-collect.takeaway:focus {
-  font-variation-settings: "FILL" 1, "wght" 600, "GRAD" 0, "opsz" 40;
-  background-color: transparent;
-  color: #f9c349;
-}
-.transaction-table .table-controls .row .col:nth-child(5) .dis-collect.dine-in {
-  font-variation-settings: "FILL" 0, "wght" 600, "GRAD" 0, "opsz" 40;
-  background-color: #30c7b5;
-  color: #fff;
-  padding: 0.18rem;
-  border-radius: 0.4rem;
-  border: #30c7b5 0.13rem solid;
-  transition: all 0.28s ease-in-out;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-}
-.transaction-table .table-controls .row .col:nth-child(5) .dis-collect.dine-in:hover, .transaction-table .table-controls .row .col:nth-child(5) .dis-collect.dine-in:focus {
-  font-variation-settings: "FILL" 1, "wght" 600, "GRAD" 0, "opsz" 40;
-  background-color: transparent;
-  color: #30c7b5;
 }
 .transaction-table .table-controls .row .col:nth-child(5) .dis-collect.shipping {
   font-variation-settings: "FILL" 0, "wght" 600, "GRAD" 0, "opsz" 40;
@@ -3273,6 +3282,103 @@
 }
 .go-shipping .main .execute .buttons .wrapper .container:nth-child(4):hover .material-symbols-outlined {
   font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+.notification-all {
+  width: 100%;
+  height: auto;
+}
+.notification-all-header {
+  width: 100%;
+  height: -moz-fit-content;
+  height: fit-content;
+  display: grid;
+  grid-template-columns: 1fr 14fr 3fr 2fr;
+  gap: 1.2rem;
+  border-bottom: 0.15rem solid #ddd;
+}
+.notification-all-header .col {
+  width: 100%;
+  height: auto;
+  padding: 0.75rem 0;
+  font-weight: 700;
+}
+.notification-all-header .col:nth-child(1), .notification-all-header .col:nth-child(4) {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: row;
+}
+.notification-all-body {
+  width: 100%;
+  height: auto;
+  display: grid;
+  grid-template-columns: 1fr 14fr 3fr 2fr;
+  gap: 1.2rem;
+  border-bottom: 0.15rem solid #ddd;
+}
+.notification-all-body .col {
+  width: 100%;
+  height: auto;
+  padding: 0.75rem 0;
+}
+.notification-all-body .col:nth-child(1) {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: row;
+}
+.notification-all-body .col:nth-child(2) span {
+  font-weight: 700;
+}
+.notification-all-body .col:nth-child(2) span.pending {
+  color: rgba(255, 177, 0, 0.88);
+}
+.notification-all-body .col:nth-child(2) span.success {
+  color: rgba(6, 117, 46, 0.88);
+}
+.notification-all-body .col:nth-child(2) span.cancelled {
+  color: rgba(217, 7, 0, 0.88);
+}
+.notification-all-body .col:nth-child(2) span.blue {
+  color: rgba(8, 172, 242, 0.88);
+}
+.notification-all-body .col:nth-child(4) {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: row;
+  gap: 0.3rem;
+}
+.notification-all-body .col:nth-child(4) .material-symbols-outlined:nth-child(1) {
+  border-radius: 0.25rem;
+  padding: 0.2rem 0.3rem;
+  border: 0.12rem solid #2fc1ff;
+  color: #2fc1ff;
+  font-variation-settings: "FILL" 1, "wght" 300, "GRAD" 0, "opsz" 24;
+  transition: all 0.4s ease-in-out;
+}
+.notification-all-body .col:nth-child(4) .material-symbols-outlined:nth-child(1):hover {
+  border: 0.12rem solid #2fc1ff;
+  color: #fff;
+  background-color: #2fc1ff;
+  font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+}
+.notification-all-body .col:nth-child(4) .material-symbols-outlined:nth-child(2) {
+  border-radius: 0.25rem;
+  padding: 0.2rem 0.3rem;
+  border: 0.12rem solid #ef4d48;
+  color: #ef4d48;
+  font-variation-settings: "FILL" 1, "wght" 300, "GRAD" 0, "opsz" 24;
+  transition: all 0.4s ease-in-out;
+}
+.notification-all-body .col:nth-child(4) .material-symbols-outlined:nth-child(2):hover {
+  border: 0.12rem solid #ef4d48;
+  color: #fff;
+  background-color: #ef4d48;
+  font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
 }
 
 * {

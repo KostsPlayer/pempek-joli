@@ -1,0 +1,43 @@
+@use "./../../helper/mixin" as m;
+@use "./../../helper/variable" as v;
+
+.pagination-controls {
+  width: 100%;
+  height: fit-content;
+  @include m.flex($justify: flex-end);
+
+  button {
+    outline: 0;
+    background-color: v.$dark-blue;
+    border: 0;
+    border: 0.1rem v.$dark-blue solid;
+    padding: 0 0.6rem;
+    color: #fff;
+    height: 1.65rem;
+    @include m.flex();
+
+    &:first-child {
+      border-top-left-radius: 0.2rem;
+      border-bottom-left-radius: 0.2rem;
+    }
+
+    &:last-child {
+      border-top-right-radius: 0.2rem;
+      border-bottom-right-radius: 0.2rem;
+    }
+
+    &:disabled {
+      background-color: v.$dark-gray;
+      border: v.$dark-gray solid 0.1rem;
+    }
+  }
+
+  span {
+    @include m.flex();
+    background-color: #000;
+    color: #fff;
+    font-size: 0.9rem;
+    padding: 0 0.8rem;
+    height: 1.65rem;
+  }
+}

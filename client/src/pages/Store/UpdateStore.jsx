@@ -1,91 +1,149 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import AlertMessage from "../../helper/AlertMessage";
 import { ToastContainer } from "react-toastify";
 import GetData from "../../helper/GetData";
 
-export default function UpdateStore({ onOpen, onClose }) {
+export default function UpdateStore({
+  onOpen,
+  onClose,
+  productId,
+  refreshData,
+}) {
   axios.defaults.withCredentials = true;
-  if (!onOpen) return null;
+
   const { toastMessage } = AlertMessage();
   const { getToken } = GetData();
   const objectToken = JSON.parse(getToken);
   const token = objectToken.token;
-
   const [values, setValues] = useState({
     nama_menu: "",
     jenis_menu: "",
     harga_menu: 0,
     stock_menu: 0,
     description: "",
-    image: null, // Perbaikan di sini
+    img_menu: "",
+    image: null,
   });
-  const [foods, setFoods] = useState([]);
-  const [fileName, setFileName] = useState("");
+  const [selectedImage, setSelectedImage] = useState("");
 
   useEffect(() => {
     if (token) {
       axios
-        .get("https://pempek-joli-server.vercel.app/makanan", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
+        .get(
+          `https://pempek-joli-server.vercel.app/api/product/cari/${productId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
         .then((res) => {
-          setFoods(res.data);
+          console.log(res.data.data);
+          // Set values here to update form fields
+          setValues({
+            nama_menu: res.data.data.nama_menu,
+            jenis_menu: res.data.data.jenis_menu,
+            harga_menu: parseFloat(
+              res.data.data.harga_menu?.$numberDecimal || 0
+            ),
+            stock_menu: res.data.data.stock_menu,
+            description: res.data.data.description,
+            img_menu: res.data.data.img_menu,
+            image: null,
+          });
         })
         .catch((errors) => {
           console.error(errors);
         });
     }
-  }, [token]);
+  }, [token, productId]);
 
-  const handleChange = (e) => {
-    if (e.target.type === "file") {
-      setValues({ ...values, [e.target.name]: e.target.files[0] }); // Perbaikan di sini
-      setFileName(e.target.files[0].name);
-    } else {
-      if (
-        (e.target.name === "harga_menu" || e.target.name === "stock_menu") &&
-        parseFloat(e.target.value) < 0
-      ) {
-        return toastMessage("error", "Cannot be negative");
+  useEffect(() => {
+    if (values.img_menu) {
+      setSelectedImage(
+        `https://nyhsxdvwnltrriyylvyl.supabase.co/storage/v1/object/public/payments-image/products/${values.img_menu}`
+      );
+    }
+  }, [values.img_menu]);
+
+  useEffect(() => {
+    console.log(values.img_menu);
+    console.log(selectedImage);
+  }, [selectedImage, values]);
+
+  const handleImageChange = useCallback(
+    (e) => {
+      const file = e.target.files[0];
+
+      if (file) {
+        const imageUrl = URL.createObjectURL(file);
+        setSelectedImage(imageUrl);
+        setValues((prevValues) => ({ ...prevValues, image: file }));
       }
-      setValues({ ...values, [e.target.name]: e.target.value });
-    }
-  };
+    },
+    [setSelectedImage, setValues]
+  );
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleChange = useCallback(
+    (e) => {
+      if (e.target.type === "file") {
+        handleImageChange(e);
+      } else {
+        if (
+          (e.target.name === "harga_menu" || e.target.name === "stock_menu") &&
+          e.target.value < 0
+        ) {
+          toastMessage("error", "Cannot be negative");
+        } else {
+          setValues((prevValues) => ({
+            ...prevValues,
+            [e.target.name]: e.target.value,
+          }));
+        }
+      }
+    },
+    [handleImageChange, toastMessage]
+  );
 
-    const formData = new FormData();
-    formData.append("nama_menu", values.nama_menu);
-    formData.append("jenis_menu", values.jenis_menu);
-    formData.append("harga_menu", values.harga_menu);
-    formData.append("stock_menu", values.stock_menu);
-    formData.append("description", values.description);
-    formData.append("image", values.image); // Perbaikan di sini
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
 
-    // Log FormData to console
-    for (let pair of formData.entries()) {
-      console.log(`${pair[0]}: ${pair[1]}`);
-    }
+      const formData = new FormData();
+      formData.append("nama_menu", values.nama_menu);
+      formData.append("jenis_menu", values.jenis_menu);
+      formData.append("harga_menu", values.harga_menu);
+      formData.append("stock_menu", values.stock_menu);
+      formData.append("description", values.description);
+      if (values.image) {
+        formData.append("img_menu", values.image);
+      }
 
-    if (token) {
       axios
-        .post("https://pempek-joli-server.vercel.app/api/product/makanan", formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
+        .put(
+          `https://pempek-joli-server.vercel.app/api/product/update/${productId}`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
         .then((res) => {
-          console.log(res.data);
+          toastMessage("success", res.data.message);
+          onClose();
+          refreshData();
         })
         .catch((errors) => {
+          toastMessage("error", errors.response.data.error);
           console.error(errors);
         });
-    }
-  };
+    },
+    [values, token, toastMessage, onClose, refreshData, productId]
+  );
+
+  if (!onOpen) return null;
 
   return (
     <>
@@ -105,72 +163,72 @@ export default function UpdateStore({ onOpen, onClose }) {
             encType="multipart/form-data"
             onSubmit={handleSubmit}
           >
-            {foods.map((data, index) => {
-              return (
-                <>
-                  <div className="form-content">
-                    <label htmlFor="nama_menu">Nama Product</label>
-                    <input
-                      type="text"
-                      onChange={handleChange}
-                      id="nama_menu"
-                      name="nama_menu"
-                      value={data.nama_menu}
-                    />
-                  </div>
-                  <div className="form-content">
-                    <label htmlFor="jenis_menu">Jenis</label>
-                    <select
-                      onChange={handleChange}
-                      id="jenis_menu"
-                      name="jenis_menu"
-                    >
-                      <option value="makanan">Makanan</option>
-                      <option value="minuman">Minuman</option>
-                    </select>
-                  </div>
-                  <div className="form-content">
-                    <label htmlFor="harga_menu">Harga</label>
-                    <input
-                      type="number"
-                      onChange={handleChange}
-                      id="harga_menu"
-                      name="harga_menu"
-                      value={data.harga_menu}
-                    />
-                  </div>
-                  <div className="form-content">
-                    <label htmlFor="stock_menu">Stock</label>
-                    <input
-                      type="number"
-                      onChange={handleChange}
-                      id="stock_menu"
-                      name="stock_menu"
-                      value={data.stock_menu}
-                    />
-                  </div>
-                  <div className="form-content">
-                    <label htmlFor="description">Description</label>
-                    <textarea
-                      onChange={handleChange}
-                      id="description"
-                      name="description"
-                      value={data.description}
-                    ></textarea>
-                  </div>
-                  <div className="form-content">
-                    <label htmlFor="image">Image</label>
-                    <input
-                      type="file"
-                      onChange={handleChange}
-                      id="image"
-                      name="image"
-                    />
-                  </div>
-                  <button type="submit">Submit</button>
-                </>
-              );
-            })}
+            <div className="form-content">
+              <label htmlFor="nama_menu">Nama Product</label>
+              <input
+                type="text"
+                onChange={handleChange}
+                id="nama_menu"
+                name="nama_menu"
+                value={values.nama_menu}
+              />
+            </div>
+            <div className="form-content">
+              <label htmlFor="jenis_menu">Jenis</label>
+              <select
+                onChange={handleChange}
+                id="jenis_menu"
+                name="jenis_menu"
+                value={values.jenis_menu}
+              >
+                <option value="makanan">Makanan</option>
+                <option value="minuman">Minuman</option>
+              </select>
+            </div>
+            <div className="form-content">
+              <label htmlFor="harga_menu">Harga</label>
+              <input
+                type="number"
+                onChange={handleChange}
+                id="harga_menu"
+                name="harga_menu"
+                value={values.harga_menu}
+              />
+            </div>
+            <div className="form-content">
+              <label htmlFor="stock_menu">Stock</label>
+              <input
+                type="number"
+                onChange={handleChange}
+                id="stock_menu"
+                name="stock_menu"
+                value={values.stock_menu}
+              />
+            </div>
+            <div className="form-content">
+              <label htmlFor="description">Description</label>
+              <textarea
+                onChange={handleChange}
+                id="description"
+                name="description"
+                value={values.description}
+              ></textarea>
+            </div>
+            <div className="form-content">
+              <label htmlFor="image">Image</label>
+              <input
+                type="file"
+                onChange={handleImageChange}
+                id="image"
+                name="image"
+              />
+            </div>
+            <div className="form-content">
+              <div className="container-img">
+                <img src={selectedImage} alt="choose image" />
+              </div>
+            </div>
+            <button type="submit">Submit</button>
           </form>
         </div>
       </div>

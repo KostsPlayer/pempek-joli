@@ -8,8 +8,8 @@ export default function Receipt({ onClose, onOpen, token, paymentId }) {
 
   const navigate = useNavigate();
 
-  const [selectedImage, setSelectedImage] = useState(image);
   const [sendReceipt, setSendReceipt] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(image);
 
   const handleImageChange = useCallback(
     (e) => {
@@ -42,7 +42,6 @@ export default function Receipt({ onClose, onOpen, token, paymentId }) {
       await axios
         .put(
           `https://pempek-joli-server.vercel.app/api/upload/payments/${paymentId}`,
-          // `http://localhost:5000/api/upload/payments/${paymentId}`,
           formData,
           {
             headers: {
@@ -63,10 +62,6 @@ export default function Receipt({ onClose, onOpen, token, paymentId }) {
     },
     [navigate, paymentId, token, sendReceipt]
   );
-
-  useEffect(() => {
-    console.log(sendReceipt, paymentId);
-  }, [sendReceipt, paymentId]);
 
   if (!onOpen) return null;
 
