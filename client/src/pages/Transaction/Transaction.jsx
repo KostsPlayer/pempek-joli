@@ -84,7 +84,7 @@ export default function Transaction() {
 
   useEffect(() => {
     const fetchAddress = axios.get(
-      "https://pempek-joli-server.vercel.app/api/alamatpengiriman/alamat",
+      "https://pempek-joli-server.vercel.app/api/alamatpengiriman/admin/all",
       {
         headers: {
           Authorization: `Bearer ${token}`,
