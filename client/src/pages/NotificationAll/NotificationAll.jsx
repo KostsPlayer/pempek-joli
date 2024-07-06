@@ -107,52 +107,69 @@ function NotificationAll() {
       .then((res) => {
         const data = res.data.data;
 
-        // const paymentDatePromise = data.map((dataItem) => {
-        //   return axios
-        //     .get(
-        //       `https://pempek-joli-server.vercel.app/api/payments/${dataItem.id_pembayaran}`,
-        //       {
-        //         headers: {
-        //           Authorization: `Bearer ${token}`,
-        //         },
-        //       }
-        //     )
-        //     .then((res) => {
-        //       return res.data.data; // Mengembalikan data dari respons
-        //     })
-        //     .catch((err) => {
-        //       console.error(err);
-        //       return null; // Mengembalikan null jika terjadi kesalahan
-        //     });
-        // });
-
-        // Promise.all(paymentDatePromise)
-        //   .then((results) => {
-        //     const validResults = results.filter((result) => result !== null); // Memfilter hasil yang valid
-        //     console.log("Hasil:", validResults);
-        //   })
-        //   .catch((error) => {
-        //     console.error("Kesalahan saat menunggu semua promise:", error);
-        //   });
-
-        const userOrderData = data.filter((item) => {
-          return (
-            item.hasOwnProperty("duration") &&
-            Object.values(item).every(
-              (value) => value !== null && value !== "" && value !== undefined
+        const paymentDatePromise = data.map((dataItem) => {
+          return axios
+            .get(
+              `https://pempek-joli-server.vercel.app/api/payments/${dataItem.id_pembayaran}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
             )
-          );
+            .then((res) => {
+              return res.data.data; // Mengembalikan data dari respons
+            })
+            .catch((err) => {
+              console.error(err);
+              return null; // Mengembalikan null jika terjadi kesalahan
+            });
         });
 
-        const filtered = filterData(userOrderData, "week");
+        Promise.all(paymentDatePromise)
+          .then((results) => {
+            const getPaymentDate = results
+              .filter((result) => result !== null)
+              .map((data) => data.payment)
+              .map((item) => ({
+                _id: item.id_pembayaran,
+                tanggal_pembayaran: item.tanggal_pembayaran,
+              }));
 
-        const sorted = filtered.sort((a, b) => {
-          const dateA = new Date(a.tanggal_pesanan || a.tanggal_pembayaran);
-          const dateB = new Date(b.tanggal_pesanan || b.tanggal_pembayaran);
-          return dateB - dateA;
-        });
+            const userOrderData = data.filter((item) => {
+              return (
+                item.hasOwnProperty("duration") &&
+                Object.values(item).every(
+                  (value) =>
+                    value !== null && value !== "" && value !== undefined
+                )
+              );
+            });
 
-        setUserOrder(sorted);
+            userOrderData.forEach((order) => {
+              const payment = getPaymentDate.find(
+                (payment) => payment._id === order.id_pembayaran
+              );
+              if (payment) {
+                order.tanggal_pembayaran = payment.tanggal_pembayaran;
+              }
+            });
+
+            const filtered = filterData(userOrderData, "week");
+
+            const sorted = filtered.sort((a, b) => {
+              const dateA = new Date(a.tanggal_pesanan || a.tanggal_pembayaran);
+              const dateB = new Date(b.tanggal_pesanan || b.tanggal_pembayaran);
+              return dateB - dateA;
+            });
+
+            // console.log(sorted);
+
+            setUserOrder(sorted);
+          })
+          .catch((error) => {
+            console.error("Kesalahan saat menunggu semua promise:", error);
+          });
       })
       .catch((err) => {
         console.error(err);
@@ -297,9 +314,11 @@ function NotificationAll() {
                     " detik "
                   );
 
-                  const estimationShipping = calculateTime(data.duration);
-                  const estimationFormat =
-                    estimationShipping.format("HH:mm");
+                  const estimationShipping = calculateTime(
+                    data.duration,
+                    data.tanggal_pembayaran
+                  );
+                  const estimationFormat = estimationShipping.format("HH:mm");
 
                   return (
                     <div className="notification-all-body">
