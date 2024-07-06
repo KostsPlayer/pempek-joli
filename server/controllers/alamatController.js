@@ -127,3 +127,21 @@ exports.getKabByProv = async (req, res) => {
     });
   }
 };
+
+exports.getAllAlamatPengirimanAdmin = async (req, res) => {
+  try {
+    // Find all addresses for the current user
+    const alamat = await AlamatPengiriman.find().populate('id_pengguna');
+
+    // Respond with the addresses
+    res.status(200).json({ message: "Success", alamat });
+  } catch (error) {
+    console.error("Error fetching alamat pengiriman:", error);
+    res
+      .status(500)
+      .json({
+        message: "An error occurred while fetching alamat pengiriman",
+        error: error.message,
+      });
+  }
+}

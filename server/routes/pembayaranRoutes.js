@@ -9,4 +9,5 @@ router.put('/upload/payments/:_id', upload.single('bukti_pembayaran'), verifyTok
 router.get('/payments/:_id', verifyToken, getPaymentsById);
 router.get('/all', verifyToken, getAllPayments);
 
+
 module.exports = router;

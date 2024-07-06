@@ -112,7 +112,7 @@ exports.getPaymentsById = async (req, res) => {
           metode_pembayaran: payment.metode_pembayaran,
           status_pembayaran: payment.status_pembayaran,
           bukti_pembayaran: payment.bukti_pembayaran,
-tanggal_pembayaran: payments.tanggal_pembayaran
+          tanggal_pembayaran: payment.tanggal_pembayaran
         },
         order: {
           id_MetodePembayaran: order.id_MetodePembayaran,
