@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import axios from "axios";
 import AlertMessage from "../../helper/AlertMessage";
 import { ToastContainer } from "react-toastify";
@@ -55,6 +55,10 @@ export default function CreateStore({ onOpen, onClose, refreshData }) {
     [values, handleImageChange, toastMessage]
   );
 
+  useEffect(() => {
+    console.log(values);
+  }, [values])
+
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault();
@@ -67,10 +71,9 @@ export default function CreateStore({ onOpen, onClose, refreshData }) {
       formData.append("description", values.description);
       formData.append("img_menu", values.image);
 
-      // Log FormData to console
-      // for (let pair of formData.entries()) {
-      //   console.log(`${pair[0]}: ${pair[1]}`);
-      // }
+      for (let pair of formData.entries()) {
+        console.log(`${pair[0]}: ${pair[1]}`);
+      }
 
       axios
         .post("https://pempek-joli-server.vercel.app/api/product", formData, {

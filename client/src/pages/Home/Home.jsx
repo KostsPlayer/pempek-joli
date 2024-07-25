@@ -51,7 +51,7 @@ export default function Home() {
           <Cursor />
           <SmoothScroll />
           <H_Hero />
-          <H_Advantage />
+          {/* <H_Advantage /> */}
           <H_Feature />
           <H_Catalog />
           <Footer />
